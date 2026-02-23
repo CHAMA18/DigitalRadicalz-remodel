@@ -1,0 +1,174 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function userRef() {
+      return /databases/$(database)/documents/users/$(request.auth.uid);
+    }
+    function isInList(list, item) {
+      return item in list;
+    }
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Users collection - users can read/update their own profile
+    // Note: collection is lowercase 'users'
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Product collection - anyone can read products (public catalog)
+    match /Product/{productId} {
+      allow read: if true;
+      allow write: if false; // Only admins via console
+    }
+
+    // Productid collection (cart items) - authenticated users can manage
+    match /Productid/{cartItemId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Cart collection - authenticated users can manage their cart
+    match /cart/{cartId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Post collection - read by all, like updates by authenticated users
+    match /Post/{postId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated() && resource.data.postedby == userRef();
+    }
+
+    // Commentsecction - authenticated users can read/write comments
+    match /Commentsecction/{commentId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+
+    // AppPreference - users can read/write their own preferences
+    match /AppPreference/{prefId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // Events collection - public read, admin write
+    match /Events/{eventId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Communities collection
+    match /communities/{communityId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // CommunityMemberships collection
+    match /CommunityMemberships/{membershipId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // Course collection - public read
+    match /Course/{courseId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Coursemodules collection
+    match /Coursemodules/{moduleId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // News collection - public read
+    match /news/{newsId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Tickets collection
+    match /Tickets/{ticketId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // ticket_types collection
+    match /ticket_types/{typeId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Orders collection
+    match /orders/{orderId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // Orders2 collection
+    match /Orders2/{orderId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // order_items collection
+    match /order_items/{itemId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // OrderAdd-ons collection
+    match /OrderAdd-ons/{addonId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // Chats collection (1:1 chats)
+    match /Chats/{chatId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+      
+      // Chatmessages subcollection
+      match /Chatmessages/{messageId} {
+        allow read: if isAuthenticated();
+        allow write: if isAuthenticated();
+      }
+    }
+
+    // Chatscollection - authenticated users can read/write
+    match /Chatscollection/{chatId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // chatmessagesgroup collection
+    match /chatmessagesgroup/{messageId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // Group collection (singular)
+    match /Group/{groupId} {
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+
+    // Groups collection - authenticated users who are members can read/write
+    match /Groups/{groupId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated();
+      
+      // Chats2 subcollection - group members can read/write messages
+      match /Chats2/{messageId} {
+        allow read: if isAuthenticated();
+        allow create: if isAuthenticated();
+        allow update, delete: if isAuthenticated();
+      }
+    }
+  }
+}

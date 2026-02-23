@@ -1,0 +1,124 @@
+{
+  "project_info": {
+    "project_number": "578115042061",
+    "project_id": "bright-wave-ioj9xl",
+    "storage_bucket": "bright-wave-ioj9xl.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578115042061:android:2336b6ff936cd38ecece44",
+        "android_client_info": {
+          "package_name": "com.DigitalRadicolz.web"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1UoclvtOdy8Eni_U1L4rrCJtXz0WXMbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578115042061:android:06503aae0221856bcece44",
+        "android_client_info": {
+          "package_name": "com.digitalradicalz.data"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1UoclvtOdy8Eni_U1L4rrCJtXz0WXMbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578115042061:android:c231588c6ee4d95acece44",
+        "android_client_info": {
+          "package_name": "com.digitalradicolz.web"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1UoclvtOdy8Eni_U1L4rrCJtXz0WXMbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578115042061:android:bb9729d1d3bfa1cfcece44",
+        "android_client_info": {
+          "package_name": "com.mycompany.CounterApp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1UoclvtOdy8Eni_U1L4rrCJtXz0WXMbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578115042061:android:06974666b876834fcece44",
+        "android_client_info": {
+          "package_name": "com.mycompany.brightwave"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1UoclvtOdy8Eni_U1L4rrCJtXz0WXMbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:578115042061:android:611ba735fc9f5b56cece44",
+        "android_client_info": {
+          "package_name": "digitalradicalz.stackone.web"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC1UoclvtOdy8Eni_U1L4rrCJtXz0WXMbI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,326 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is admin
+    function isAdmin() {
+      return request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.userType == 'admin';
+    }
+    
+    // Helper function to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function to get user document path
+    function userPath() {
+      return /databases/$(database)/documents/users/$(request.auth.uid);
+    }
+
+    // ==================== USERS ====================
+    // Users collection - private data owned by authenticated users
+    // Path: /users/{userId}
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && request.auth.uid == userId;
+      allow update, delete: if isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // ==================== PRODUCTS ====================
+    // Products collection - public read, admin write
+    // Path: /Product/{productId}
+    match /Product/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Legacy lowercase
+    match /product/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Product ID tracking - admin only
+    // Path: /Productid/{docId}
+    match /Productid/{docId} {
+      allow read, write: if isAdmin();
+    }
+    
+    // Legacy lowercase
+    match /productid/{docId} {
+      allow read, write: if isAdmin();
+    }
+    
+    // ==================== COMMUNITIES ====================
+    // Communities collection - public read, authenticated users can create/update
+    // Path: /communities/{communityId}
+    match /communities/{communityId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated() && 
+        (resource.data.createdbyid == userPath() || isAdmin());
+    }
+    
+    // Community memberships - users can manage their own memberships
+    // Path: /CommunityMemberships/{membershipId}
+    match /CommunityMemberships/{membershipId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+    
+    // Legacy lowercase
+    match /community_memberships/{membershipId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+    
+    // ==================== POSTS ====================
+    // Posts collection - public read, authenticated users can create, owners can modify
+    // Path: /Post/{postId}
+    match /Post/{postId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated() && 
+        (resource.data.postedby == userPath() || isAdmin());
+    }
+    
+    // ==================== COMMENTS ====================
+    // Comments - authenticated users only
+    // Path: /Commentsecction/{commentId}
+    match /Commentsecction/{commentId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+    
+    // Legacy lowercase
+    match /commentsecction/{commentId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+    
+    // ==================== CHATS ====================
+    // Chats collection - participants can read/write
+    // Path: /Chats/{chatId}
+    match /Chats/{chatId} {
+      allow read, write: if isAuthenticated();
+      
+      // Subcollection for chat messages
+      match /Chatmessages/{messageId} {
+        allow read, create: if isAuthenticated();
+        allow update, delete: if isAuthenticated() && 
+          resource.data.uidofsender == userPath();
+      }
+      
+      // Chats2 subcollection
+      match /Chats2/{subChatId} {
+        allow read, write: if isAuthenticated();
+      }
+    }
+    
+    // Legacy chat collections (lowercase)
+    match /chats/{chatId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Chats2 (top-level collection)
+    match /Chats2/{chatId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    match /chats2/{chatId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Chatscollection (with capital C)
+    match /Chatscollection/{chatId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    match /chatscollection/{chatId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Chat messages (top-level collection if used)
+    match /Chatmessages/{messageId} {
+      allow read, create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+    
+    match /chatmessages/{messageId} {
+      allow read, create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+    
+    // ==================== GROUPS ====================
+    // Groups collection - authenticated users can read, members can participate
+    // Path: /Groups/{groupId}
+    match /Groups/{groupId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAuthenticated() && 
+        (resource.data.adminId == userPath() || isAdmin());
+      
+      // Group messages subcollection
+      match /Chatmessagesgroup/{messageId} {
+        allow read, create: if isAuthenticated();
+        allow update, delete: if isAuthenticated();
+      }
+    }
+    
+    // Group collection (singular with capital G)
+    match /Group/{groupId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+    
+    // Legacy group collections (lowercase)
+    match /group/{groupId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+    
+    match /groups/{groupId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+    
+    // Group messages (top-level collection if used)
+    match /Chatmessagesgroup/{messageId} {
+      allow read, create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+    
+    match /chatmessagesgroup/{messageId} {
+      allow read, create: if isAuthenticated();
+      allow update, delete: if isAuthenticated();
+    }
+    
+    // ==================== EVENTS ====================
+    // Events - public read, authenticated users can create
+    // Path: /Events/{eventId}
+    match /Events/{eventId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAdmin();
+    }
+    
+    // Legacy lowercase
+    match /events/{eventId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update: if isAuthenticated();
+      allow delete: if isAdmin();
+    }
+    
+    // ==================== TICKETS ====================
+    // Tickets - users can manage their own tickets
+    // Path: /Tickets/{ticketId}
+    match /Tickets/{ticketId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Legacy lowercase
+    match /tickets/{ticketId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Ticket types - public read, admin write
+    match /ticket_types/{typeId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // ==================== ORDERS & CART ====================
+    // Orders - users can manage their own orders
+    match /orders/{orderId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Orders2 (with capital O)
+    match /Orders2/{orderId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    match /orders2/{orderId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Order items
+    match /order_items/{itemId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Order add-ons (with hyphen)
+    match /OrderAdd-ons/{addonId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Legacy underscore version
+    match /order_add_ons/{addonId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Cart - users can manage their own cart
+    match /cart/{cartId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // ==================== COURSES ====================
+    // Courses - public read, admin write
+    // Path: /Course/{courseId}
+    match /Course/{courseId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Legacy lowercase
+    match /course/{courseId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // Course modules - authenticated read, admin write
+    // Path: /Coursemodules/{moduleId}
+    match /Coursemodules/{moduleId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+    
+    // Legacy lowercase
+    match /coursemodules/{moduleId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+    
+    // ==================== NEWS ====================
+    // News - public read, admin write
+    match /news/{newsId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+    
+    // ==================== APP PREFERENCES ====================
+    // App preferences - users can manage their own
+    // Path: /AppPreference/{prefId}
+    match /AppPreference/{prefId} {
+      allow read, write: if isAuthenticated();
+    }
+    
+    // Legacy underscore version
+    match /app_preference/{prefId} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}
