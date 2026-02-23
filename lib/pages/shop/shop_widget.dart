@@ -1,15 +1,13 @@
 import '/backend/backend.dart';
-import '/auth/firebase_auth/auth_util.dart';
 import '/components/navbar/navbar_widget.dart';
+import '/components/main_tab_app_bar.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import '/index.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'shop_model.dart';
 export 'shop_model.dart';
 
@@ -51,111 +49,7 @@ class _ShopWidgetState extends State<ShopWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-        appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-          automaticallyImplyLeading: false,
-          title: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 193.9,
-                height: 48.8,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.contain,
-                    image: Image.asset(
-                      'assets/images/Digital_radicalz_(1).png',
-                    ).image,
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  StreamBuilder<List<ProductidRecord>>(
-                    stream: queryProductidRecord(
-                      queryBuilder: (r) => r.where('userid', isEqualTo: currentUserReference),
-                    ),
-                    builder: (context, snapshot) {
-                      final items = (snapshot.data ?? [])
-                          .where((item) => item.productid != null)
-                          .toList();
-                      final count = items.length;
-                      return Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          FlutterFlowIconButton(
-                            borderRadius: 8.0,
-                            buttonSize: 40.0,
-                            icon: Icon(
-                              Icons.shopping_cart_outlined,
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              size: 24.0,
-                            ),
-                            onPressed: () async {
-                              context.pushNamed(MyCartWidget.routeName);
-                            },
-                          ),
-                            Positioned(
-                              right: 0,
-                              top: -2,
-                              child: AnimatedSwitcher(
-                                duration: Duration(milliseconds: 300),
-                                switchInCurve: Curves.easeOutBack,
-                                switchOutCurve: Curves.easeInBack,
-                                transitionBuilder: (child, animation) {
-                                  return ScaleTransition(scale: animation, child: child);
-                                },
-                                child: count > 0
-                                    ? Container(
-                                        key: ValueKey<int>(count),
-                                        padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context).primary,
-                                          borderRadius: BorderRadius.circular(10),
-                                        ),
-                                        constraints: BoxConstraints(minWidth: 18, minHeight: 18),
-                                        child: Center(
-                                          child: Text(
-                                            count > 99 ? '99+' : '$count',
-                                            style: FlutterFlowTheme.of(context).bodySmall.override(
-                                                  color: FlutterFlowTheme.of(context).secondaryBackground,
-                                                  fontWeight: FontWeight.w700,
-                                                  letterSpacing: 0.0,
-                                                ),
-                                          ),
-                                        ),
-                                      )
-                                    : SizedBox.shrink(
-                                        key: ValueKey<String>('empty'),
-                                      ),
-                              ),
-                            ),
-                        ],
-                      );
-                    },
-                  ),
-                  FlutterFlowIconButton(
-                    borderRadius: 8.0,
-                    buttonSize: 40.0,
-                    icon: Icon(
-                      Icons.favorite_border,
-                      color: FlutterFlowTheme.of(context).primaryText,
-                      size: 24.0,
-                    ),
-                    onPressed: () async {
-                      context.pushNamed(FavoriteWidget.routeName);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-          actions: [],
-          centerTitle: false,
-          elevation: 2.0,
-        ),
+        appBar: const MainTabAppBar(showShopActions: true),
         body: SafeArea(
           top: true,
           child: Stack(
@@ -172,7 +66,8 @@ class _ShopWidgetState extends State<ShopWidget> {
                         child: Row(
                           children: [
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 12.0, 0.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 12.0, 0.0),
                               child: InkWell(
                                 splashColor: Colors.transparent,
                                 focusColor: Colors.transparent,
@@ -187,38 +82,58 @@ class _ShopWidgetState extends State<ShopWidget> {
                                   width: 120.0,
                                   height: 80.0,
                                   decoration: BoxDecoration(
-                                    color: (_model.onselected == 'Scanner' || _model.onselected == 'Scanners')
+                                    color: (_model.onselected == 'Scanner' ||
+                                            _model.onselected == 'Scanners')
                                         ? FlutterFlowTheme.of(context).primary
-                                        : FlutterFlowTheme.of(context).secondaryBackground,
+                                        : FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
                                     borderRadius: BorderRadius.circular(10.0),
                                     border: Border.all(
-                                      color: FlutterFlowTheme.of(context).alternate,
+                                      color: FlutterFlowTheme.of(context)
+                                          .alternate,
                                       width: 1.0,
                                     ),
                                   ),
                                   child: Padding(
                                     padding: EdgeInsets.all(12.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Icon(
                                           Icons.qr_code_scanner,
-                                          color: (_model.onselected == 'Scanner' || _model.onselected == 'Scanners')
-                                              ? Colors.white
-                                              : FlutterFlowTheme.of(context).primaryText,
+                                          color:
+                                              (_model.onselected == 'Scanner' ||
+                                                      _model.onselected ==
+                                                          'Scanners')
+                                                  ? Colors.white
+                                                  : FlutterFlowTheme.of(context)
+                                                      .primaryText,
                                         ),
                                         SizedBox(height: 8.0),
                                         Text(
                                           'Scanner',
-                                          style: FlutterFlowTheme.of(context).labelMedium.override(
+                                          style: FlutterFlowTheme.of(context)
+                                              .labelMedium
+                                              .override(
                                                 font: GoogleFonts.inter(
                                                   fontWeight: FontWeight.w600,
-                                                  fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .labelMedium
+                                                          .fontStyle,
                                                 ),
-                                                color: (_model.onselected == 'Scanner' || _model.onselected == 'Scanners')
+                                                color: (_model.onselected ==
+                                                            'Scanner' ||
+                                                        _model.onselected ==
+                                                            'Scanners')
                                                     ? Colors.white
-                                                    : FlutterFlowTheme.of(context).primaryText,
+                                                    : FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
                                                 letterSpacing: 0.0,
                                               ),
                                         ),
@@ -229,7 +144,8 @@ class _ShopWidgetState extends State<ShopWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 12.0, 0.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 12.0, 0.0),
                               child: InkWell(
                                 splashColor: Colors.transparent,
                                 focusColor: Colors.transparent,
@@ -246,36 +162,50 @@ class _ShopWidgetState extends State<ShopWidget> {
                                   decoration: BoxDecoration(
                                     color: _model.onselected == 'T-shirt'
                                         ? FlutterFlowTheme.of(context).primary
-                                        : FlutterFlowTheme.of(context).secondaryBackground,
+                                        : FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
                                     borderRadius: BorderRadius.circular(10.0),
                                     border: Border.all(
-                                      color: FlutterFlowTheme.of(context).alternate,
+                                      color: FlutterFlowTheme.of(context)
+                                          .alternate,
                                       width: 1.0,
                                     ),
                                   ),
                                   child: Padding(
                                     padding: EdgeInsets.all(12.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Icon(
                                           Icons.checkroom,
                                           color: _model.onselected == 'T-shirt'
                                               ? Colors.white
-                                              : FlutterFlowTheme.of(context).primaryText,
+                                              : FlutterFlowTheme.of(context)
+                                                  .primaryText,
                                         ),
                                         SizedBox(height: 8.0),
                                         Text(
                                           'T-shirt',
-                                          style: FlutterFlowTheme.of(context).labelMedium.override(
+                                          style: FlutterFlowTheme.of(context)
+                                              .labelMedium
+                                              .override(
                                                 font: GoogleFonts.inter(
                                                   fontWeight: FontWeight.w600,
-                                                  fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .labelMedium
+                                                          .fontStyle,
                                                 ),
-                                                color: _model.onselected == 'T-shirt'
+                                                color: _model.onselected ==
+                                                        'T-shirt'
                                                     ? Colors.white
-                                                    : FlutterFlowTheme.of(context).primaryText,
+                                                    : FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
                                                 letterSpacing: 0.0,
                                               ),
                                         ),
@@ -286,7 +216,8 @@ class _ShopWidgetState extends State<ShopWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 12.0, 0.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 12.0, 0.0),
                               child: InkWell(
                                 splashColor: Colors.transparent,
                                 focusColor: Colors.transparent,
@@ -303,36 +234,51 @@ class _ShopWidgetState extends State<ShopWidget> {
                                   decoration: BoxDecoration(
                                     color: _model.onselected == 'Assessoires'
                                         ? FlutterFlowTheme.of(context).primary
-                                        : FlutterFlowTheme.of(context).secondaryBackground,
+                                        : FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
                                     borderRadius: BorderRadius.circular(10.0),
                                     border: Border.all(
-                                      color: FlutterFlowTheme.of(context).alternate,
+                                      color: FlutterFlowTheme.of(context)
+                                          .alternate,
                                       width: 1.0,
                                     ),
                                   ),
                                   child: Padding(
                                     padding: EdgeInsets.all(12.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Icon(
                                           Icons.watch,
-                                          color: _model.onselected == 'Assessoires'
-                                              ? Colors.white
-                                              : FlutterFlowTheme.of(context).primaryText,
+                                          color:
+                                              _model.onselected == 'Assessoires'
+                                                  ? Colors.white
+                                                  : FlutterFlowTheme.of(context)
+                                                      .primaryText,
                                         ),
                                         SizedBox(height: 8.0),
                                         Text(
                                           'Assessoires',
-                                          style: FlutterFlowTheme.of(context).labelMedium.override(
+                                          style: FlutterFlowTheme.of(context)
+                                              .labelMedium
+                                              .override(
                                                 font: GoogleFonts.inter(
                                                   fontWeight: FontWeight.w600,
-                                                  fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .labelMedium
+                                                          .fontStyle,
                                                 ),
-                                                color: _model.onselected == 'Assessoires'
+                                                color: _model.onselected ==
+                                                        'Assessoires'
                                                     ? Colors.white
-                                                    : FlutterFlowTheme.of(context).primaryText,
+                                                    : FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
                                                 letterSpacing: 0.0,
                                               ),
                                         ),
@@ -343,7 +289,8 @@ class _ShopWidgetState extends State<ShopWidget> {
                               ),
                             ),
                             Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 12.0, 0.0),
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 0.0, 12.0, 0.0),
                               child: InkWell(
                                 splashColor: Colors.transparent,
                                 focusColor: Colors.transparent,
@@ -360,36 +307,50 @@ class _ShopWidgetState extends State<ShopWidget> {
                                   decoration: BoxDecoration(
                                     color: _model.onselected == 'Stickers'
                                         ? FlutterFlowTheme.of(context).primary
-                                        : FlutterFlowTheme.of(context).secondaryBackground,
+                                        : FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
                                     borderRadius: BorderRadius.circular(10.0),
                                     border: Border.all(
-                                      color: FlutterFlowTheme.of(context).alternate,
+                                      color: FlutterFlowTheme.of(context)
+                                          .alternate,
                                       width: 1.0,
                                     ),
                                   ),
                                   child: Padding(
                                     padding: EdgeInsets.all(12.0),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: [
                                         Icon(
                                           Icons.local_offer_outlined,
                                           color: _model.onselected == 'Stickers'
                                               ? Colors.white
-                                              : FlutterFlowTheme.of(context).primaryText,
+                                              : FlutterFlowTheme.of(context)
+                                                  .primaryText,
                                         ),
                                         SizedBox(height: 8.0),
                                         Text(
                                           'Stickers',
-                                          style: FlutterFlowTheme.of(context).labelMedium.override(
+                                          style: FlutterFlowTheme.of(context)
+                                              .labelMedium
+                                              .override(
                                                 font: GoogleFonts.inter(
                                                   fontWeight: FontWeight.w600,
-                                                  fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
+                                                  fontStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .labelMedium
+                                                          .fontStyle,
                                                 ),
-                                                color: _model.onselected == 'Stickers'
+                                                color: _model.onselected ==
+                                                        'Stickers'
                                                     ? Colors.white
-                                                    : FlutterFlowTheme.of(context).primaryText,
+                                                    : FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryText,
                                                 letterSpacing: 0.0,
                                               ),
                                         ),
@@ -765,19 +726,25 @@ class _ShopWidgetState extends State<ShopWidget> {
                             stream: (() {
                               if (_model.ongenre == 'Stickers') {
                                 return queryProductRecord(
-                                  queryBuilder: (p) => p.where('Category', whereIn: ['Stickers', 'Sticker']),
+                                  queryBuilder: (p) => p.where('Category',
+                                      whereIn: ['Stickers', 'Sticker']),
                                 );
                               } else if (_model.ongenre == 'Assessoires') {
                                 return queryProductRecord(
-                                  queryBuilder: (p) => p.where('Category', whereIn: ['Assessoires', 'Accessoires']),
+                                  queryBuilder: (p) => p.where('Category',
+                                      whereIn: ['Assessoires', 'Accessoires']),
                                 );
-                              } else if (_model.ongenre == 'Scanners' || _model.ongenre == 'Scanner') {
+                              } else if (_model.ongenre == 'Scanners' ||
+                                  _model.ongenre == 'Scanner') {
                                 return queryProductRecord(
-                                  queryBuilder: (p) => p.where('Category', isEqualTo: 'Scanners'),
+                                  queryBuilder: (p) => p.where('Category',
+                                      isEqualTo: 'Scanners'),
                                 );
                               } else {
                                 return queryProductRecord(
-                                  queryBuilder: (productRecord) => productRecord.where('Category', isEqualTo: _model.ongenre),
+                                  queryBuilder: (productRecord) =>
+                                      productRecord.where('Category',
+                                          isEqualTo: _model.ongenre),
                                 );
                               }
                             })(),
@@ -789,9 +756,14 @@ class _ShopWidgetState extends State<ShopWidget> {
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Icon(Icons.error_outline, size: 48, color: FlutterFlowTheme.of(context).secondaryText),
+                                        Icon(Icons.error_outline,
+                                            size: 48,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText),
                                         SizedBox(height: 8),
-                                        Text('Kon producten niet laden', style: FlutterFlowTheme.of(context).bodyMedium),
+                                        Text('Kon producten niet laden',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium),
                                       ],
                                     ),
                                   ),
@@ -816,7 +788,9 @@ class _ShopWidgetState extends State<ShopWidget> {
                                 return Center(
                                   child: Padding(
                                     padding: EdgeInsets.all(16.0),
-                                    child: Text('Geen producten gevonden', style: FlutterFlowTheme.of(context).bodyMedium),
+                                    child: Text('Geen producten gevonden',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium),
                                   ),
                                 );
                               }
@@ -1016,9 +990,14 @@ class _ShopWidgetState extends State<ShopWidget> {
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        Icon(Icons.error_outline, size: 48, color: FlutterFlowTheme.of(context).secondaryText),
+                                        Icon(Icons.error_outline,
+                                            size: 48,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText),
                                         SizedBox(height: 8),
-                                        Text('Kon producten niet laden', style: FlutterFlowTheme.of(context).bodyMedium),
+                                        Text('Kon producten niet laden',
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium),
                                       ],
                                     ),
                                   ),
@@ -1043,7 +1022,9 @@ class _ShopWidgetState extends State<ShopWidget> {
                                 return Center(
                                   child: Padding(
                                     padding: EdgeInsets.all(16.0),
-                                    child: Text('Geen producten gevonden', style: FlutterFlowTheme.of(context).bodyMedium),
+                                    child: Text('Geen producten gevonden',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium),
                                   ),
                                 );
                               }
@@ -1136,8 +1117,10 @@ class _ShopWidgetState extends State<ShopWidget> {
                                               valueOrDefault<String>(
                                                 formatNumber(
                                                   gridViewProductRecord.price,
-                                                  formatType: FormatType.decimal,
-                                                  decimalType: DecimalType.periodDecimal,
+                                                  formatType:
+                                                      FormatType.decimal,
+                                                  decimalType:
+                                                      DecimalType.periodDecimal,
                                                   currency: '€',
                                                 ),
                                                 '€50',
@@ -1313,13 +1296,16 @@ class _SearchResultsList extends StatelessWidget {
         return queryProductRecord();
       } else if (selectedCategory == 'Stickers') {
         return queryProductRecord(
-          queryBuilder: (p) => p.where('Category', whereIn: ['Stickers', 'Sticker']),
+          queryBuilder: (p) =>
+              p.where('Category', whereIn: ['Stickers', 'Sticker']),
         );
       } else if (selectedCategory == 'Assessoires') {
         return queryProductRecord(
-          queryBuilder: (p) => p.where('Category', whereIn: ['Assessoires', 'Accessoires']),
+          queryBuilder: (p) =>
+              p.where('Category', whereIn: ['Assessoires', 'Accessoires']),
         );
-      } else if (selectedCategory == 'Scanners' || selectedCategory == 'Scanner') {
+      } else if (selectedCategory == 'Scanners' ||
+          selectedCategory == 'Scanner') {
         return queryProductRecord(
           queryBuilder: (p) => p.where('Category', isEqualTo: 'Scanners'),
         );
@@ -1340,9 +1326,12 @@ class _SearchResultsList extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.error_outline, size: 48, color: FlutterFlowTheme.of(context).secondaryText),
+                  Icon(Icons.error_outline,
+                      size: 48,
+                      color: FlutterFlowTheme.of(context).secondaryText),
                   SizedBox(height: 8),
-                  Text('Kon producten niet laden', style: FlutterFlowTheme.of(context).bodyMedium),
+                  Text('Kon producten niet laden',
+                      style: FlutterFlowTheme.of(context).bodyMedium),
                 ],
               ),
             ),
@@ -1363,15 +1352,16 @@ class _SearchResultsList extends StatelessWidget {
         }
         List<ProductRecord> items = snapshot.data!;
         if (q.isNotEmpty) {
-          items = items
-              .where((p) => (p.name).toLowerCase().contains(q))
-              .toList();
+          items =
+              items.where((p) => (p.name).toLowerCase().contains(q)).toList();
         }
 
         if (items.isEmpty) {
           return Center(
             child: Text(
-              q.isEmpty ? 'Type to search products' : 'No results for "$queryText"',
+              q.isEmpty
+                  ? 'Type to search products'
+                  : 'No results for "$queryText"',
               style: FlutterFlowTheme.of(context).labelMedium,
             ),
           );
@@ -1448,10 +1438,9 @@ class ProductFilterDelegate extends SearchDelegate<ProductRecord?> {
   });
 
   @override
-  String? get searchFieldLabel =>
-      mode == ProductFilterMode.name
-          ? 'Filter by name'
-          : 'Filter by price (e.g., 20 or 20-50)';
+  String? get searchFieldLabel => mode == ProductFilterMode.name
+      ? 'Filter by name'
+      : 'Filter by price (e.g., 20 or 20-50)';
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -1529,11 +1518,15 @@ class _FilteredResultsList extends StatelessWidget {
     final raw = input.trim();
     if (raw.isEmpty) return (null, null, 'any');
 
-    final normalized = raw.toLowerCase().replaceAll('eur', '').replaceAll('€', '').replaceAll('\n', ' ');
+    final normalized = raw
+        .toLowerCase()
+        .replaceAll('eur', '')
+        .replaceAll('€', '')
+        .replaceAll('\n', ' ');
 
     // Support operators: >, >=, <, <=
-    final opMatch = RegExp(r'^(>=|<=|>|<)\s*(\d+(?:[\.,]\d+)?)$')
-        .firstMatch(normalized);
+    final opMatch =
+        RegExp(r'^(>=|<=|>|<)\s*(\d+(?:[\.,]\d+)?)$').firstMatch(normalized);
     if (opMatch != null) {
       final op = opMatch.group(1)!;
       final numStr = opMatch.group(2)!;
@@ -1548,9 +1541,9 @@ class _FilteredResultsList extends StatelessWidget {
     }
 
     // Support ranges: 10-50, 10 – 50, 10 to 50
-    final rangeMatch = RegExp(
-            r'^(\d+(?:[\.,]\d+)?)\s*(?:-|–|—|to)\s*(\d+(?:[\.,]\d+)?)$')
-        .firstMatch(normalized);
+    final rangeMatch =
+        RegExp(r'^(\d+(?:[\.,]\d+)?)\s*(?:-|–|—|to)\s*(\d+(?:[\.,]\d+)?)$')
+            .firstMatch(normalized);
     if (rangeMatch != null) {
       final a = double.tryParse(rangeMatch.group(1)!.replaceAll(',', '.'));
       final b = double.tryParse(rangeMatch.group(2)!.replaceAll(',', '.'));
@@ -1580,13 +1573,16 @@ class _FilteredResultsList extends StatelessWidget {
         return queryProductRecord();
       } else if (selectedCategory == 'Stickers') {
         return queryProductRecord(
-          queryBuilder: (p) => p.where('Category', whereIn: ['Stickers', 'Sticker']),
+          queryBuilder: (p) =>
+              p.where('Category', whereIn: ['Stickers', 'Sticker']),
         );
       } else if (selectedCategory == 'Assessoires') {
         return queryProductRecord(
-          queryBuilder: (p) => p.where('Category', whereIn: ['Assessoires', 'Accessoires']),
+          queryBuilder: (p) =>
+              p.where('Category', whereIn: ['Assessoires', 'Accessoires']),
         );
-      } else if (selectedCategory == 'Scanners' || selectedCategory == 'Scanner') {
+      } else if (selectedCategory == 'Scanners' ||
+          selectedCategory == 'Scanner') {
         return queryProductRecord(
           queryBuilder: (p) => p.where('Category', isEqualTo: 'Scanners'),
         );
@@ -1607,9 +1603,12 @@ class _FilteredResultsList extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.error_outline, size: 48, color: FlutterFlowTheme.of(context).secondaryText),
+                  Icon(Icons.error_outline,
+                      size: 48,
+                      color: FlutterFlowTheme.of(context).secondaryText),
                   SizedBox(height: 8),
-                  Text('Kon producten niet laden', style: FlutterFlowTheme.of(context).bodyMedium),
+                  Text('Kon producten niet laden',
+                      style: FlutterFlowTheme.of(context).bodyMedium),
                 ],
               ),
             ),
@@ -1644,6 +1643,7 @@ class _FilteredResultsList extends StatelessWidget {
             if (hasDisc) return p.discountprice;
             return p.hasPrice() ? p.price : 0.0;
           }
+
           items = items.where((p) {
             final price = effective(p);
             final meetsMin = minP == null ? true : price >= minP;

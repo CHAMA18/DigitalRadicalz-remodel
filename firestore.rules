@@ -41,15 +41,26 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
     
-    // Product ID tracking - admin only
+    // Productid collection is used as user cart items.
+    // Users may only read/write their own docs; admins may access all.
     // Path: /Productid/{docId}
     match /Productid/{docId} {
-      allow read, write: if isAdmin();
+      allow read: if isAuthenticated() &&
+        (resource.data.userid == userPath() || isAdmin());
+      allow create: if isAuthenticated() &&
+        (request.resource.data.userid == userPath() || isAdmin());
+      allow update, delete: if isAuthenticated() &&
+        (resource.data.userid == userPath() || isAdmin());
     }
     
     // Legacy lowercase
     match /productid/{docId} {
-      allow read, write: if isAdmin();
+      allow read: if isAuthenticated() &&
+        (resource.data.userid == userPath() || isAdmin());
+      allow create: if isAuthenticated() &&
+        (request.resource.data.userid == userPath() || isAdmin());
+      allow update, delete: if isAuthenticated() &&
+        (resource.data.userid == userPath() || isAdmin());
     }
     
     // ==================== COMMUNITIES ====================
@@ -173,6 +184,13 @@ service cloud.firestore {
         allow read, create: if isAuthenticated();
         allow update, delete: if isAuthenticated();
       }
+
+      // Group chat messages used by app UI
+      // Path: /Groups/{groupId}/Chats2/{messageId}
+      match /Chats2/{messageId} {
+        allow read, create: if isAuthenticated();
+        allow update, delete: if isAuthenticated();
+      }
     }
     
     // Group collection (singular with capital G)
@@ -193,6 +211,11 @@ service cloud.firestore {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated();
       allow update, delete: if isAuthenticated();
+
+      match /Chats2/{messageId} {
+        allow read, create: if isAuthenticated();
+        allow update, delete: if isAuthenticated();
+      }
     }
     
     // Group messages (top-level collection if used)

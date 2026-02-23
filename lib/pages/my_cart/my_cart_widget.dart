@@ -90,7 +90,57 @@ elevation: 2.0,
 ),
 body: SafeArea(
 top: true,
-child: StreamBuilder<List<ProductidRecord>>(
+child: !loggedIn
+? Center(
+child: Padding(
+padding: EdgeInsets.all(24.0),
+child: Column(
+mainAxisSize: MainAxisSize.min,
+children: [
+Icon(
+Icons.lock_outline,
+size: 56.0,
+color: FlutterFlowTheme.of(context).secondaryText,
+),
+SizedBox(height: 12.0),
+Text(
+'Please log in to view your cart.',
+textAlign: TextAlign.center,
+style: FlutterFlowTheme.of(context).bodyMedium.override(
+letterSpacing: 0.0,
+),
+),
+SizedBox(height: 16.0),
+FFButtonWidget(
+onPressed: () async {
+context.pushNamed(LoginWidget.routeName);
+},
+text: 'Go to Login',
+options: FFButtonOptions(
+height: 44.0,
+padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
+color: FlutterFlowTheme.of(context).primary,
+textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+font: GoogleFonts.interTight(
+fontWeight: FontWeight.w500,
+fontStyle:
+FlutterFlowTheme.of(context).titleSmall.fontStyle,
+),
+color: Colors.white,
+letterSpacing: 0.0,
+fontWeight: FontWeight.w500,
+fontStyle:
+FlutterFlowTheme.of(context).titleSmall.fontStyle,
+),
+elevation: 0.0,
+borderRadius: BorderRadius.circular(12.0),
+),
+),
+],
+),
+),
+)
+: StreamBuilder<List<ProductidRecord>>(
 stream: queryProductidRecord(
 queryBuilder: (productidRecord) => productidRecord
 .where('userid', isEqualTo: currentUserReference),

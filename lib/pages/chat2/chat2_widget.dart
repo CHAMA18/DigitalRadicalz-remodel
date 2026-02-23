@@ -16,7 +16,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'chat2_model.dart';
@@ -69,6 +68,93 @@ class _Chat2WidgetState extends State<Chat2Widget> {
     return StreamBuilder<ChatsRecord>(
       stream: ChatsRecord.getDocument(widget!.receiveChat!),
       builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Scaffold(
+            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+            appBar: AppBar(
+              backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+              automaticallyImplyLeading: false,
+              leading: FlutterFlowIconButton(
+                borderRadius: 20.0,
+                buttonSize: 40.0,
+                icon: Icon(
+                  Icons.chevron_left,
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  size: 24.0,
+                ),
+                onPressed: () async {
+                  context.safePop();
+                },
+              ),
+              titleSpacing: 0.0,
+              title: Text(
+                widget.username.isNotEmpty ? widget.username : 'Chat',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: FlutterFlowTheme.of(context).bodyLarge.override(
+                      font: GoogleFonts.inter(
+                        fontWeight: FontWeight.w600,
+                        fontStyle:
+                            FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+                      ),
+                      letterSpacing: 0.0,
+                      fontWeight: FontWeight.w600,
+                      fontStyle:
+                          FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+                    ),
+              ),
+              actions: [
+                FlutterFlowIconButton(
+                  borderRadius: 20.0,
+                  buttonSize: 40.0,
+                  icon: Icon(
+                    Icons.settings_outlined,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 22.0,
+                  ),
+                  onPressed: () async {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Chat settings are unavailable right now.',
+                          style: TextStyle(
+                            color: FlutterFlowTheme.of(context).primaryText,
+                          ),
+                        ),
+                        duration: Duration(milliseconds: 2000),
+                        backgroundColor: FlutterFlowTheme.of(context).secondary,
+                      ),
+                    );
+                  },
+                ),
+              ],
+              elevation: 2.0,
+            ),
+            body: Center(
+              child: Padding(
+                padding: EdgeInsets.all(24.0),
+                child: Text(
+                  'Unable to load this chat right now.',
+                  textAlign: TextAlign.center,
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        font: GoogleFonts.inter(
+                          fontWeight:
+                              FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                          fontStyle:
+                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                        ),
+                        letterSpacing: 0.0,
+                        fontWeight:
+                            FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                        fontStyle:
+                            FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                      ),
+                ),
+              ),
+            ),
+          );
+        }
+
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
           return Scaffold(
@@ -88,6 +174,10 @@ class _Chat2WidgetState extends State<Chat2Widget> {
         }
 
         final chat2ChatsRecord = snapshot.data!;
+        final chatTitle = widget.username.isNotEmpty
+            ? widget.username
+            : functions.getOtherUserName(
+                chat2ChatsRecord.usernames.toList(), currentUserDisplayName);
 
         return Scaffold(
             key: scaffoldKey,
@@ -95,17 +185,18 @@ class _Chat2WidgetState extends State<Chat2Widget> {
             appBar: AppBar(
               backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
               automaticallyImplyLeading: false,
-              title: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  InkWell(
-                    splashColor: Colors.transparent,
-                    focusColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: () async {
-                      await widget!.receiveChat!.update({
+              leading: FlutterFlowIconButton(
+                borderRadius: 20.0,
+                buttonSize: 40.0,
+                icon: Icon(
+                  Icons.chevron_left,
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  size: 24.0,
+                ),
+                onPressed: () async {
+                  try {
+                    if (currentUserReference != null) {
+                      await widget.receiveChat!.update({
                         ...mapToFirestore(
                           {
                             'lastmessageseenby':
@@ -113,102 +204,56 @@ class _Chat2WidgetState extends State<Chat2Widget> {
                           },
                         ),
                       });
-                      context.safePop();
-                    },
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        InkWell(
-                          splashColor: Colors.transparent,
-                          focusColor: Colors.transparent,
-                          hoverColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onTap: () async {
-                            context.safePop();
-                          },
-                          child: Icon(
-                            Icons.chevron_left,
-                            color: FlutterFlowTheme.of(context).primaryText,
-                            size: 32.0,
-                          ),
-                        ),
-                        Text(
-                          'Back',
-                          style: FlutterFlowTheme.of(context)
-                              .headlineMedium
-                              .override(
-                                font: GoogleFonts.interTight(
-                                  fontWeight: FontWeight.w500,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .headlineMedium
-                                      .fontStyle,
-                                ),
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                fontSize: 16.0,
-                                letterSpacing: 0.0,
-                                fontWeight: FontWeight.w500,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .headlineMedium
-                                    .fontStyle,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Text(
-                    widget.username.isNotEmpty 
-                        ? widget.username 
-                        : functions.getOtherUserName(
-                            chat2ChatsRecord.usernames.toList(),
-                            currentUserDisplayName),
-                    style: FlutterFlowTheme.of(context).bodyMedium.override(
-                          font: GoogleFonts.inter(
-                            fontWeight: FontWeight.w500,
-                            fontStyle: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .fontStyle,
-                          ),
-                          fontSize: 16.0,
-                          letterSpacing: 0.0,
-                          fontWeight: FontWeight.w500,
-                          fontStyle: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .fontStyle,
-                        ),
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Text(
-                        'Back',
-                        style: FlutterFlowTheme.of(context)
-                            .headlineMedium
-                            .override(
-                              font: GoogleFonts.interTight(
-                                fontWeight: FontWeight.w500,
-                                fontStyle: FlutterFlowTheme.of(context)
-                                    .headlineMedium
-                                    .fontStyle,
-                              ),
-                              color: Color(0x0014181B),
-                              fontSize: 16.0,
-                              letterSpacing: 0.0,
-                              fontWeight: FontWeight.w500,
-                              fontStyle: FlutterFlowTheme.of(context)
-                                  .headlineMedium
-                                  .fontStyle,
-                            ),
-                      ),
-                      FaIcon(
-                        FontAwesomeIcons.edit,
-                        color: Color(0x0014181B),
-                        size: 24.0,
-                      ),
-                    ],
-                  ),
-                ],
+                    }
+                  } catch (e) {
+                    debugPrint('Failed to mark last message seen: $e');
+                  } finally {
+                    context.safePop();
+                  }
+                },
               ),
-              actions: [],
+              titleSpacing: 0.0,
+              title: Text(
+                chatTitle,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: FlutterFlowTheme.of(context).bodyLarge.override(
+                      font: GoogleFonts.inter(
+                        fontWeight: FontWeight.w600,
+                        fontStyle:
+                            FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+                      ),
+                      letterSpacing: 0.0,
+                      fontWeight: FontWeight.w600,
+                      fontStyle:
+                          FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+                    ),
+              ),
+              actions: [
+                FlutterFlowIconButton(
+                  borderRadius: 20.0,
+                  buttonSize: 40.0,
+                  icon: Icon(
+                    Icons.settings_outlined,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 22.0,
+                  ),
+                  onPressed: () async {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Chat settings - coming soon.',
+                          style: TextStyle(
+                            color: FlutterFlowTheme.of(context).primaryText,
+                          ),
+                        ),
+                        duration: Duration(milliseconds: 2000),
+                        backgroundColor: FlutterFlowTheme.of(context).secondary,
+                      ),
+                    );
+                  },
+                ),
+              ],
               centerTitle: false,
               elevation: 2.0,
             ),
@@ -226,6 +271,37 @@ class _Chat2WidgetState extends State<Chat2Widget> {
                             .orderBy('timestamp', descending: true),
                       ),
                       builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(24.0),
+                              child: Text(
+                                'Unable to load messages. Please try again.',
+                                textAlign: TextAlign.center,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.inter(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                      letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                              ),
+                            ),
+                          );
+                        }
+
                         // Customize what your widget looks like when it's loading.
                         if (!snapshot.hasData) {
                           return Center(
@@ -243,7 +319,7 @@ class _Chat2WidgetState extends State<Chat2Widget> {
                         List<ChatmessagesRecord>
                             listViewChatmessagesRecordList = snapshot.data!;
                         if (listViewChatmessagesRecordList.isEmpty) {
-                          return EmptychatWidget();
+                          return const EmptychatWidget();
                         }
 
                         return ListView.builder(
@@ -321,7 +397,9 @@ class _Chat2WidgetState extends State<Chat2Widget> {
                                   size: 24.0,
                                 ),
                               ) : Container(),
-                              child: Stack(
+                              child: SizedBox(
+                                width: double.infinity,
+                                child: Stack(
                                 children: [
                                   (isCurrentUser)
                                       ? Align(
@@ -333,12 +411,8 @@ class _Chat2WidgetState extends State<Chat2Widget> {
                                             mainAxisAlignment: MainAxisAlignment.end,
                                             crossAxisAlignment: CrossAxisAlignment.end,
                                             children: [
-                                              InkWell(
-                                                splashColor: Colors.transparent,
-                                                focusColor: Colors.transparent,
-                                                hoverColor: Colors.transparent,
-                                                highlightColor: Colors.transparent,
-                                                onTap: null,
+                                              GestureDetector(
+                                                behavior: HitTestBehavior.opaque,
                                                 onLongPress: () async {
                                               final confirmed = await showDialog<bool>(
                                                     context: context,
@@ -386,7 +460,7 @@ class _Chat2WidgetState extends State<Chat2Widget> {
                                                 await listViewChatmessagesRecord.reference.delete();
                                               }
                                             },
-                                            child: Container(
+                                                child: Container(
                                               width: 224.53,
                                               decoration: BoxDecoration(),
                                               child: Column(
@@ -647,8 +721,8 @@ class _Chat2WidgetState extends State<Chat2Widget> {
                                                   ),
                                                 ],
                                               ),
-                                            ),
-                                          ),
+                                                ),
+                                              ),
                                         ],
                                       ),
                                     )
@@ -687,13 +761,7 @@ class _Chat2WidgetState extends State<Chat2Widget> {
                                             ),
                                           ),
                                         ),
-                                        InkWell(
-                                          splashColor: Colors.transparent,
-                                          focusColor: Colors.transparent,
-                                          hoverColor: Colors.transparent,
-                                          highlightColor: Colors.transparent,
-                                          onTap: null,
-                                          child: Container(
+                                        Container(
                                             width: 224.5,
                                             decoration: BoxDecoration(),
                                             child: Column(
@@ -946,11 +1014,11 @@ class _Chat2WidgetState extends State<Chat2Widget> {
                                               ],
                                             ),
                                           ),
-                                        ),
                                       ],
                                     ),
                                   ),
                                 ],
+                                ),
                               ),
                             );
                           },

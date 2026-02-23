@@ -1,18 +1,12 @@
 import '/backend/backend.dart';
 import '/components/agenda_widget.dart';
+import '/components/main_tab_app_bar.dart';
 import '/components/navbar/navbar_widget.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
-import '/flutter_flow/flutter_flow_widgets.dart';
-import '/flutter_flow/flutter_flow_icon_button.dart';
-import '/auth/firebase_auth/auth_util.dart';
-import '/components/profile/profile_widget.dart';
-import '/index.dart';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'agendaoverview_model.dart';
 export 'agendaoverview_model.dart';
 
@@ -63,99 +57,7 @@ class _AgendaoverviewWidgetState extends State<AgendaoverviewWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-        appBar: AppBar(
-          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-          automaticallyImplyLeading: false,
-          title: Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 193.91,
-                height: 48.8,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.contain,
-                    image: Image.asset(
-                      'assets/images/Digital_radicalz_(1).png',
-                    ).image,
-                  ),
-                ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 8.0, 0.0),
-                    child: FlutterFlowIconButton(
-                      borderRadius: 8.0,
-                      buttonSize: 40.0,
-                      icon: Icon(
-                        Icons.chat_bubble_outline_outlined,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        size: 24.0,
-                      ),
-                      onPressed: () async {
-                        context.pushNamed(ChatWidget.routeName);
-                      },
-                    ),
-                  ),
-                  AuthUserStreamWidget(
-                    builder: (context) => InkWell(
-                      splashColor: Colors.transparent,
-                      focusColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () async {
-                        await showModalBottomSheet(
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          enableDrag: false,
-                          context: context,
-                          builder: (context) {
-                            return GestureDetector(
-                              onTap: () {
-                                FocusScope.of(context).unfocus();
-                                FocusManager.instance.primaryFocus?.unfocus();
-                              },
-                              child: Padding(
-                                padding: MediaQuery.viewInsetsOf(context),
-                                child: Container(
-                                  height: MediaQuery.sizeOf(context).height * 0.98,
-                                  child: ProfileWidget(),
-                                ),
-                              ),
-                            );
-                          },
-                        ).then((value) => safeSetState(() {}));
-                      },
-                      child: Container(
-                        width: 32.0,
-                        height: 32.0,
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).secondaryBackground,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: Image.network(
-                              valueOrDefault<String>(
-                                currentUserPhoto,
-                                'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/gbh03g8a6d5k/placeholder-profile-icon-8qmjk1094ijhbem9-removebg-preview.png',
-                              ),
-                            ).image,
-                          ),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          actions: [],
-          centerTitle: false,
-          elevation: 2.0,
-        ),
+        appBar: const MainTabAppBar(),
         body: SafeArea(
           top: true,
           child: Stack(
@@ -184,7 +86,8 @@ class _AgendaoverviewWidgetState extends State<AgendaoverviewWidget> {
                                       width: 50.0,
                                       height: 50.0,
                                       child: CircularProgressIndicator(
-                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
                                           FlutterFlowTheme.of(context).primary,
                                         ),
                                       ),
@@ -221,8 +124,10 @@ class _AgendaoverviewWidgetState extends State<AgendaoverviewWidget> {
                                         12.0, 200.0, 0.0, 40.0),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           valueOrDefault<String>(
@@ -234,11 +139,13 @@ class _AgendaoverviewWidgetState extends State<AgendaoverviewWidget> {
                                               .override(
                                                 font: GoogleFonts.inter(
                                                   fontWeight:
-                                                      FlutterFlowTheme.of(context)
+                                                      FlutterFlowTheme.of(
+                                                              context)
                                                           .bodyMedium
                                                           .fontWeight,
                                                   fontStyle:
-                                                      FlutterFlowTheme.of(context)
+                                                      FlutterFlowTheme.of(
+                                                              context)
                                                           .bodyMedium
                                                           .fontStyle,
                                                 ),
@@ -264,11 +171,13 @@ class _AgendaoverviewWidgetState extends State<AgendaoverviewWidget> {
                                               .override(
                                                 font: GoogleFonts.inter(
                                                   fontWeight:
-                                                      FlutterFlowTheme.of(context)
+                                                      FlutterFlowTheme.of(
+                                                              context)
                                                           .bodyMedium
                                                           .fontWeight,
                                                   fontStyle:
-                                                      FlutterFlowTheme.of(context)
+                                                      FlutterFlowTheme.of(
+                                                              context)
                                                           .bodyMedium
                                                           .fontStyle,
                                                 ),
@@ -303,16 +212,19 @@ class _AgendaoverviewWidgetState extends State<AgendaoverviewWidget> {
                   Align(
                     alignment: Alignment.bottomCenter,
                     child: Padding(
-                      padding: EdgeInsets.only(bottom: 72.0), // keep above navbar
+                      padding:
+                          EdgeInsets.only(bottom: 72.0), // keep above navbar
                       child: AnimatedContainer(
                         duration: Duration(milliseconds: 220),
                         curve: Curves.easeOut,
                         width: double.infinity,
-                        height: MediaQuery.sizeOf(context).height * _panelFraction,
+                        height:
+                            MediaQuery.sizeOf(context).height * _panelFraction,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(12.0),
                           child: Material(
-                            color: FlutterFlowTheme.of(context).primaryBackground,
+                            color:
+                                FlutterFlowTheme.of(context).primaryBackground,
                             elevation: 2,
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
@@ -324,19 +236,28 @@ class _AgendaoverviewWidgetState extends State<AgendaoverviewWidget> {
                                     _dragStartFraction = _panelFraction;
                                   },
                                   onVerticalDragUpdate: (details) {
-                                    final screenH = MediaQuery.sizeOf(context).height;
-                                    final dy = details.delta.dy; // positive when dragging down
-                                    final next = (_panelFraction - (dy / screenH))
-                                        .clamp(_minPanelFraction, _maxPanelFraction);
+                                    final screenH =
+                                        MediaQuery.sizeOf(context).height;
+                                    final dy = details.delta
+                                        .dy; // positive when dragging down
+                                    final next =
+                                        (_panelFraction - (dy / screenH)).clamp(
+                                            _minPanelFraction,
+                                            _maxPanelFraction);
                                     safeSetState(() {
                                       _panelFraction = next.toDouble();
                                     });
                                   },
                                   onVerticalDragEnd: (details) {
                                     // Snap to nearest stop
-                                    final snaps = <double>[_minPanelFraction, 0.5, _maxPanelFraction];
+                                    final snaps = <double>[
+                                      _minPanelFraction,
+                                      0.5,
+                                      _maxPanelFraction
+                                    ];
                                     double closest = snaps.first;
-                                    double best = (snaps.first - _panelFraction).abs();
+                                    double best =
+                                        (snaps.first - _panelFraction).abs();
                                     for (final s in snaps) {
                                       final d = (s - _panelFraction).abs();
                                       if (d < best) {
@@ -349,11 +270,13 @@ class _AgendaoverviewWidgetState extends State<AgendaoverviewWidget> {
                                     });
                                   },
                                   child: Semantics(
-                                    label: 'Drag handle: drag vertically to resize agenda panel',
+                                    label:
+                                        'Drag handle: drag vertically to resize agenda panel',
                                     button: true,
                                     child: Container(
                                       width: double.infinity,
-                                      padding: EdgeInsets.symmetric(vertical: 14.0),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 14.0),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
@@ -361,32 +284,48 @@ class _AgendaoverviewWidgetState extends State<AgendaoverviewWidget> {
                                             width: 56,
                                             height: 6,
                                             decoration: BoxDecoration(
-                                              color: FlutterFlowTheme.of(context)
-                                                  .secondaryText
-                                                  .withValues(alpha: 0.35),
-                                              borderRadius: BorderRadius.circular(3),
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .secondaryText
+                                                      .withValues(alpha: 0.35),
+                                              borderRadius:
+                                                  BorderRadius.circular(3),
                                             ),
                                           ),
                                           SizedBox(height: 6),
                                           Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              Icon(Icons.drag_handle, size: 16, color: FlutterFlowTheme.of(context).secondaryText),
+                                              Icon(Icons.drag_handle,
+                                                  size: 16,
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondaryText),
                                               SizedBox(width: 4),
                                               Text(
                                                 'Hold to resize',
-                                                style: FlutterFlowTheme.of(context).labelSmall.override(
+                                                style: FlutterFlowTheme.of(
+                                                        context)
+                                                    .labelSmall
+                                                    .override(
                                                       font: GoogleFonts.inter(
-                                                        fontWeight: FlutterFlowTheme.of(context)
-                                                            .labelSmall
-                                                            .fontWeight,
-                                                        fontStyle: FlutterFlowTheme.of(context)
-                                                            .labelSmall
-                                                            .fontStyle,
+                                                        fontWeight:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .labelSmall
+                                                                .fontWeight,
+                                                        fontStyle:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .labelSmall
+                                                                .fontStyle,
                                                       ),
-                                                      color: FlutterFlowTheme.of(context)
-                                                          .secondaryText
-                                                          .withValues(alpha: 0.8),
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryText
+                                                              .withValues(
+                                                                  alpha: 0.8),
                                                       letterSpacing: 0.0,
                                                     ),
                                               ),

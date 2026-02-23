@@ -66,6 +66,93 @@ class _GrouchatsWidgetState extends State<GrouchatsWidget> {
     return StreamBuilder<GroupsRecord>(
       stream: GroupsRecord.getDocument(widget.receivedgroupchats!),
       builder: (context, snapshot) {
+        if (snapshot.hasError) {
+          return Scaffold(
+            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+            appBar: AppBar(
+              backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+              automaticallyImplyLeading: false,
+              leading: FlutterFlowIconButton(
+                borderRadius: 20.0,
+                buttonSize: 40.0,
+                icon: Icon(
+                  Icons.chevron_left,
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  size: 24.0,
+                ),
+                onPressed: () async {
+                  context.safePop();
+                },
+              ),
+              titleSpacing: 0.0,
+              title: Text(
+                widget.username.isNotEmpty ? widget.username : 'Group chat',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: FlutterFlowTheme.of(context).bodyLarge.override(
+                      font: GoogleFonts.inter(
+                        fontWeight: FontWeight.w600,
+                        fontStyle:
+                            FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+                      ),
+                      letterSpacing: 0.0,
+                      fontWeight: FontWeight.w600,
+                      fontStyle:
+                          FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+                    ),
+              ),
+              actions: [
+                FlutterFlowIconButton(
+                  borderRadius: 20.0,
+                  buttonSize: 40.0,
+                  icon: Icon(
+                    Icons.settings_outlined,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 22.0,
+                  ),
+                  onPressed: () async {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Group settings are unavailable right now.',
+                          style: TextStyle(
+                            color: FlutterFlowTheme.of(context).primaryText,
+                          ),
+                        ),
+                        duration: Duration(milliseconds: 2000),
+                        backgroundColor: FlutterFlowTheme.of(context).secondary,
+                      ),
+                    );
+                  },
+                ),
+              ],
+              elevation: 2.0,
+            ),
+            body: Center(
+              child: Padding(
+                padding: EdgeInsets.all(24.0),
+                child: Text(
+                  'Unable to load this chat right now.',
+                  textAlign: TextAlign.center,
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        font: GoogleFonts.inter(
+                          fontWeight:
+                              FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                          fontStyle:
+                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                        ),
+                        letterSpacing: 0.0,
+                        fontWeight:
+                            FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                        fontStyle:
+                            FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                      ),
+                ),
+              ),
+            ),
+          );
+        }
+
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
           return Scaffold(
@@ -123,97 +210,106 @@ class _GrouchatsWidgetState extends State<GrouchatsWidget> {
                   }
                 },
               ),
+              titleSpacing: 0.0,
               title: Row(
                 mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Container(
-                        width: 40.0,
-                        height: 40.0,
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).alternate,
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: Image.network(
-                              grouchatsGroupsRecord.groupimage.isNotEmpty
-                                  ? grouchatsGroupsRecord.groupimage
-                                  : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/gbh03g8a6d5k/placeholder-profile-icon-8qmjk1094ijhbem9-removebg-preview.png',
-                            ).image,
-                          ),
-                          shape: BoxShape.circle,
-                        ),
+                  Container(
+                    width: 40.0,
+                    height: 40.0,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).alternate,
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: Image.network(
+                          grouchatsGroupsRecord.groupimage.isNotEmpty
+                              ? grouchatsGroupsRecord.groupimage
+                              : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/gbh03g8a6d5k/placeholder-profile-icon-8qmjk1094ijhbem9-removebg-preview.png',
+                        ).image,
                       ),
-                      Expanded(
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                grouchatsGroupsRecord.groupName,
-                                style: FlutterFlowTheme.of(context).bodyLarge.override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FontWeight.w600,
-                                        fontStyle: FlutterFlowTheme.of(context).bodyLarge.fontStyle,
-                                      ),
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w600,
-                                      fontStyle: FlutterFlowTheme.of(context).bodyLarge.fontStyle,
-                                    ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                '${grouchatsGroupsRecord.userid.length} members',
-                                style: FlutterFlowTheme.of(context).bodySmall.override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
-                                      ),
-                                      color: FlutterFlowTheme.of(context).secondaryText,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (grouchatsGroupsRecord.adminId == currentUserReference)
-                    FlutterFlowIconButton(
-                      borderRadius: 20.0,
-                      buttonSize: 40.0,
-                      icon: Icon(
-                        Icons.settings,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        size: 24.0,
-                      ),
-                      onPressed: () async {
-                        // TODO: Navigate to group settings
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              'Group settings - Coming soon!',
-                              style: TextStyle(
-                                color: FlutterFlowTheme.of(context).primaryText,
-                              ),
-                            ),
-                            duration: Duration(milliseconds: 2000),
-                            backgroundColor: FlutterFlowTheme.of(context).secondary,
-                          ),
-                        );
-                      },
+                      shape: BoxShape.circle,
                     ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            grouchatsGroupsRecord.groupName,
+                            style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                  font: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w600,
+                                    fontStyle: FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+                                  ),
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w600,
+                                  fontStyle: FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+                                ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            '${grouchatsGroupsRecord.userid.length} members',
+                            style: FlutterFlowTheme.of(context).bodySmall.override(
+                                  font: GoogleFonts.inter(
+                                    fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                                    fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                  ),
+                                  color: FlutterFlowTheme.of(context).secondaryText,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                                  fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
-              actions: [],
+              actions: [
+                FlutterFlowIconButton(
+                  borderRadius: 20.0,
+                  buttonSize: 40.0,
+                  icon: Icon(
+                    Icons.settings_outlined,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 22.0,
+                  ),
+                  onPressed: () async {
+                    if (grouchatsGroupsRecord.adminId == currentUserReference) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Group settings - coming soon.',
+                            style: TextStyle(
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
+                          ),
+                          duration: Duration(milliseconds: 2000),
+                          backgroundColor: FlutterFlowTheme.of(context).secondary,
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Only group admins can access settings.',
+                            style: TextStyle(
+                              color: FlutterFlowTheme.of(context).primaryText,
+                            ),
+                          ),
+                          duration: Duration(milliseconds: 2000),
+                          backgroundColor: FlutterFlowTheme.of(context).secondary,
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ],
               centerTitle: false,
               elevation: 2.0,
             ),
@@ -231,6 +327,37 @@ class _GrouchatsWidgetState extends State<GrouchatsWidget> {
                             chats2Record.orderBy('timestamp', descending: true),
                       ),
                       builder: (context, snapshot) {
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(24.0),
+                              child: Text(
+                                'Unable to load messages. Please try again.',
+                                textAlign: TextAlign.center,
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.inter(
+                                        fontWeight: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .fontStyle,
+                                      ),
+                                      letterSpacing: 0.0,
+                                      fontWeight: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontWeight,
+                                      fontStyle: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .fontStyle,
+                                    ),
+                              ),
+                            ),
+                          );
+                        }
+
                         // Customize what your widget looks like when it's loading.
                         if (!snapshot.hasData) {
                           return Center(
@@ -248,7 +375,7 @@ class _GrouchatsWidgetState extends State<GrouchatsWidget> {
                         List<Chats2Record> listViewChats2RecordList =
                             snapshot.data!;
                         if (listViewChats2RecordList.isEmpty) {
-                          return EmptychatWidget();
+                          return const EmptychatWidget();
                         }
 
                         return ListView.builder(
@@ -260,7 +387,9 @@ class _GrouchatsWidgetState extends State<GrouchatsWidget> {
                           itemBuilder: (context, listViewIndex) {
                             final listViewChats2Record =
                                 listViewChats2RecordList[listViewIndex];
-                            return Stack(
+                            return SizedBox(
+                              width: double.infinity,
+                              child: Stack(
                               children: [
                                 if (listViewChats2Record.uidofsender ==
                                     currentUserReference)
@@ -684,6 +813,7 @@ class _GrouchatsWidgetState extends State<GrouchatsWidget> {
                                     ),
                                   ),
                               ],
+                              ),
                             );
                           },
                         );

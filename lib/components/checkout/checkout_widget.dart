@@ -615,6 +615,11 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 23.0, 0.0, 0.0),
                   child: FFButtonWidget(
                     onPressed: () async {
+                      if (!loggedIn || currentUserReference == null) {
+                        context.pushNamed(LoginWidget.routeName);
+                        return;
+                      }
+
                       // Clear user's cart by deleting all their cart items
                       final userCartItems = await queryProductidRecord(
                         queryBuilder: (productidRecord) => productidRecord

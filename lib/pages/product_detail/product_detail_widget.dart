@@ -553,6 +553,11 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                           EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 3.0),
                       child: FFButtonWidget(
                         onPressed: () async {
+                          if (!loggedIn || currentUserReference == null) {
+                            context.pushNamed(LoginWidget.routeName);
+                            return;
+                          }
+
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(

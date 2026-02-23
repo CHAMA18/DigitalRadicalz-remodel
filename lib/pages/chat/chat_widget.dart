@@ -53,6 +53,37 @@ textAlign: TextAlign.center,
 }
 }
 
+/// Badge widget for unread count on each group row.
+class _GroupUnreadBadge extends StatelessWidget {
+const _GroupUnreadBadge({required this.count});
+
+final int count;
+
+@override
+Widget build(BuildContext context) {
+if (count <= 0) return SizedBox.shrink();
+
+return Container(
+margin: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 0.0, 0.0),
+padding: EdgeInsets.symmetric(horizontal: 7.0, vertical: 3.0),
+constraints: BoxConstraints(minWidth: 20.0),
+decoration: BoxDecoration(
+color: Colors.red,
+borderRadius: BorderRadius.circular(10.0),
+),
+child: Text(
+count > 99 ? '99+' : count.toString(),
+textAlign: TextAlign.center,
+style: TextStyle(
+color: Colors.white,
+fontSize: 10.0,
+fontWeight: FontWeight.w700,
+),
+),
+);
+}
+}
+
 class ChatWidget extends StatefulWidget {
 const ChatWidget({super.key});
 
@@ -1168,6 +1199,9 @@ physics: NeverScrollableScrollPhysics(),
 itemCount: visibleGroups.length,
 itemBuilder: (context, index) {
 final g = visibleGroups[index];
+final bool hasUnread =
+!g.lastmessageseenby.contains(currentUserReference);
+final int unreadMessageCount = hasUnread ? 1 : 0;
 return Padding(
 padding: EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 0.0),
 child: InkWell(
@@ -1274,12 +1308,16 @@ child: Text(
 g.lastmessage.isNotEmpty ? g.lastmessage : 'No messages yet',
 style: FlutterFlowTheme.of(context).bodyMedium.override(
 font: GoogleFonts.inter(
-fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+	fontWeight: hasUnread
+	? FontWeight.w600
+	: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+	fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
 ),
 color: FlutterFlowTheme.of(context).secondaryText,
 letterSpacing: 0.0,
-fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+fontWeight: hasUnread
+? FontWeight.w600
+: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
 fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
 ),
 maxLines: 2,
@@ -1336,15 +1374,7 @@ fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
 ),
 ),
 ),
-if (!g.lastmessageseenby.contains(currentUserReference))
-Container(
-width: 8.0,
-height: 8.0,
-decoration: BoxDecoration(
-color: FlutterFlowTheme.of(context).primary,
-shape: BoxShape.circle,
-),
-),
+_GroupUnreadBadge(count: unreadMessageCount),
 ],
 ),
 ),

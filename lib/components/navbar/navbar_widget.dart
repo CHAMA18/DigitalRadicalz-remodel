@@ -19,6 +19,24 @@ class NavbarWidget extends StatefulWidget {
 class _NavbarWidgetState extends State<NavbarWidget> {
   late NavbarModel _model;
 
+  Future<void> _navigateToTab(String pageKey, String routeName) async {
+    if (FFAppState().onpage == pageKey) return;
+
+    FFAppState().onpage = pageKey;
+
+    if (!mounted) return;
+    context.goNamed(
+      routeName,
+      extra: <String, dynamic>{
+        kTransitionInfoKey: TransitionInfo(
+          hasTransition: true,
+          transitionType: PageTransitionType.fade,
+          duration: Duration(milliseconds: 0),
+        ),
+      },
+    );
+  }
+
   @override
   void setState(VoidCallback callback) {
     super.setState(callback);
@@ -68,19 +86,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onTap: () async {
-                  FFAppState().onpage = 'Home';
-                  safeSetState(() {});
-
-                  context.pushNamed(
-                    HomePageWidget.routeName,
-                    extra: <String, dynamic>{
-                      kTransitionInfoKey: TransitionInfo(
-                        hasTransition: true,
-                        transitionType: PageTransitionType.fade,
-                        duration: Duration(milliseconds: 0),
-                      ),
-                    },
-                  );
+                  await _navigateToTab('Home', HomePageWidget.routeName);
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -128,19 +134,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onTap: () async {
-                  FFAppState().onpage = 'Community';
-                  safeSetState(() {});
-
-                  context.pushNamed(
-                    CommunityWidget.routeName,
-                    extra: <String, dynamic>{
-                      kTransitionInfoKey: TransitionInfo(
-                        hasTransition: true,
-                        transitionType: PageTransitionType.fade,
-                        duration: Duration(milliseconds: 0),
-                      ),
-                    },
-                  );
+                  await _navigateToTab('Community', CommunityWidget.routeName);
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -188,19 +182,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onTap: () async {
-                  FFAppState().onpage = 'Agenda';
-                  safeSetState(() {});
-
-                  context.pushNamed(
-                    AgendaoverviewWidget.routeName,
-                    extra: <String, dynamic>{
-                      kTransitionInfoKey: TransitionInfo(
-                        hasTransition: true,
-                        transitionType: PageTransitionType.fade,
-                        duration: Duration(milliseconds: 0),
-                      ),
-                    },
-                  );
+                  await _navigateToTab('Agenda', AgendaoverviewWidget.routeName);
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -248,19 +230,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onTap: () async {
-                  FFAppState().onpage = 'Shop';
-                  safeSetState(() {});
-
-                  context.pushNamed(
-                    ShopWidget.routeName,
-                    extra: <String, dynamic>{
-                      kTransitionInfoKey: TransitionInfo(
-                        hasTransition: true,
-                        transitionType: PageTransitionType.fade,
-                        duration: Duration(milliseconds: 0),
-                      ),
-                    },
-                  );
+                  await _navigateToTab('Shop', ShopWidget.routeName);
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -308,19 +278,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                 hoverColor: Colors.transparent,
                 highlightColor: Colors.transparent,
                 onTap: () async {
-                  FFAppState().onpage = 'media';
-                  safeSetState(() {});
-
-                  context.pushNamed(
-                    MediaWidget.routeName,
-                    extra: <String, dynamic>{
-                      kTransitionInfoKey: TransitionInfo(
-                        hasTransition: true,
-                        transitionType: PageTransitionType.fade,
-                        duration: Duration(milliseconds: 0),
-                      ),
-                    },
-                  );
+                  await _navigateToTab('media', MediaWidget.routeName);
                 },
                 child: Column(
                   mainAxisSize: MainAxisSize.max,

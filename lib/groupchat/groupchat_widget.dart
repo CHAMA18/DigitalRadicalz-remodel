@@ -389,7 +389,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                         List<Chats2Record> messagesList = snapshot.data!;
 
                         if (messagesList.isEmpty) {
-                          return EmptychatWidget();
+                          return const EmptychatWidget();
                         }
 
                         return ListView.builder(
