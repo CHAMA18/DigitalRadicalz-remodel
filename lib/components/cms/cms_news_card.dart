@@ -61,7 +61,7 @@ class CmsNewsCard extends StatelessWidget {
                   placeholder: (context, url) => Container(
                     color: FlutterFlowTheme.of(context).alternate,
                     child: Center(
-                      child: CircularProgressIndicator(
+                      child: FFShimmerLoadingIndicator(
                         strokeWidth: 2,
                         color: FlutterFlowTheme.of(context).primary,
                       ),
@@ -242,8 +242,7 @@ class CmsNewsCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Text(
-                          '•',
+                        Text('•',
                           style: FlutterFlowTheme.of(context).bodySmall.override(
                             font: GoogleFonts.inter(),
                             color: FlutterFlowTheme.of(context).secondaryText,

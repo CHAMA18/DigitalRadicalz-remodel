@@ -84,8 +84,7 @@ class _CommunitypostsWidgetState extends State<CommunitypostsWidget> {
                       color: FlutterFlowTheme.of(context).primaryText,
                       size: 32.0,
                     ),
-                    Text(
-                      'Back',
+                    Text('Back',
                       style:
                           FlutterFlowTheme.of(context).headlineMedium.override(
                                 font: GoogleFonts.interTight(
@@ -106,8 +105,7 @@ class _CommunitypostsWidgetState extends State<CommunitypostsWidget> {
                   ],
                 ),
               ),
-              Text(
-                'Posts',
+              Text('Posts',
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
                       font: GoogleFonts.inter(
                         fontWeight: FontWeight.w500,
@@ -124,8 +122,7 @@ class _CommunitypostsWidgetState extends State<CommunitypostsWidget> {
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text(
-                    'Back',
+                  Text('Back',
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
                           font: GoogleFonts.interTight(
                             fontWeight: FontWeight.w500,
@@ -253,7 +250,7 @@ class _CommunitypostsWidgetState extends State<CommunitypostsWidget> {
                                         .labelMedium
                                         .fontStyle,
                                   ),
-                          hintText: 'Search Post..',
+                          hintText: ffTranslate(context, 'Search Post..'),
                           hintStyle:
                               FlutterFlowTheme.of(context).labelMedium.override(
                                     font: GoogleFonts.inter(
@@ -345,7 +342,7 @@ class _CommunitypostsWidgetState extends State<CommunitypostsWidget> {
                             child: SizedBox(
                               width: 50.0,
                               height: 50.0,
-                              child: CircularProgressIndicator(
+                              child: FFShimmerLoadingIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   FlutterFlowTheme.of(context).primary,
                                 ),
@@ -385,11 +382,11 @@ class _CommunitypostsWidgetState extends State<CommunitypostsWidget> {
                                         ),
                                   ),
                                   TextSpan(
-                                    text: '\'s ',
+                                    text: ffTranslate(context, '\'s '),
                                     style: TextStyle(),
                                   ),
                                   TextSpan(
-                                    text: 'Posts',
+                                    text: ffTranslate(context, 'Posts'),
                                     style: TextStyle(),
                                   )
                                 ],
@@ -435,7 +432,7 @@ class _CommunitypostsWidgetState extends State<CommunitypostsWidget> {
                             child: SizedBox(
                               width: 50.0,
                               height: 50.0,
-                              child: CircularProgressIndicator(
+                              child: FFShimmerLoadingIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   FlutterFlowTheme.of(context).primary,
                                 ),
@@ -575,7 +572,7 @@ class _CommunitypostsWidgetState extends State<CommunitypostsWidget> {
                                                           width: 16,
                                                           height: 16,
                                                           child:
-                                                              CircularProgressIndicator(
+                                                              FFShimmerLoadingIndicator(
                                                             strokeWidth: 2,
                                                             valueColor:
                                                                 AlwaysStoppedAnimation<Color>(
@@ -719,7 +716,7 @@ class _CommunitypostsWidgetState extends State<CommunitypostsWidget> {
                               child: SizedBox(
                                 width: 50.0,
                                 height: 50.0,
-                                child: CircularProgressIndicator(
+                                child: FFShimmerLoadingIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                     FlutterFlowTheme.of(context).primary,
                                   ),
@@ -873,7 +870,7 @@ class _CommunitypostsWidgetState extends State<CommunitypostsWidget> {
                                                             width: 16,
                                                             height: 16,
                                                             child:
-                                                                CircularProgressIndicator(
+                                                                FFShimmerLoadingIndicator(
                                                               strokeWidth: 2,
                                                               valueColor:
                                                                   AlwaysStoppedAnimation<Color>(

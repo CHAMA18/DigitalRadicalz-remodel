@@ -53,8 +53,7 @@ class _EmptyCommensWidgetState extends State<EmptyCommensWidget> {
             animate: true,
           ),
         ),
-        Text(
-          'No Comments Yet!',
+        Text('No Comments Yet!',
           style: FlutterFlowTheme.of(context).bodyMedium.override(
                 font: GoogleFonts.inter(
                   fontWeight: FontWeight.w500,

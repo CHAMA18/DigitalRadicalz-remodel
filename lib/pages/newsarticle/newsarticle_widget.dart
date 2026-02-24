@@ -66,7 +66,7 @@ class _NewsarticleWidgetState extends State<NewsarticleWidget> {
                 child: SizedBox(
                   width: 50.0,
                   height: 50.0,
-                  child: CircularProgressIndicator(
+                  child: FFShimmerLoadingIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
                       FlutterFlowTheme.of(context).primary,
                     ),
@@ -327,7 +327,7 @@ class _NewsarticleWidgetState extends State<NewsarticleWidget> {
                                       child: SizedBox(
                                         width: 50.0,
                                         height: 50.0,
-                                        child: CircularProgressIndicator(
+                                        child: FFShimmerLoadingIndicator(
                                           valueColor:
                                               AlwaysStoppedAnimation<Color>(
                                             FlutterFlowTheme.of(context)
@@ -346,7 +346,7 @@ class _NewsarticleWidgetState extends State<NewsarticleWidget> {
                                     text: TextSpan(
                                       children: [
                                         TextSpan(
-                                          text: 'Published by: ',
+                                          text: ffTranslate(context, 'Published by: '),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -409,7 +409,7 @@ class _NewsarticleWidgetState extends State<NewsarticleWidget> {
                                   text: TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: 'Posted at:',
+                                        text: ffTranslate(context, 'Posted at:'),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -508,8 +508,7 @@ class _NewsarticleWidgetState extends State<NewsarticleWidget> {
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0.0, 24.0, 0.0, 12.0),
-                                  child: Text(
-                                    'Meer news',
+                                  child: Text('Meer news',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -545,7 +544,7 @@ class _NewsarticleWidgetState extends State<NewsarticleWidget> {
                                   child: SizedBox(
                                     width: 50.0,
                                     height: 50.0,
-                                    child: CircularProgressIndicator(
+                                    child: FFShimmerLoadingIndicator(
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                         FlutterFlowTheme.of(context).primary,
                                       ),

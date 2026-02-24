@@ -127,7 +127,7 @@ class _Community2WidgetState extends State<Community2Widget>
               child: SizedBox(
                 width: 50.0,
                 height: 50.0,
-                child: CircularProgressIndicator(
+                child: FFShimmerLoadingIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
                     FlutterFlowTheme.of(context).primary,
                   ),
@@ -208,8 +208,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               SnackBar(
-                                                content: Text(
-                                                  'You’ve successfully added this community to your interests!',
+                                                content: Text('You’ve successfully added this community to your interests!',
                                                   style: TextStyle(
                                                     color: FlutterFlowTheme.of(
                                                             context)
@@ -247,8 +246,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               SnackBar(
-                                                content: Text(
-                                                  'You’ve successfully removed this community to your interests!',
+                                                content: Text('You’ve successfully removed this community to your interests!',
                                                   style: TextStyle(
                                                     color: FlutterFlowTheme.of(
                                                             context)
@@ -372,8 +370,7 @@ class _Community2WidgetState extends State<Community2Widget>
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
-                          'Biografie',
+                        Text('Biografie',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -451,7 +448,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                 ),
                               });
                             },
-                            text: 'Join',
+                            text: ffTranslate(context, 'Join'),
                             options: FFButtonOptions(
                               width: double.infinity,
                               height: 40.0,
@@ -503,7 +500,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                 ),
                               });
                             },
-                            text: 'Leave',
+                            text: ffTranslate(context, 'Leave'),
                             options: FFButtonOptions(
                               width: double.infinity,
                               height: 40.0,
@@ -592,7 +589,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                           ).then(
                                               (value) => safeSetState(() {}));
                                         },
-                                        text: 'Create a Post',
+                                        text: ffTranslate(context, 'Create a Post'),
                                         options: FFButtonOptions(
                                           width: double.infinity,
                                           height: 40.0,
@@ -646,7 +643,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                         onPressed: () {
                                           print('Button pressed ...');
                                         },
-                                        text: 'Create a Post',
+                                        text: ffTranslate(context, 'Create a Post'),
                                         options: FFButtonOptions(
                                           width: double.infinity,
                                           height: 40.0,
@@ -721,7 +718,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                 child: SizedBox(
                                   width: 50.0,
                                   height: 50.0,
-                                  child: CircularProgressIndicator(
+                                  child: FFShimmerLoadingIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                       FlutterFlowTheme.of(context).primary,
                                     ),
@@ -781,7 +778,7 @@ class _Community2WidgetState extends State<Community2Widget>
                             child: SizedBox(
                               width: 50.0,
                               height: 50.0,
-                              child: CircularProgressIndicator(
+                              child: FFShimmerLoadingIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   FlutterFlowTheme.of(context).primary,
                                 ),
@@ -1005,7 +1002,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                                     text: TextSpan(
                                                       children: [
                                                         TextSpan(
-                                                          text: 'Bio: ',
+                                                          text: ffTranslate(context, 'Bio: '),
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyMedium
@@ -1088,7 +1085,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                                       text: TextSpan(
                                                         children: [
                                                           TextSpan(
-                                                            text: 'Contact: ',
+                                                            text: ffTranslate(context, 'Contact: '),
                                                             style: FlutterFlowTheme
                                                                     .of(context)
                                                                 .bodyMedium
@@ -1130,7 +1127,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                                             style: TextStyle(),
                                                           ),
                                                           TextSpan(
-                                                            text: 'Tel: ',
+                                                            text: ffTranslate(context, 'Tel: '),
                                                             style: TextStyle(),
                                                           ),
                                                           TextSpan(
@@ -1223,7 +1220,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                         child: SizedBox(
                                           width: 50.0,
                                           height: 50.0,
-                                          child: CircularProgressIndicator(
+                                          child: FFShimmerLoadingIndicator(
                                             valueColor:
                                                 AlwaysStoppedAnimation<Color>(
                                               FlutterFlowTheme.of(context)
@@ -1286,7 +1283,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                     child: SizedBox(
                                       width: 50.0,
                                       height: 50.0,
-                                      child: CircularProgressIndicator(
+                                      child: FFShimmerLoadingIndicator(
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(
                                           FlutterFlowTheme.of(context).primary,
@@ -1589,7 +1586,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                 child: SizedBox(
                                   width: 50.0,
                                   height: 50.0,
-                                  child: CircularProgressIndicator(
+                                  child: FFShimmerLoadingIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                       FlutterFlowTheme.of(context).primary,
                                     ),
@@ -1645,7 +1642,7 @@ class _Community2WidgetState extends State<Community2Widget>
                           child: SizedBox(
                             width: 50.0,
                             height: 50.0,
-                            child: CircularProgressIndicator(
+                            child: FFShimmerLoadingIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 FlutterFlowTheme.of(context).primary,
                               ),
@@ -1685,7 +1682,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                         child: SizedBox(
                                           width: 50.0,
                                           height: 50.0,
-                                          child: CircularProgressIndicator(
+                                          child: FFShimmerLoadingIndicator(
                                             valueColor:
                                                 AlwaysStoppedAnimation<Color>(
                                               FlutterFlowTheme.of(context)
@@ -1917,7 +1914,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                                       width: 50.0,
                                                       height: 50.0,
                                                       child:
-                                                          CircularProgressIndicator(
+                                                          FFShimmerLoadingIndicator(
                                                         valueColor:
                                                             AlwaysStoppedAnimation<
                                                                 Color>(
@@ -1949,8 +1946,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                                           textCount.toDouble(),
                                                     ));
                                                   },
-                                                  child: Text(
-                                                    '${valueOrDefault<String>(
+                                                  child: Text('${valueOrDefault<String>(
                                                       formatNumber(
                                                         textCount,
                                                         formatType:
@@ -2145,8 +2141,7 @@ class _Community2WidgetState extends State<Community2Widget>
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           12.0, 0.0, 0.0, 0.0),
-                                      child: Text(
-                                        'Plaats een opmerking',
+                                      child: Text('Plaats een opmerking',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(

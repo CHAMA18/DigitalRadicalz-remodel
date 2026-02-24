@@ -56,8 +56,7 @@ class _EmptyuserWidgetState extends State<EmptyuserWidget> {
           ),
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(30.0, 15.0, 30.0, 0.0),
-            child: Text(
-              'Looks like there are no new users to chat with at the moment. Try to  invite a friend to chat',
+            child: Text('Looks like there are no new users to chat with at the moment. Try to  invite a friend to chat',
               textAlign: TextAlign.center,
               style: FlutterFlowTheme.of(context).bodyMedium.override(
                     font: GoogleFonts.inter(
@@ -98,7 +97,7 @@ class _EmptyuserWidgetState extends State<EmptyuserWidget> {
                         },
                       ).then((value) => safeSetState(() {}));
                     },
-                    text: 'Create Group',
+                    text: ffTranslate(context, 'Create Group'),
                     options: FFButtonOptions(
                       width: double.infinity,
                       height: 40.0,

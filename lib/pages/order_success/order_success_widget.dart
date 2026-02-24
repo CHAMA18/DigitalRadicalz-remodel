@@ -87,8 +87,7 @@ class _OrderSuccessWidgetState extends State<OrderSuccessWidget> {
                         width: 312.0,
                         height: 100.0,
                         decoration: BoxDecoration(),
-                        child: Text(
-                          'Your Order has been accepted',
+                        child: Text('Your Order has been accepted',
                           textAlign: TextAlign.center,
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
@@ -118,8 +117,7 @@ class _OrderSuccessWidgetState extends State<OrderSuccessWidget> {
                       width: 307.1,
                       height: 59.08,
                       decoration: BoxDecoration(),
-                      child: Text(
-                        'Your Items has been accepted and its on it\'s way to being processed',
+                      child: Text('Your Items has been accepted and its on it\'s way to being processed',
                         textAlign: TextAlign.center,
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
@@ -150,7 +148,7 @@ class _OrderSuccessWidgetState extends State<OrderSuccessWidget> {
                         onPressed: () async {
                           context.pushNamed(ShopWidget.routeName);
                         },
-                        text: 'Order again',
+                        text: ffTranslate(context, 'Order again'),
                         options: FFButtonOptions(
                           width: 313.5,
                           height: 63.69,
@@ -186,7 +184,7 @@ class _OrderSuccessWidgetState extends State<OrderSuccessWidget> {
                           onPressed: () async {
                             context.pushNamed(HomePageWidget.routeName);
                           },
-                          text: 'Back to home',
+                          text: ffTranslate(context, 'Back to home'),
                           options: FFButtonOptions(
                             width: 313.5,
                             height: 63.7,

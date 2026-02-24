@@ -9,7 +9,6 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/upload_data.dart';
-import '/flutter_flow/uploaded_file.dart';
 import '/index.dart';
 
 import 'creategroup_model.dart';
@@ -45,6 +44,8 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
       mediaSource: MediaSource.photoGallery,
       multiImage: false,
     );
+    if (!mounted) return;
+
     if (selectedMedia != null && selectedMedia.isNotEmpty) {
       if (!validateFileFormat(selectedMedia.first.storagePath, context)) {
         return;
@@ -56,6 +57,8 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
           selectedMedia.first.storagePath,
           selectedMedia.first.bytes,
         );
+        if (!mounted) return;
+
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         if (uploadedUrl != null) {
           setState(() => _model.uploadedImageUrl = uploadedUrl);
@@ -67,6 +70,47 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
         setState(() => _model.isUploading = false);
       }
     }
+  }
+
+  InputDecoration _fieldDecoration(
+    FlutterFlowTheme theme, {
+    required String hintText,
+    required IconData prefixIcon,
+  }) {
+    return InputDecoration(
+      hintText: hintText,
+      hintStyle: theme.bodyMedium.override(
+        color: theme.secondaryText,
+        letterSpacing: 0.0,
+      ),
+      prefixIcon: Icon(
+        prefixIcon,
+        color: theme.secondaryText,
+        size: 20.0,
+      ),
+      filled: true,
+      fillColor: theme.secondaryBackground,
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: theme.alternate, width: 1),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: theme.primary, width: 1.6),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: theme.error, width: 1),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: theme.error, width: 1.6),
+        borderRadius: BorderRadius.circular(14),
+      ),
+      contentPadding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 16,
+      ),
+    );
   }
 
   @override
@@ -89,8 +133,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
             icon: Icon(Icons.arrow_back_rounded, color: theme.primaryText),
             onPressed: () => context.safePop(),
           ),
-          title: Text(
-            'Create a Group',
+          title: Text('Create a Group',
             style: theme.headlineSmall.override(
               font: GoogleFonts.interTight(
                 fontWeight: FontWeight.w600,
@@ -103,167 +146,303 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
         ),
         body: SafeArea(
           top: true,
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Add Photo',
-                  style: theme.labelLarge.override(
-                    letterSpacing: 0.0,
-                    color: theme.secondaryText,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                InkWell(
-                  onTap: _pickImage,
-                  child: Container(
+          child: Form(
+            key: _model.formKey,
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
                     width: double.infinity,
-                    height: 140,
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                     decoration: BoxDecoration(
-                      color: theme.secondaryBackground,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: theme.alternate),
-                    ),
-                    child: Center(
-                      child: _model.uploadedImageUrl == null
-                          ? Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.add_a_photo_outlined,
-                                    size: 40, color: theme.secondaryText),
-                                const SizedBox(height: 8),
-                                Text(
-                                  'Tap to upload',
-                                  style: theme.bodyMedium.override(
-                                    color: theme.secondaryText,
-                                    letterSpacing: 0.0,
-                                  ),
-                                ),
-                              ],
-                            )
-                          : ClipRRect(
-                              borderRadius: BorderRadius.circular(10),
-                              child: Image.network(
-                                _model.uploadedImageUrl!,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: 140,
-                              ),
-                            ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Text('Title',
-                    style: theme.labelLarge.override(
-                      letterSpacing: 0.0,
-                      color: theme.secondaryText,
-                    )),
-                const SizedBox(height: 8),
-                TextFormField(
-                  controller: _model.titleController,
-                  decoration: InputDecoration(
-                    hintText: 'Add a title to your group',
-                    hintStyle: theme.bodyMedium.override(
-                      color: theme.secondaryText,
-                      letterSpacing: 0.0,
-                    ),
-                    filled: true,
-                    fillColor: theme.secondaryBackground,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: theme.alternate, width: 1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: theme.primary, width: 1.5),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 16,
-                    ),
-                  ),
-                  style: theme.bodyMedium.override(letterSpacing: 0.0),
-                  validator: (val) {
-                    if (val == null || val.trim().isEmpty) {
-                      return 'Please enter a title';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 20),
-                Text('Title',
-                    style: theme.labelLarge.override(
-                      letterSpacing: 0.0,
-                      color: theme.secondaryText,
-                    )),
-                const SizedBox(height: 8),
-                TextFormField(
-                  controller: _model.descriptionController,
-                  maxLines: 4,
-                  decoration: InputDecoration(
-                    hintText: 'Describe your Group',
-                    hintStyle: theme.bodyMedium.override(
-                      color: theme.secondaryText,
-                      letterSpacing: 0.0,
-                    ),
-                    filled: true,
-                    fillColor: theme.secondaryBackground,
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: theme.alternate, width: 1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: theme.primary, width: 1.5),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    contentPadding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                  ),
-                  style: theme.bodyMedium.override(letterSpacing: 0.0),
-                ),
-                const SizedBox(height: 28),
-                FFButtonWidget(
-                  onPressed: () async {
-                    final title = _model.titleController?.text.trim() ?? '';
-                    if (title.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: const Text('Please add a title'),
-                          backgroundColor: theme.error,
-                        ),
-                      );
-                      return;
-                    }
-                    context.pushNamed(
-                      AddMembersPage.routeName,
-                      queryParameters: {
-                        'groupTitle': title,
-                        'groupDescription': _model.descriptionController?.text.trim() ?? '',
-                        'groupImage': _model.uploadedImageUrl ?? '',
-                      }.withoutNulls,
-                    );
-                  },
-                  text: 'Continue',
-                  options: FFButtonOptions(
-                    width: double.infinity,
-                    height: 52,
-                    color: theme.primary,
-                    textStyle: theme.titleSmall.override(
-                      color: theme.info,
-                      font: GoogleFonts.inter(
-                        fontWeight: FontWeight.w600,
-                        fontStyle: theme.titleSmall.fontStyle,
+                      borderRadius: BorderRadius.circular(18),
+                      gradient: LinearGradient(
+                        begin: const Alignment(-1, -1),
+                        end: const Alignment(1, 1),
+                        colors: [
+                          theme.primary.withValues(alpha: 0.16),
+                          theme.secondaryBackground,
+                        ],
                       ),
+                      border: Border.all(
+                        color: theme.primary.withValues(alpha: 0.24),
+                        width: 1,
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Group Identity',
+                          style: theme.titleMedium.override(
+                            font: GoogleFonts.interTight(
+                              fontWeight: FontWeight.w700,
+                              fontStyle: theme.titleMedium.fontStyle,
+                            ),
+                            letterSpacing: 0.0,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text('Design your group with a standout image, a clear name, and a compelling description.',
+                          style: theme.bodySmall.override(
+                            color: theme.secondaryText,
+                            letterSpacing: 0.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Cover Photo',
+                        style: theme.labelLarge.override(
+                          letterSpacing: 0.0,
+                          color: theme.primaryText,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: theme.alternate.withValues(alpha: 0.6),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text('Optional',
+                          style: theme.labelSmall.override(
+                            letterSpacing: 0.0,
+                            color: theme.secondaryText,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  InkWell(
+                    onTap: _pickImage,
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      width: double.infinity,
+                      height: 182,
+                      decoration: BoxDecoration(
+                        color: theme.secondaryBackground,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: theme.alternate,
+                          width: 1.2,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 14,
+                            color: theme.primaryText.withValues(alpha: 0.06),
+                            offset: const Offset(0, 5),
+                          ),
+                        ],
+                      ),
+                      child: _model.isUploading
+                          ? Center(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                    child: FFShimmerLoadingIndicator(
+                                      strokeWidth: 2.8,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        theme.primary,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Text('Uploading image...',
+                                    style: theme.bodyMedium.override(
+                                      color: theme.secondaryText,
+                                      letterSpacing: 0.0,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : (_model.uploadedImageUrl == null
+                              ? Center(
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Container(
+                                        width: 62,
+                                        height: 62,
+                                        decoration: BoxDecoration(
+                                          color: theme.alternate
+                                              .withValues(alpha: 0.4),
+                                          shape: BoxShape.circle,
+                                        ),
+                                        child: Icon(
+                                          Icons.add_photo_alternate_outlined,
+                                          size: 30,
+                                          color: theme.secondaryText,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+                                      Text('Tap to upload',
+                                        style: theme.titleSmall.override(
+                                          letterSpacing: 0.0,
+                                          color: theme.primaryText,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text('Recommended: 1:1 or 16:9',
+                                        style: theme.bodySmall.override(
+                                          color: theme.secondaryText,
+                                          letterSpacing: 0.0,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Stack(
+                                  fit: StackFit.expand,
+                                  children: [
+                                    ClipRRect(
+                                      borderRadius: BorderRadius.circular(15),
+                                      child: Image.network(
+                                        _model.uploadedImageUrl!,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.topRight,
+                                      child: Container(
+                                        margin: const EdgeInsets.all(10),
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 12,
+                                          vertical: 6,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: Colors.black
+                                              .withValues(alpha: 0.52),
+                                          borderRadius:
+                                              BorderRadius.circular(20),
+                                        ),
+                                        child: Text('Change',
+                                          style: theme.labelSmall.override(
+                                            color: theme.info,
+                                            letterSpacing: 0.0,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                    ),
+                  ),
+                  const SizedBox(height: 18),
+                  Text('Group Name',
+                    style: theme.labelLarge.override(
                       letterSpacing: 0.0,
+                      color: theme.primaryText,
                       fontWeight: FontWeight.w600,
                     ),
-                    elevation: 1,
-                    borderRadius: BorderRadius.circular(14),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    controller: _model.titleController,
+                    maxLength: 48,
+                    textCapitalization: TextCapitalization.words,
+                    textInputAction: TextInputAction.next,
+                    decoration: _fieldDecoration(
+                      theme,
+                      hintText: ffTranslate(context, 'Add a title to your group'),
+                      prefixIcon: Icons.groups_outlined,
+                    ),
+                    style: theme.bodyMedium.override(letterSpacing: 0.0),
+                    validator: (val) {
+                      if (val == null || val.trim().isEmpty) {
+                        return 'Please enter a group name';
+                      }
+                      if (val.trim().length < 3) {
+                        return 'Group name must be at least 3 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 10),
+                  Text('Description',
+                    style: theme.labelLarge.override(
+                      letterSpacing: 0.0,
+                      color: theme.primaryText,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextFormField(
+                    controller: _model.descriptionController,
+                    maxLines: 5,
+                    minLines: 4,
+                    maxLength: 220,
+                    textCapitalization: TextCapitalization.sentences,
+                    textInputAction: TextInputAction.newline,
+                    decoration: _fieldDecoration(
+                      theme,
+                      hintText: ffTranslate(context, 'Describe your group purpose, audience, and vibe'),
+                      prefixIcon: Icons.edit_note_rounded,
+                    ),
+                    style: theme.bodyMedium.override(letterSpacing: 0.0),
+                  ),
+                  const SizedBox(height: 18),
+                  FFButtonWidget(
+                    onPressed: () async {
+                      if (_model.isUploading) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Please wait for the image upload to finish.'),
+                            backgroundColor: theme.secondary,
+                          ),
+                        );
+                        return;
+                      }
+
+                      if (!(_model.formKey.currentState?.validate() ?? false)) {
+                        return;
+                      }
+
+                      final title = _model.titleController?.text.trim() ?? '';
+                      final description =
+                          _model.descriptionController?.text.trim() ?? '';
+
+                      context.pushNamed(
+                        AddMembersPage.routeName,
+                        queryParameters: {
+                          'groupTitle': title,
+                          'groupDescription': description,
+                          'groupImage': _model.uploadedImageUrl ?? '',
+                        }.withoutNulls,
+                      );
+                    },
+                    text: ffTranslate(context, 'Continue'),
+                    options: FFButtonOptions(
+                      width: double.infinity,
+                      height: 56,
+                      color: theme.primary,
+                      textStyle: theme.titleSmall.override(
+                        color: theme.info,
+                        font: GoogleFonts.inter(
+                          fontWeight: FontWeight.w700,
+                          fontStyle: theme.titleSmall.fontStyle,
+                        ),
+                        letterSpacing: 0.0,
+                        fontWeight: FontWeight.w700,
+                      ),
+                      elevation: 0,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -273,7 +452,8 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
 }
 
 class AddMembersPage extends StatefulWidget {
-  const AddMembersPage({super.key, this.groupTitle, this.groupDescription, this.groupImage});
+  const AddMembersPage(
+      {super.key, this.groupTitle, this.groupDescription, this.groupImage});
 
   final String? groupTitle;
   final String? groupDescription;
@@ -304,7 +484,9 @@ class _AddMembersPageState extends State<AddMembersPage> {
     if (adminRef == null) return;
     if ((widget.groupTitle ?? '').isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: const Text('Group title required'), backgroundColor: FlutterFlowTheme.of(context).error),
+        SnackBar(
+            content: Text('Group title required'),
+            backgroundColor: FlutterFlowTheme.of(context).error),
       );
       return;
     }
@@ -329,7 +511,8 @@ class _AddMembersPageState extends State<AddMembersPage> {
       final data = createGroupsRecordData(
         groupName: widget.groupTitle,
         groupDescription: widget.groupDescription,
-        groupimage: (widget.groupImage ?? '').isEmpty ? null : widget.groupImage,
+        groupimage:
+            (widget.groupImage ?? '').isEmpty ? null : widget.groupImage,
         adminId: adminRef,
         createdAt: getCurrentTimestamp,
         timestamp: getCurrentTimestamp,
@@ -354,7 +537,8 @@ class _AddMembersPageState extends State<AddMembersPage> {
         context.pushNamed(
           GrouchatsWidget.routeName,
           queryParameters: {
-            'receivedgroupchats': serializeParam(docRef, ParamType.DocumentReference),
+            'receivedgroupchats':
+                serializeParam(docRef, ParamType.DocumentReference),
           }.withoutNulls,
         );
       }
@@ -388,8 +572,7 @@ class _AddMembersPageState extends State<AddMembersPage> {
             icon: Icon(Icons.arrow_back_rounded, color: theme.primaryText),
             onPressed: () => context.safePop(),
           ),
-          title: Text(
-            'Add Member',
+          title: Text('Add Member',
             style: theme.headlineSmall.override(
               font: GoogleFonts.interTight(
                 fontWeight: FontWeight.w600,
@@ -402,7 +585,7 @@ class _AddMembersPageState extends State<AddMembersPage> {
             IconButton(
               icon: Icon(Icons.check, color: theme.primaryText),
               onPressed: _createGroup,
-              tooltip: 'Create group',
+              tooltip: ffTranslate(context, 'Create group'),
             ),
             const SizedBox(width: 8),
           ],
@@ -417,7 +600,7 @@ class _AddMembersPageState extends State<AddMembersPage> {
                   controller: _searchController,
                   onChanged: (_) => setState(() {}),
                   decoration: InputDecoration(
-                    hintText: 'search for user',
+                    hintText: ffTranslate(context, 'search for user'),
                     suffixIcon: _searchController.text.isNotEmpty
                         ? IconButton(
                             icon: const Icon(Icons.clear),
@@ -495,7 +678,8 @@ class _AddMembersPageState extends State<AddMembersPage> {
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.center,
-                              style: theme.bodySmall.override(letterSpacing: 0.0),
+                              style:
+                                  theme.bodySmall.override(letterSpacing: 0.0),
                             ),
                           ),
                         ],
@@ -518,23 +702,25 @@ class _AddMembersPageState extends State<AddMembersPage> {
                   ),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const Center(child: FFShimmerLoadingIndicator());
                     }
                     var users = snapshot.data!;
                     final term = _searchController.text.trim().toLowerCase();
                     if (term.isNotEmpty) {
                       users = users
-                          .where((u) => (u.displayName.toLowerCase().contains(term) ||
-                              u.email.toLowerCase().contains(term)))
+                          .where((u) =>
+                              (u.displayName.toLowerCase().contains(term) ||
+                                  u.email.toLowerCase().contains(term)))
                           .toList();
                     }
                     // Hide current user from selection list
-                    users = users.where((u) => u.reference != currentUserReference).toList();
+                    users = users
+                        .where((u) => u.reference != currentUserReference)
+                        .toList();
 
                     if (users.isEmpty) {
                       return Center(
-                        child: Text(
-                          'No users found',
+                        child: Text('No users found',
                           style: theme.bodyMedium.override(letterSpacing: 0.0),
                         ),
                       );
@@ -550,7 +736,9 @@ class _AddMembersPageState extends State<AddMembersPage> {
                         final photo = user.photoUrl.isNotEmpty
                             ? user.photoUrl
                             : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/gbh03g8a6d5k/placeholder-profile-icon-8qmjk1094ijhbem9-removebg-preview.png';
-                        final name = user.displayName.isNotEmpty ? user.displayName : user.email;
+                        final name = user.displayName.isNotEmpty
+                            ? user.displayName
+                            : user.email;
                         return InkWell(
                           onTap: () {
                             setState(() {
@@ -569,15 +757,19 @@ class _AddMembersPageState extends State<AddMembersPage> {
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: theme.alternate),
                             ),
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 12, vertical: 8),
                             child: Row(
                               children: [
-                                CircleAvatar(radius: 22, backgroundImage: NetworkImage(photo)),
+                                CircleAvatar(
+                                    radius: 22,
+                                    backgroundImage: NetworkImage(photo)),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Text(
                                     name,
-                                    style: theme.bodyLarge.override(letterSpacing: 0.0),
+                                    style: theme.bodyLarge
+                                        .override(letterSpacing: 0.0),
                                   ),
                                 ),
                                 Checkbox(

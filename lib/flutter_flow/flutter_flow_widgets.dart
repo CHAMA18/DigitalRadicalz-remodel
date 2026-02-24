@@ -1,6 +1,8 @@
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/ff_localization.dart';
 
 class FFButtonOptions {
   const FFButtonOptions({
@@ -85,16 +87,21 @@ class _FFButtonWidgetState extends State<FFButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final translatedText = text == null ? null : ffTranslate(context, text!);
     Widget textWidget = loading
         ? SizedBox(
             width: widget.options.width == null
-                ? _getTextWidth(text, widget.options.textStyle, maxLines)
+                ? _getTextWidth(
+                    translatedText,
+                    widget.options.textStyle,
+                    maxLines,
+                  )
                 : null,
             child: Center(
               child: SizedBox(
                 width: 23,
                 height: 23,
-                child: CircularProgressIndicator(
+                child: FFShimmerLoadingIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
                     widget.options.textStyle?.color ?? Colors.white,
                   ),
@@ -103,9 +110,11 @@ class _FFButtonWidgetState extends State<FFButtonWidget> {
             ),
           )
         : AutoSizeText(
-            text ?? '',
+            translatedText ?? '',
             style:
-                text == null ? null : widget.options.textStyle?.withoutColor(),
+                translatedText == null
+                    ? null
+                    : widget.options.textStyle?.withoutColor(),
             textAlign: widget.options.textAlign,
             maxLines: maxLines,
             overflow: TextOverflow.ellipsis,

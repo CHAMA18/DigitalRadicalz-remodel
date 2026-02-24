@@ -60,7 +60,7 @@ class _Media2WidgetState extends State<Media2Widget> {
               child: SizedBox(
                 width: 50.0,
                 height: 50.0,
-                child: CircularProgressIndicator(
+                child: FFShimmerLoadingIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
                     FlutterFlowTheme.of(context).primary,
                   ),
@@ -244,8 +244,7 @@ class _Media2WidgetState extends State<Media2Widget> {
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
-                                    Text(
-                                      'Instructor:',
+                                    Text('Instructor:',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -299,8 +298,7 @@ class _Media2WidgetState extends State<Media2Widget> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
-                                      Text(
-                                        'Time:',
+                                      Text('Time:',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -371,7 +369,7 @@ class _Media2WidgetState extends State<Media2Widget> {
                                     child: SizedBox(
                                       width: 50.0,
                                       height: 50.0,
-                                      child: CircularProgressIndicator(
+                                      child: FFShimmerLoadingIndicator(
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(
                                           FlutterFlowTheme.of(context).primary,

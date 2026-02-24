@@ -107,8 +107,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                               Navigator.pop(context);
                             },
                           ),
-                          Text(
-                            'Back',
+                          Text('Back',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -135,8 +134,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
-                          'Order',
+                        Text('Order',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -170,8 +168,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                             print('IconButton pressed ...');
                           },
                         ),
-                        Text(
-                          'Back',
+                        Text('Back',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -252,7 +249,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                                       child: SizedBox(
                                         width: 50.0,
                                         height: 50.0,
-                                        child: CircularProgressIndicator(
+                                        child: FFShimmerLoadingIndicator(
                                           valueColor:
                                               AlwaysStoppedAnimation<Color>(
                                             FlutterFlowTheme.of(context)
@@ -314,11 +311,11 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                                                       ),
                                             ),
                                             TextSpan(
-                                              text: ' left to order tickets ',
+                                              text: ffTranslate(context, ' left to order tickets '),
                                               style: TextStyle(),
                                             ),
                                             TextSpan(
-                                              text: ' for',
+                                              text: ffTranslate(context, ' for'),
                                               style: TextStyle(),
                                             ),
                                             TextSpan(
@@ -374,8 +371,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                           Row(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              Text(
-                                'My order',
+                              Text('My order',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -404,7 +400,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                                   child: SizedBox(
                                     width: 50.0,
                                     height: 50.0,
-                                    child: CircularProgressIndicator(
+                                    child: FFShimmerLoadingIndicator(
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                         FlutterFlowTheme.of(context).primary,
                                       ),
@@ -450,7 +446,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                                                     style: TextStyle(),
                                                   ),
                                                   TextSpan(
-                                                    text: 'x ',
+                                                    text: ffTranslate(context, 'x '),
                                                     style: TextStyle(),
                                                   ),
                                                   TextSpan(
@@ -548,8 +544,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(
-                                'Total',
+                              Text('Total',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -577,7 +572,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                                       child: SizedBox(
                                         width: 50.0,
                                         height: 50.0,
-                                        child: CircularProgressIndicator(
+                                        child: FFShimmerLoadingIndicator(
                                           valueColor:
                                               AlwaysStoppedAnimation<Color>(
                                             FlutterFlowTheme.of(context)
@@ -650,7 +645,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                         child: SizedBox(
                           width: 50.0,
                           height: 50.0,
-                          child: CircularProgressIndicator(
+                          child: FFShimmerLoadingIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
                               FlutterFlowTheme.of(context).primary,
                             ),
@@ -666,7 +661,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                       text: TextSpan(
                         children: [
                           TextSpan(
-                            text: 'I place an order with a total of ',
+                            text: ffTranslate(context, 'I place an order with a total of '),
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -697,8 +692,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                             style: TextStyle(),
                           ),
                           TextSpan(
-                            text:
-                                'and agree to the terms and conditions\nThese products are delivered online to my email address example@fancee.com',
+                            text: ffTranslate(context, 'and agree to the terms and conditions\nThese products are delivered online to my email address example@fancee.com'),
                             style: TextStyle(),
                           )
                         ],
@@ -755,8 +749,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                           checkColor: FlutterFlowTheme.of(context).info,
                         ),
                       ),
-                      Text(
-                        'I confirm the above is correct',
+                      Text('I confirm the above is correct',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FlutterFlowTheme.of(context)
@@ -792,8 +785,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
-                          'Add on',
+                        Text('Add on',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -850,8 +842,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                             checkColor: FlutterFlowTheme.of(context).info,
                           ),
                         ),
-                        Text(
-                          'Upgrade my ticket to service plus tickets  (+ €1,10)',
+                        Text('Upgrade my ticket to service plus tickets  (+ €1,10)',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -914,8 +905,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
                         Container(
                           width: 289.6,
                           decoration: BoxDecoration(),
-                          child: Text(
-                            'I want to be kept informed through promotional emails',
+                          child: Text('I want to be kept informed through promotional emails',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -958,7 +948,7 @@ class _DetailCopyWidgetState extends State<DetailCopyWidget> {
 
                         context.pushNamed(TicketCompletionWidget.routeName);
                       },
-                      text: 'Next',
+                      text: ffTranslate(context, 'Next'),
                       options: FFButtonOptions(
                         width: double.infinity,
                         height: 40.0,

@@ -60,8 +60,7 @@ class _EmptychatWidgetState extends State<EmptychatWidget> {
                 ),
               ),
               SizedBox(height: 16.0),
-              Text(
-                'No messages yet',
+              Text('No messages yet',
                 textAlign: TextAlign.center,
                 style: FlutterFlowTheme.of(context).bodyMedium.override(
                       font: GoogleFonts.inter(
@@ -78,8 +77,7 @@ class _EmptychatWidgetState extends State<EmptychatWidget> {
                     ),
               ),
               SizedBox(height: 8.0),
-              Text(
-                'Start the conversation by sending your first message.',
+              Text('Start the conversation by sending your first message.',
                 textAlign: TextAlign.center,
                 style: FlutterFlowTheme.of(context).bodySmall.override(
                       font: GoogleFonts.inter(

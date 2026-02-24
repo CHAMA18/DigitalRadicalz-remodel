@@ -66,8 +66,7 @@ onPressed: () async {
 context.pop();
 },
 ),
-title: Text(
-'My Cart',
+title: Text('My Cart',
 style: FlutterFlowTheme.of(context).headlineMedium.override(
 font: GoogleFonts.interTight(
 fontWeight:
@@ -103,8 +102,7 @@ size: 56.0,
 color: FlutterFlowTheme.of(context).secondaryText,
 ),
 SizedBox(height: 12.0),
-Text(
-'Please log in to view your cart.',
+Text('Please log in to view your cart.',
 textAlign: TextAlign.center,
 style: FlutterFlowTheme.of(context).bodyMedium.override(
 letterSpacing: 0.0,
@@ -115,7 +113,7 @@ FFButtonWidget(
 onPressed: () async {
 context.pushNamed(LoginWidget.routeName);
 },
-text: 'Go to Login',
+text: ffTranslate(context, 'Go to Login'),
 options: FFButtonOptions(
 height: 44.0,
 padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
@@ -162,16 +160,14 @@ size: 80,
 color: Colors.grey[400],
 ),
 SizedBox(height: 16),
-Text(
-'Unable to load cart',
+Text('Unable to load cart',
 style: FlutterFlowTheme.of(context).headlineSmall.override(
 color: Colors.grey[600],
 letterSpacing: 0.0,
 ),
 ),
 SizedBox(height: 8),
-Text(
-'Please check your connection',
+Text('Please check your connection',
 style: FlutterFlowTheme.of(context).bodyMedium.override(
 color: Colors.grey[500],
 letterSpacing: 0.0,
@@ -193,8 +189,7 @@ child: Row(
 mainAxisSize: MainAxisSize.max,
 mainAxisAlignment: MainAxisAlignment.center,
 children: [
-Text(
-'Error Loading Cart',
+Text('Error Loading Cart',
 style: FlutterFlowTheme.of(context).bodyMedium.override(
 font: GoogleFonts.inter(
 fontWeight: FontWeight.w600,
@@ -222,7 +217,7 @@ Center(
 child: SizedBox(
 width: 50.0,
 height: 50.0,
-child: CircularProgressIndicator(
+child: FFShimmerLoadingIndicator(
 valueColor: AlwaysStoppedAnimation<Color>(
 FlutterFlowTheme.of(context).primary,
 ),
@@ -242,8 +237,7 @@ child: Row(
 mainAxisSize: MainAxisSize.max,
 mainAxisAlignment: MainAxisAlignment.center,
 children: [
-Text(
-'Loading...',
+Text('Loading...',
 style: FlutterFlowTheme.of(context).bodyMedium.override(
 font: GoogleFonts.inter(
 fontWeight: FontWeight.w600,
@@ -319,16 +313,14 @@ size: 80,
 color: Colors.grey[400],
 ),
 SizedBox(height: 16),
-Text(
-'Your cart is empty',
+Text('Your cart is empty',
 style: FlutterFlowTheme.of(context).headlineSmall.override(
 color: Colors.grey[600],
 letterSpacing: 0.0,
 ),
 ),
 SizedBox(height: 8),
-Text(
-'Add some products to get started',
+Text('Add some products to get started',
 style: FlutterFlowTheme.of(context).bodyMedium.override(
 color: Colors.grey[500],
 letterSpacing: 0.0,
@@ -350,8 +342,7 @@ child: Row(
 mainAxisSize: MainAxisSize.max,
 mainAxisAlignment: MainAxisAlignment.center,
 children: [
-Text(
-'Cart Empty',
+Text('Cart Empty',
 style: FlutterFlowTheme.of(context).bodyMedium.override(
 font: GoogleFonts.inter(
 fontWeight: FontWeight.w600,
@@ -444,7 +435,7 @@ return Center(
 child: SizedBox(
 width: 50.0,
 height: 50.0,
-child: CircularProgressIndicator(
+child: FFShimmerLoadingIndicator(
 valueColor: AlwaysStoppedAnimation<Color>(
 FlutterFlowTheme.of(context).primary,
 ),
@@ -491,8 +482,7 @@ decoration: BoxDecoration(
 color: FlutterFlowTheme.of(context).primary,
 borderRadius: BorderRadius.circular(10),
 ),
-child: Text(
-'x$quantity',
+child: Text('x$quantity',
 style: FlutterFlowTheme.of(context).bodySmall.override(
 color: FlutterFlowTheme.of(context).secondaryBackground,
 fontWeight: FontWeight.w600,
@@ -520,8 +510,7 @@ stream: ProductRecord.getDocument(productRef),
 builder: (context, snapshot) {
 if (snapshot.hasError) {
 debugPrint('Error loading product name: ${snapshot.error}');
-return Text(
-'Product unavailable',
+return Text('Product unavailable',
 style: FlutterFlowTheme.of(context).bodyMedium.override(
 font: GoogleFonts.inter(
 fontWeight: FontWeight.w500,
@@ -541,7 +530,7 @@ return Center(
 child: SizedBox(
 width: 50.0,
 height: 50.0,
-child: CircularProgressIndicator(
+child: FFShimmerLoadingIndicator(
 valueColor: AlwaysStoppedAnimation<Color>(
 FlutterFlowTheme.of(context).primary,
 ),
@@ -576,8 +565,7 @@ decoration: BoxDecoration(
 color: FlutterFlowTheme.of(context).alternate,
 borderRadius: BorderRadius.circular(12),
 ),
-child: Text(
-'$quantity items',
+child: Text('$quantity items',
 style: FlutterFlowTheme.of(context).bodySmall.override(
 color: FlutterFlowTheme.of(context).primaryText,
 letterSpacing: 0.0,
@@ -599,8 +587,7 @@ stream: ProductRecord.getDocument(productRef),
 builder: (context, snapshot) {
 if (snapshot.hasError) {
 debugPrint('Error loading product details: ${snapshot.error}');
-return Text(
-'N/A',
+return Text('N/A',
 style: FlutterFlowTheme.of(context).bodyMedium.override(
 font: GoogleFonts.inter(
 fontWeight: FontWeight.normal,
@@ -620,7 +607,7 @@ return Center(
 child: SizedBox(
 width: 50.0,
 height: 50.0,
-child: CircularProgressIndicator(
+child: FFShimmerLoadingIndicator(
 valueColor: AlwaysStoppedAnimation<Color>(
 FlutterFlowTheme.of(context).primary,
 ),
@@ -700,8 +687,7 @@ fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
 ),
 ),
 if (quantity > 1)
-Text(
-'(' + formatNumber(unitPrice, formatType: FormatType.decimal, decimalType: DecimalType.periodDecimal, currency: '\$') + ' ea)',
+Text('(' + formatNumber(unitPrice, formatType: FormatType.decimal, decimalType: DecimalType.periodDecimal, currency: '\$') + ' ea)',
 style: FlutterFlowTheme.of(context).bodySmall.override(
 color: FlutterFlowTheme.of(context).secondaryText,
 letterSpacing: 0.0,
@@ -752,8 +738,7 @@ child: Row(
 mainAxisSize: MainAxisSize.max,
 mainAxisAlignment: MainAxisAlignment.center,
 children: [
-Text(
-'Continue Shopping',
+Text('Continue Shopping',
 style: FlutterFlowTheme.of(context)
 .bodyMedium
 .override(
@@ -815,8 +800,7 @@ child: Row(
 mainAxisSize: MainAxisSize.max,
 mainAxisAlignment: MainAxisAlignment.center,
 children: [
-Text(
-'Go to Checkout',
+Text('Go to Checkout',
 style:
 FlutterFlowTheme.of(context).bodyMedium.override(
 font: GoogleFonts.inter(

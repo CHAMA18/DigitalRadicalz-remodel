@@ -30,6 +30,13 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
   String _onselect = 'Groeps chat';
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  bool _isConfirmedChatUser(UsersRecord user) {
+    final hasUid = user.uid.trim().isNotEmpty;
+    final hasDisplayName = user.displayName.trim().isNotEmpty;
+    final isCurrentUser = user.reference == currentUserReference;
+    return hasUid && hasDisplayName && !isCurrentUser;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -58,7 +65,8 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text('Select a user/Group', style: theme.headlineSmall),
-              Text('Invite your friends or groups to chat with you!', style: theme.labelMedium),
+              Text('Invite your friends or groups to chat with you!',
+                  style: theme.labelMedium),
             ],
           ),
           actions: [
@@ -137,13 +145,23 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                       children: [
                         Row(
                           children: [
-                            CircleAvatar(radius: 22, backgroundColor: Colors.white, backgroundImage: NetworkImage('https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/gbh03g8a6d5k/placeholder-profile-icon-8qmjk1094ijhbem9-removebg-preview.png')),
+                            CircleAvatar(
+                                radius: 22,
+                                backgroundColor: Colors.white,
+                                backgroundImage: NetworkImage(
+                                    'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/gbh03g8a6d5k/placeholder-profile-icon-8qmjk1094ijhbem9-removebg-preview.png')),
                             SizedBox(width: 12),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Create Group Chat', style: theme.bodyMedium.override(fontFamily: 'Inter', fontWeight: FontWeight.w600)),
-                                Text('This is the first test of the group', style: theme.bodyMedium.override(color: theme.secondaryText, fontSize: 12)),
+                                Text('Create Group Chat',
+                                    style: theme.bodyMedium.override(
+                                        fontFamily: 'Inter',
+                                        fontWeight: FontWeight.w600)),
+                                Text('This is the first test of the group',
+                                    style: theme.bodyMedium.override(
+                                        color: theme.secondaryText,
+                                        fontSize: 12)),
                               ],
                             ),
                           ],
@@ -183,8 +201,9 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                         return Center(
                           child: Padding(
                             padding: EdgeInsets.all(24),
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(theme.primary),
+                            child: FFShimmerLoadingIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(theme.primary),
                             ),
                           ),
                         );
@@ -192,12 +211,14 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                       final groups = snapshot.data!
                           .where((g) =>
                               (g.groupName.trim().isNotEmpty) &&
-                              (g.groupName.trim().toLowerCase() != 'untitled group'))
+                              (g.groupName.trim().toLowerCase() !=
+                                  'untitled group'))
                           .toList();
                       if (groups.isEmpty) {
                         return Padding(
                           padding: EdgeInsets.symmetric(vertical: 12),
-                          child: Text('No groups yet. Create one to get started!', style: theme.bodyMedium),
+                          child: Text('No groups yet. Create one to get started!',
+                              style: theme.bodyMedium),
                         );
                       }
                       return ListView.separated(
@@ -210,7 +231,9 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                           final isAdmin = group.adminId == currentUserReference;
                           return Dismissible(
                             key: Key(group.reference.id),
-                            direction: isAdmin ? DismissDirection.endToStart : DismissDirection.none,
+                            direction: isAdmin
+                                ? DismissDirection.endToStart
+                                : DismissDirection.none,
                             background: Container(
                               alignment: Alignment.centerRight,
                               padding: EdgeInsets.symmetric(horizontal: 20),
@@ -223,23 +246,32 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                             confirmDismiss: (direction) async {
                               if (!isAdmin) return false;
                               return await showDialog<bool>(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  backgroundColor: theme.secondaryBackground,
-                                  title: Text('Delete Group', style: theme.titleLarge),
-                                  content: Text('Are you sure you want to delete "${group.groupName}"? This will remove the group for all members and cannot be undone.'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () => Navigator.of(context).pop(false),
-                                      child: Text('Cancel', style: theme.bodyMedium.override(color: theme.secondaryText)),
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      backgroundColor:
+                                          theme.secondaryBackground,
+                                      title: Text('Delete Group',
+                                          style: theme.titleLarge),
+                                      content: Text('Are you sure you want to delete "${group.groupName}"? This will remove the group for all members and cannot be undone.'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(false),
+                                          child: Text('Cancel',
+                                              style: theme.bodyMedium.override(
+                                                  color: theme.secondaryText)),
+                                        ),
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(context).pop(true),
+                                          child: Text('Delete',
+                                              style: theme.bodyMedium.override(
+                                                  color: theme.error)),
+                                        ),
+                                      ],
                                     ),
-                                    TextButton(
-                                      onPressed: () => Navigator.of(context).pop(true),
-                                      child: Text('Delete', style: theme.bodyMedium.override(color: theme.error)),
-                                    ),
-                                  ],
-                                ),
-                              ) ?? false;
+                                  ) ??
+                                  false;
                             },
                             onDismissed: (_) async {
                               try {
@@ -265,7 +297,9 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                                 context.pushNamed(
                                   GrouchatsWidget.routeName,
                                   queryParameters: {
-                                    'receivedgroupchats': serializeParam(group.reference, ParamType.DocumentReference),
+                                    'receivedgroupchats': serializeParam(
+                                        group.reference,
+                                        ParamType.DocumentReference),
                                   }.withoutNulls,
                                   extra: <String, dynamic>{
                                     kTransitionInfoKey: TransitionInfo(
@@ -282,47 +316,69 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                                   borderRadius: BorderRadius.circular(12),
                                   border: Border.all(color: theme.alternate),
                                 ),
-                                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 10),
                                 child: Row(
                                   children: [
                                     CircleAvatar(
                                       radius: 22,
                                       backgroundColor: Colors.white,
-                                      backgroundImage: group.groupimage.isNotEmpty
-                                          ? NetworkImage(group.groupimage)
-                                          : null,
+                                      backgroundImage:
+                                          group.groupimage.isNotEmpty
+                                              ? NetworkImage(group.groupimage)
+                                              : null,
                                     ),
                                     SizedBox(width: 12),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Row(
                                             children: [
                                               Expanded(
                                                 child: Text(
-                                                  group.groupName.isNotEmpty ? group.groupName : 'Untitled Group',
+                                                  group.groupName.isNotEmpty
+                                                      ? group.groupName
+                                                      : 'Untitled Group',
                                                   maxLines: 1,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  style: theme.bodyMedium.override(fontFamily: 'Inter', fontWeight: FontWeight.w600),
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: theme.bodyMedium
+                                                      .override(
+                                                          fontFamily: 'Inter',
+                                                          fontWeight:
+                                                              FontWeight.w600),
                                                 ),
                                               ),
                                               if (isAdmin)
                                                 Container(
-                                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 8,
+                                                      vertical: 2),
                                                   decoration: BoxDecoration(
                                                     color: theme.primary,
-                                                    borderRadius: BorderRadius.circular(10),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10),
                                                   ),
-                                                  child: Text('Admin', style: theme.bodySmall.override(color: theme.info, fontSize: 10)),
+                                                  child: Text('Admin',
+                                                      style: theme.bodySmall
+                                                          .override(
+                                                              color: theme.info,
+                                                              fontSize: 10)),
                                                 ),
                                             ],
                                           ),
                                           Text(
-                                            group.lastmessage.isNotEmpty ? group.lastmessage : 'No messages yet',
+                                            group.lastmessage.isNotEmpty
+                                                ? group.lastmessage
+                                                : 'No messages yet',
                                             maxLines: 1,
                                             overflow: TextOverflow.ellipsis,
-                                            style: theme.bodyMedium.override(color: theme.secondaryText, fontSize: 12),
+                                            style: theme.bodyMedium.override(
+                                                color: theme.secondaryText,
+                                                fontSize: 12),
                                           ),
                                         ],
                                       ),
@@ -353,19 +409,20 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                         return Center(
                           child: Padding(
                             padding: EdgeInsets.all(24),
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(theme.primary),
+                            child: FFShimmerLoadingIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(theme.primary),
                             ),
                           ),
                         );
                       }
-                      final users = snapshot.data!
-                          .where((u) => u.reference != currentUserReference)
-                          .toList();
+                      final users =
+                          snapshot.data!.where(_isConfirmedChatUser).toList();
                       if (users.isEmpty) {
                         return Padding(
                           padding: EdgeInsets.all(24),
-                          child: Text('No users found.', style: theme.bodyMedium),
+                          child: Text('No confirmed users found.',
+                              style: theme.bodyMedium),
                         );
                       }
                       return ListView.separated(
@@ -379,13 +436,15 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                             onTap: () async {
                               if (currentUserReference == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Please sign in to start a chat.')),
+                                  SnackBar(
+                                      content: Text('Please sign in to start a chat.')),
                                 );
                                 return;
                               }
                               try {
                                 // Find or create a 1-on-1 chat
-                                final existing = await functions.findExistingChat(
+                                final existing =
+                                    await functions.findExistingChat(
                                   currentUserReference!,
                                   user.reference,
                                 );
@@ -400,9 +459,15 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                                       timestamp: getCurrentTimestamp,
                                     ),
                                     ...mapToFirestore({
-                                      'userid': functions.generateListOfUsers(currentUserReference!, user.reference),
-                                      'usernames': functions.generateListOfNames(currentUserDisplayName, user.displayName),
-                                      'lastmessageseenby': <DocumentReference>[],
+                                      'userid': functions.generateListOfUsers(
+                                          currentUserReference!,
+                                          user.reference),
+                                      'usernames':
+                                          functions.generateListOfNames(
+                                              currentUserDisplayName,
+                                              user.displayName),
+                                      'lastmessageseenby':
+                                          <DocumentReference>[],
                                       'images': <String>[],
                                     }),
                                   });
@@ -412,9 +477,12 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                                 context.pushNamed(
                                   Chat2Widget.routeName,
                                   queryParameters: {
-                                    'receiveChat': serializeParam(chatRef, ParamType.DocumentReference),
-                                    'username': serializeParam(user.displayName, ParamType.String),
-                                    'profile': serializeParam(user.photoUrl, ParamType.String),
+                                    'receiveChat': serializeParam(
+                                        chatRef, ParamType.DocumentReference),
+                                    'username': serializeParam(
+                                        user.displayName, ParamType.String),
+                                    'profile': serializeParam(
+                                        user.photoUrl, ParamType.String),
                                   }.withoutNulls,
                                   extra: <String, dynamic>{
                                     kTransitionInfoKey: TransitionInfo(
@@ -426,7 +494,8 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                                 );
                               } catch (e) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Failed to open chat. Please try again.')),
+                                  SnackBar(
+                                      content: Text('Failed to open chat. Please try again.')),
                                 );
                               }
                             },
@@ -436,7 +505,8 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(color: theme.alternate),
                               ),
-                              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 12, vertical: 10),
                               child: Row(
                                 children: [
                                   CircleAvatar(
@@ -452,14 +522,22 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                                   SizedBox(width: 12),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Text(valueOrDefault<String>(user.displayName, 'Unknown User'), style: theme.bodyMedium.override(fontFamily: 'Inter', fontWeight: FontWeight.w600)),
-                                        Text(user.email, style: theme.bodyMedium.override(color: theme.secondaryText, fontSize: 12)),
+                                        Text(user.displayName,
+                                            style: theme.bodyMedium.override(
+                                                fontFamily: 'Inter',
+                                                fontWeight: FontWeight.w600)),
+                                        Text(user.email,
+                                            style: theme.bodyMedium.override(
+                                                color: theme.secondaryText,
+                                                fontSize: 12)),
                                       ],
                                     ),
                                   ),
-                                  Icon(Icons.chevron_right, color: theme.secondaryText),
+                                  Icon(Icons.chevron_right,
+                                      color: theme.secondaryText),
                                 ],
                               ),
                             ),

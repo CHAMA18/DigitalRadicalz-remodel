@@ -93,8 +93,7 @@ class _CreatepostWidgetState extends State<CreatepostWidget> {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Text(
-                  'Add  Post for this community',
+                Text('Add  Post for this community',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         font: GoogleFonts.inter(
                           fontWeight: FontWeight.w600,
@@ -115,8 +114,7 @@ class _CreatepostWidgetState extends State<CreatepostWidget> {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text(
-                    'Add Photo',
+                  Text('Add Photo',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.inter(
                             fontWeight: FontWeight.normal,
@@ -216,8 +214,7 @@ class _CreatepostWidgetState extends State<CreatepostWidget> {
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Title',
+                  Text('Title',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.inter(
                             fontWeight: FlutterFlowTheme.of(context)
@@ -268,7 +265,7 @@ class _CreatepostWidgetState extends State<CreatepostWidget> {
                                       .labelMedium
                                       .fontStyle,
                                 ),
-                            hintText: 'Add a title to your post',
+                            hintText: ffTranslate(context, 'Add a title to your post'),
                             hintStyle: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
@@ -355,8 +352,7 @@ class _CreatepostWidgetState extends State<CreatepostWidget> {
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Title',
+                  Text('Title',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.inter(
                             fontWeight: FlutterFlowTheme.of(context)
@@ -407,7 +403,7 @@ class _CreatepostWidgetState extends State<CreatepostWidget> {
                                       .labelMedium
                                       .fontStyle,
                                 ),
-                            hintText: 'Describe your post',
+                            hintText: ffTranslate(context, 'Describe your post'),
                             hintStyle: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
@@ -502,8 +498,7 @@ class _CreatepostWidgetState extends State<CreatepostWidget> {
                       ));
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(
-                        'The post was successfully published.',
+                      content: Text('The post was successfully published.',
                         style: TextStyle(
                           color: FlutterFlowTheme.of(context).primaryText,
                         ),
@@ -514,7 +509,7 @@ class _CreatepostWidgetState extends State<CreatepostWidget> {
                   );
                   Navigator.pop(context);
                 },
-                text: 'Continue',
+                text: ffTranslate(context, 'Continue'),
                 options: FFButtonOptions(
                   width: double.infinity,
                   height: 40.0,

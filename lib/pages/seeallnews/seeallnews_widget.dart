@@ -73,8 +73,7 @@ class _SeeallnewsWidgetState extends State<SeeallnewsWidget> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                'Back',
+              Text('Back',
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
                       font: GoogleFonts.interTight(
                         fontWeight: FontWeight.w500,
@@ -115,28 +114,17 @@ class _SeeallnewsWidgetState extends State<SeeallnewsWidget> {
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        await showModalBottomSheet(
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          enableDrag: false,
-                          context: context,
-                          builder: (context) {
-                            return GestureDetector(
-                              onTap: () {
-                                FocusScope.of(context).unfocus();
-                                FocusManager.instance.primaryFocus?.unfocus();
-                              },
-                              child: Padding(
-                                padding: MediaQuery.viewInsetsOf(context),
-                                child: Container(
-                                  height:
-                                      MediaQuery.sizeOf(context).height * 0.98,
-                                  child: ProfileWidget(),
+                        await Navigator.of(context)
+                            .push(
+                              MaterialPageRoute(
+                                builder: (context) => Scaffold(
+                                  backgroundColor: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  body: const ProfileWidget(),
                                 ),
                               ),
-                            );
-                          },
-                        ).then((value) => safeSetState(() {}));
+                            )
+                            .then((value) => safeSetState(() {}));
                       },
                       child: Container(
                         width: 32.0,
@@ -187,7 +175,7 @@ class _SeeallnewsWidgetState extends State<SeeallnewsWidget> {
                           child: SizedBox(
                             width: 50.0,
                             height: 50.0,
-                            child: CircularProgressIndicator(
+                            child: FFShimmerLoadingIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 FlutterFlowTheme.of(context).primary,
                               ),
@@ -266,7 +254,7 @@ class _SeeallnewsWidgetState extends State<SeeallnewsWidget> {
                           child: SizedBox(
                             width: 50.0,
                             height: 50.0,
-                            child: CircularProgressIndicator(
+                            child: FFShimmerLoadingIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 FlutterFlowTheme.of(context).primary,
                               ),
@@ -436,8 +424,7 @@ class _SeeallnewsWidgetState extends State<SeeallnewsWidget> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'General',
+                      Text('General',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FontWeight.bold,
@@ -467,7 +454,7 @@ class _SeeallnewsWidgetState extends State<SeeallnewsWidget> {
                           child: SizedBox(
                             width: 50.0,
                             height: 50.0,
-                            child: CircularProgressIndicator(
+                            child: FFShimmerLoadingIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 FlutterFlowTheme.of(context).primary,
                               ),
@@ -724,8 +711,7 @@ class _SeeallnewsWidgetState extends State<SeeallnewsWidget> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Videos',
+                      Text('Videos',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FontWeight.bold,
@@ -756,7 +742,7 @@ class _SeeallnewsWidgetState extends State<SeeallnewsWidget> {
                         child: SizedBox(
                           width: 50.0,
                           height: 50.0,
-                          child: CircularProgressIndicator(
+                          child: FFShimmerLoadingIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
                               FlutterFlowTheme.of(context).primary,
                             ),

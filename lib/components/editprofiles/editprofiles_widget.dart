@@ -205,7 +205,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
       try {
         downloadUrl = await uploadData(safePath, selectedMedia.first.bytes);
       } on FirebaseException catch (fe) {
-        print(
+        debugPrint(
             '[EditProfile] Firebase Storage error: code=${fe.code}, message=${fe.message}, path=$safePath');
         rethrow;
       }
@@ -228,7 +228,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
       try {
         await FirebaseAuth.instance.currentUser?.updatePhotoURL(downloadUrl);
       } catch (e) {
-        print('[EditProfile] Auth photoURL update failed: $e');
+        debugPrint('[EditProfile] Auth photoURL update failed: $e');
       }
 
       try {
@@ -237,7 +237,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
         }
         await NetworkImage(downloadUrl).evict();
       } catch (e) {
-        print('[EditProfile] Image cache eviction error: $e');
+        debugPrint('[EditProfile] Image cache eviction error: $e');
       }
 
       if (mounted) {
@@ -245,7 +245,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
       }
       safeSetState(() {});
     } catch (e) {
-      print('[EditProfile] Upload error: $e');
+      debugPrint('[EditProfile] Upload error: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         showUploadMessage(context, 'Upload failed');
@@ -265,7 +265,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
     if (password.isNotEmpty && password.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text('Password must be at least 6 characters.'),
+          content: Text('Password must be at least 6 characters.'),
           backgroundColor: FlutterFlowTheme.of(context).error,
         ),
       );
@@ -275,6 +275,8 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
     if (password.isNotEmpty) {
       await authManager.updatePassword(newPassword: password, context: context);
     }
+
+    if (!mounted) return;
 
     if (email.isNotEmpty && email != currentUserEmail) {
       await authManager.updateEmail(email: email, context: context);
@@ -296,7 +298,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
       try {
         await FirebaseAuth.instance.currentUser?.updateDisplayName(displayName);
       } catch (e) {
-        print('[EditProfile] Auth displayName update failed: $e');
+        debugPrint('[EditProfile] Auth displayName update failed: $e');
       }
     }
 
@@ -304,8 +306,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          'Profile updated successfully',
+        content: Text('Profile updated successfully',
           style: TextStyle(color: FlutterFlowTheme.of(context).primaryText),
         ),
         duration: const Duration(milliseconds: 2600),
@@ -499,8 +500,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Edit Profile',
+                        Text('Edit Profile',
                           style: FlutterFlowTheme.of(context)
                               .headlineSmall
                               .override(
@@ -517,8 +517,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                                     .fontStyle,
                               ),
                         ),
-                        Text(
-                          'Keep your account details current',
+                        Text('Keep your account details current',
                           style: FlutterFlowTheme.of(context)
                               .labelMedium
                               .override(
@@ -584,7 +583,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                               textInputAction: TextInputAction.next,
                               decoration: _inputDecoration(
                                 context,
-                                hintText: 'Your full name',
+                                hintText: ffTranslate(context, 'Your full name'),
                                 prefixIcon: Icons.person_outline_rounded,
                               ),
                               style: FlutterFlowTheme.of(context)
@@ -625,8 +624,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Account',
+                            Text('Account',
                               style: FlutterFlowTheme.of(context)
                                   .titleSmall
                                   .override(
@@ -652,7 +650,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                               textInputAction: TextInputAction.next,
                               decoration: _inputDecoration(
                                 context,
-                                hintText: '••••••••••••',
+                                hintText: ffTranslate(context, '••••••••••••'),
                                 prefixIcon: Icons.lock_outline_rounded,
                                 suffixIcon: InkWell(
                                   onTap: () => safeSetState(
@@ -696,7 +694,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                               textInputAction: TextInputAction.next,
                               decoration: _inputDecoration(
                                 context,
-                                hintText: 'name@example.com',
+                                hintText: ffTranslate(context, 'name@example.com'),
                                 prefixIcon: Icons.email_outlined,
                               ),
                               style: FlutterFlowTheme.of(context)
@@ -719,8 +717,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                                   .asValidator(context),
                             ),
                             const SizedBox(height: 16.0),
-                            Text(
-                              'Contact',
+                            Text('Contact',
                               style: FlutterFlowTheme.of(context)
                                   .titleSmall
                                   .override(
@@ -749,7 +746,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                                     textInputAction: TextInputAction.next,
                                     decoration: _inputDecoration(
                                       context,
-                                      hintText: 'Street name',
+                                      hintText: ffTranslate(context, 'Street name'),
                                       prefixIcon: Icons.location_on_outlined,
                                     ),
                                     style: FlutterFlowTheme.of(context)
@@ -784,7 +781,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                                     textInputAction: TextInputAction.next,
                                     decoration: _inputDecoration(
                                       context,
-                                      hintText: 'No.',
+                                      hintText: ffTranslate(context, 'No.'),
                                     ),
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -818,7 +815,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                               textInputAction: TextInputAction.next,
                               decoration: _inputDecoration(
                                 context,
-                                hintText: 'Town name',
+                                hintText: ffTranslate(context, 'Town name'),
                                 prefixIcon: Icons.apartment_outlined,
                               ),
                               style: FlutterFlowTheme.of(context)
@@ -848,7 +845,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                               onTap: _pickBirthday,
                               decoration: _inputDecoration(
                                 context,
-                                hintText: 'MM/DD/YYYY',
+                                hintText: ffTranslate(context, 'MM/DD/YYYY'),
                                 prefixIcon: Icons.cake_outlined,
                                 suffixIcon: InkWell(
                                   onTap: _pickBirthday,
@@ -886,7 +883,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                               textInputAction: TextInputAction.done,
                               decoration: _inputDecoration(
                                 context,
-                                hintText: '+1 555 123 4567',
+                                hintText: ffTranslate(context, '+1 555 123 4567'),
                                 prefixIcon: Icons.phone_outlined,
                               ),
                               style: FlutterFlowTheme.of(context)
@@ -914,7 +911,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                       const SizedBox(height: 18.0),
                       FFButtonWidget(
                         onPressed: _saveProfileChanges,
-                        text: 'Save Changes',
+                        text: ffTranslate(context, 'Save Changes'),
                         options: FFButtonOptions(
                           width: double.infinity,
                           height: 52.0,

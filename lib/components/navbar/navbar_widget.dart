@@ -102,8 +102,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                       ),
                       size: 24.0,
                     ),
-                    Text(
-                      'Home',
+                    Text('Home',
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.inter(
                               fontWeight: FontWeight.w500,
@@ -150,8 +149,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                       ),
                       size: 24.0,
                     ),
-                    Text(
-                      'Community',
+                    Text('Community',
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.inter(
                               fontWeight: FontWeight.w500,
@@ -198,8 +196,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                       ),
                       size: 24.0,
                     ),
-                    Text(
-                      'Agenda',
+                    Text('Agenda',
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.inter(
                               fontWeight: FontWeight.w500,
@@ -246,8 +243,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                       ),
                       size: 24.0,
                     ),
-                    Text(
-                      'Shop',
+                    Text('Shop',
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.inter(
                               fontWeight: FontWeight.w500,
@@ -294,8 +290,7 @@ class _NavbarWidgetState extends State<NavbarWidget> {
                       ),
                       size: 24.0,
                     ),
-                    Text(
-                      'Media',
+                    Text('Media',
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.inter(
                               fontWeight: FontWeight.w500,

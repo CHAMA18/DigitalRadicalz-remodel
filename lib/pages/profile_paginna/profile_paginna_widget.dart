@@ -66,7 +66,7 @@ class _ProfilePaginnaWidgetState extends State<ProfilePaginnaWidget> {
                 child: SizedBox(
                   width: 50.0,
                   height: 50.0,
-                  child: CircularProgressIndicator(
+                  child: FFShimmerLoadingIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
                       FlutterFlowTheme.of(context).primary,
                     ),
@@ -292,8 +292,7 @@ class _ProfilePaginnaWidgetState extends State<ProfilePaginnaWidget> {
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Text(
-                            '7.500 Members',
+                          Text('7.500 Members',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -320,8 +319,7 @@ class _ProfilePaginnaWidgetState extends State<ProfilePaginnaWidget> {
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Text(
-                            'Biografie',
+                          Text('Biografie',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -385,7 +383,7 @@ class _ProfilePaginnaWidgetState extends State<ProfilePaginnaWidget> {
                                         ),
                                   ),
                                   TextSpan(
-                                    text: '\nContact: \n',
+                                    text: ffTranslate(context, '\nContact: \n'),
                                     style: TextStyle(),
                                   ),
                                   TextSpan(
@@ -393,7 +391,7 @@ class _ProfilePaginnaWidgetState extends State<ProfilePaginnaWidget> {
                                     style: TextStyle(),
                                   ),
                                   TextSpan(
-                                    text: 'Tel: ',
+                                    text: ffTranslate(context, 'Tel: '),
                                     style: TextStyle(),
                                   ),
                                   TextSpan(
@@ -453,7 +451,7 @@ class _ProfilePaginnaWidgetState extends State<ProfilePaginnaWidget> {
                               ),
                             });
                           },
-                          text: 'Follow',
+                          text: ffTranslate(context, 'Follow'),
                           options: FFButtonOptions(
                             width: double.infinity,
                             height: 40.0,
@@ -505,7 +503,7 @@ class _ProfilePaginnaWidgetState extends State<ProfilePaginnaWidget> {
                               ),
                             });
                           },
-                          text: 'Unfollow',
+                          text: ffTranslate(context, 'Unfollow'),
                           options: FFButtonOptions(
                             width: double.infinity,
                             height: 40.0,

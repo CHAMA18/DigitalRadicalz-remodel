@@ -90,8 +90,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                 ),
                 onPressed: () => context.safePop(),
               ),
-              title: Text(
-                'Group Chat',
+              title: Text('Group Chat',
                 style: FlutterFlowTheme.of(context).titleMedium.override(
                   letterSpacing: 0.0,
                 ),
@@ -111,15 +110,13 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                       size: 64.0,
                     ),
                     SizedBox(height: 16.0),
-                    Text(
-                      'Unable to load group',
+                    Text('Unable to load group',
                       style: FlutterFlowTheme.of(context).headlineSmall.override(
                         letterSpacing: 0.0,
                       ),
                     ),
                     SizedBox(height: 8.0),
-                    Text(
-                      'You may not have permission to view this group chat.',
+                    Text('You may not have permission to view this group chat.',
                       textAlign: TextAlign.center,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                         color: FlutterFlowTheme.of(context).secondaryText,
@@ -129,7 +126,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                     SizedBox(height: 24.0),
                     FFButtonWidget(
                       onPressed: () => context.safePop(),
-                      text: 'Go Back',
+                      text: ffTranslate(context, 'Go Back'),
                       options: FFButtonOptions(
                         height: 44.0,
                         padding: EdgeInsets.symmetric(horizontal: 24.0),
@@ -156,7 +153,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
               child: SizedBox(
                 width: 50.0,
                 height: 50.0,
-                child: CircularProgressIndicator(
+                child: FFShimmerLoadingIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
                     FlutterFlowTheme.of(context).primary,
                   ),
@@ -231,8 +228,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          Text(
-                            '${groupsRecord.userid.length} members',
+                          Text('${groupsRecord.userid.length} members',
                             style: FlutterFlowTheme.of(context).bodySmall.override(
                                   font: GoogleFonts.inter(
                                     fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
@@ -350,15 +346,13 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                                     size: 48.0,
                                   ),
                                   SizedBox(height: 16.0),
-                                  Text(
-                                    'Unable to load messages',
+                                  Text('Unable to load messages',
                                     style: FlutterFlowTheme.of(context).titleMedium.override(
                                       letterSpacing: 0.0,
                                     ),
                                   ),
                                   SizedBox(height: 8.0),
-                                  Text(
-                                    'You may not have permission to view this chat.',
+                                  Text('You may not have permission to view this chat.',
                                     textAlign: TextAlign.center,
                                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                                       color: FlutterFlowTheme.of(context).secondaryText,
@@ -377,7 +371,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                             child: SizedBox(
                               width: 50.0,
                               height: 50.0,
-                              child: CircularProgressIndicator(
+                              child: FFShimmerLoadingIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   FlutterFlowTheme.of(context).primary,
                                 ),
@@ -411,14 +405,12 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                                   builder: (context) {
                                     return AlertDialog(
                                       backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-                                      title: Text(
-                                        'Delete message?',
+                                      title: Text('Delete message?',
                                         style: FlutterFlowTheme.of(context).titleMedium.override(
                                           letterSpacing: 0.0,
                                         ),
                                       ),
-                                      content: Text(
-                                        'This will permanently delete your message.',
+                                      content: Text('This will permanently delete your message.',
                                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                                           letterSpacing: 0.0,
                                         ),
@@ -426,8 +418,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                                       actions: [
                                         TextButton(
                                           onPressed: () => Navigator.of(context).pop(false),
-                                          child: Text(
-                                            'Cancel',
+                                          child: Text('Cancel',
                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                               color: FlutterFlowTheme.of(context).secondaryText,
                                               letterSpacing: 0.0,
@@ -436,8 +427,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                                         ),
                                         TextButton(
                                           onPressed: () => Navigator.of(context).pop(true),
-                                          child: Text(
-                                            'Delete',
+                                          child: Text('Delete',
                                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                                               color: FlutterFlowTheme.of(context).error,
                                               letterSpacing: 0.0,
@@ -457,8 +447,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                                   debugPrint('Error deleting message: $e');
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      content: Text(
-                                        'Failed to delete message',
+                                      content: Text('Failed to delete message',
                                         style: TextStyle(
                                           color: Colors.white,
                                         ),
@@ -494,8 +483,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                                         0.0,
                                         isCurrentUser ? 48.0 : 0.0,
                                         4.0),
-                                    child: Text(
-                                      '${message.nameofsender} • ${TimestampFormatter.formatChatTime(message.timestamp)}',
+                                    child: Text('${message.nameofsender} • ${TimestampFormatter.formatChatTime(message.timestamp)}',
                                       style: FlutterFlowTheme.of(context).bodySmall.override(
                                             font: GoogleFonts.inter(
                                               fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
@@ -547,14 +535,12 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                                             builder: (context) {
                                               return AlertDialog(
                                                 backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-                                                title: Text(
-                                                  'Delete message?',
+                                                title: Text('Delete message?',
                                                   style: FlutterFlowTheme.of(context).titleMedium.override(
                                                     letterSpacing: 0.0,
                                                   ),
                                                 ),
-                                                content: Text(
-                                                  'This will permanently delete your message.',
+                                                content: Text('This will permanently delete your message.',
                                                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                     letterSpacing: 0.0,
                                                   ),
@@ -562,8 +548,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                                                 actions: [
                                                   TextButton(
                                                     onPressed: () => Navigator.of(context).pop(false),
-                                                    child: Text(
-                                                      'Cancel',
+                                                    child: Text('Cancel',
                                                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                         color: FlutterFlowTheme.of(context).secondaryText,
                                                         letterSpacing: 0.0,
@@ -572,8 +557,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () => Navigator.of(context).pop(true),
-                                                    child: Text(
-                                                      'Delete',
+                                                    child: Text('Delete',
                                                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                                                         color: FlutterFlowTheme.of(context).error,
                                                         letterSpacing: 0.0,
@@ -592,8 +576,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                                               debugPrint('Error deleting message: $e');
                                               ScaffoldMessenger.of(context).showSnackBar(
                                                 SnackBar(
-                                                  content: Text(
-                                                    'Failed to delete message',
+                                                  content: Text('Failed to delete message',
                                                     style: TextStyle(
                                                       color: Colors.white,
                                                     ),
@@ -692,7 +675,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                               autofocus: false,
                               obscureText: false,
                               decoration: InputDecoration(
-                                hintText: 'Type a message...',
+                                hintText: ffTranslate(context, 'Type a message...'),
                                 hintStyle: FlutterFlowTheme.of(context).bodyMedium.override(
                                       font: GoogleFonts.inter(
                                         fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
@@ -809,8 +792,7 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                                       debugPrint('Error sending message: $e');
                                       ScaffoldMessenger.of(context).showSnackBar(
                                         SnackBar(
-                                          content: Text(
-                                            'Failed to send message: ${e.toString()}',
+                                          content: Text('Failed to send message: ${e.toString()}',
                                             style: TextStyle(
                                               color: Colors.white,
                                             ),
@@ -999,8 +981,7 @@ class _GroupSettingsDialogState extends State<_GroupSettingsDialog> {
                       icon: Icon(Icons.close, color: FlutterFlowTheme.of(context).primaryText, size: 24.0),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    Text(
-                      'Group Settings',
+                    Text('Group Settings',
                       style: FlutterFlowTheme.of(context).headlineSmall.override(
                         font: GoogleFonts.inter(fontWeight: FontWeight.w600),
                         letterSpacing: 0.0,
@@ -1020,8 +1001,7 @@ class _GroupSettingsDialogState extends State<_GroupSettingsDialog> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Group Name Section
-                      Text(
-                        'Group Name',
+                      Text('Group Name',
                         style: FlutterFlowTheme.of(context).titleSmall.override(
                           font: GoogleFonts.inter(fontWeight: FontWeight.w600),
                           letterSpacing: 0.0,
@@ -1036,7 +1016,7 @@ class _GroupSettingsDialogState extends State<_GroupSettingsDialog> {
                               controller: _nameController,
                               enabled: _isCurrentUserAdmin,
                               decoration: InputDecoration(
-                                hintText: 'Enter group name',
+                                hintText: ffTranslate(context, 'Enter group name'),
                                 hintStyle: FlutterFlowTheme.of(context).bodyMedium.override(
                                   font: GoogleFonts.inter(),
                                   color: FlutterFlowTheme.of(context).secondaryText,
@@ -1067,7 +1047,7 @@ class _GroupSettingsDialogState extends State<_GroupSettingsDialog> {
                             SizedBox(width: 12.0),
                             FFButtonWidget(
                               onPressed: _isLoading ? null : _renameGroup,
-                              text: 'Save',
+                              text: ffTranslate(context, 'Save'),
                               options: FFButtonOptions(
                                 height: 48.0,
                                 padding: EdgeInsets.symmetric(horizontal: 16.0),
@@ -1086,8 +1066,7 @@ class _GroupSettingsDialogState extends State<_GroupSettingsDialog> {
                       if (!_isCurrentUserAdmin)
                         Padding(
                           padding: EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            'Only admins can rename the group',
+                          child: Text('Only admins can rename the group',
                             style: FlutterFlowTheme.of(context).bodySmall.override(
                               font: GoogleFonts.inter(),
                               color: FlutterFlowTheme.of(context).secondaryText,
@@ -1097,8 +1076,7 @@ class _GroupSettingsDialogState extends State<_GroupSettingsDialog> {
                         ),
                       SizedBox(height: 24.0),
                       // Members & Admins Section
-                      Text(
-                        'Members & Admins',
+                      Text('Members & Admins',
                         style: FlutterFlowTheme.of(context).titleSmall.override(
                           font: GoogleFonts.inter(fontWeight: FontWeight.w600),
                           letterSpacing: 0.0,
@@ -1106,8 +1084,7 @@ class _GroupSettingsDialogState extends State<_GroupSettingsDialog> {
                         ),
                       ),
                       SizedBox(height: 8.0),
-                      Text(
-                        '${groupsRecord.userid.length} members',
+                      Text('${groupsRecord.userid.length} members',
                         style: FlutterFlowTheme.of(context).bodySmall.override(
                           font: GoogleFonts.inter(),
                           color: FlutterFlowTheme.of(context).secondaryText,
@@ -1141,8 +1118,7 @@ class _GroupSettingsDialogState extends State<_GroupSettingsDialog> {
       return Center(
         child: Padding(
           padding: EdgeInsets.all(24.0),
-          child: Text(
-            'No members in this group',
+          child: Text('No members in this group',
             style: FlutterFlowTheme.of(context).bodyMedium.override(
               font: GoogleFonts.inter(),
               color: FlutterFlowTheme.of(context).secondaryText,
@@ -1160,7 +1136,7 @@ class _GroupSettingsDialogState extends State<_GroupSettingsDialog> {
           return Center(
             child: Padding(
               padding: EdgeInsets.all(24.0),
-              child: CircularProgressIndicator(
+              child: FFShimmerLoadingIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(FlutterFlowTheme.of(context).primary),
               ),
             ),
@@ -1360,8 +1336,7 @@ class _AddGroupMembersDialogState extends State<_AddGroupMembersDialog> {
     if (_selectedMembers.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            'Please select at least one member',
+          content: Text('Please select at least one member',
             style: TextStyle(color: Colors.white),
           ),
           duration: Duration(milliseconds: 2000),
@@ -1390,8 +1365,7 @@ class _AddGroupMembersDialogState extends State<_AddGroupMembersDialog> {
       Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            'Members added successfully',
+          content: Text('Members added successfully',
             style: TextStyle(color: FlutterFlowTheme.of(context).primaryText),
           ),
           duration: Duration(milliseconds: 2000),
@@ -1402,8 +1376,7 @@ class _AddGroupMembersDialogState extends State<_AddGroupMembersDialog> {
       debugPrint('Error adding members: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(
-            'Failed to add members',
+          content: Text('Failed to add members',
             style: TextStyle(color: Colors.white),
           ),
           duration: Duration(milliseconds: 2000),
@@ -1434,7 +1407,7 @@ class _AddGroupMembersDialogState extends State<_AddGroupMembersDialog> {
               child: SizedBox(
                 width: 50.0,
                 height: 50.0,
-                child: CircularProgressIndicator(
+                child: FFShimmerLoadingIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
                     FlutterFlowTheme.of(context).primary,
                   ),
@@ -1481,8 +1454,7 @@ class _AddGroupMembersDialogState extends State<_AddGroupMembersDialog> {
                       ),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    Text(
-                      'Add Members',
+                    Text('Add Members',
                       style: FlutterFlowTheme.of(context).headlineSmall.override(
                             font: GoogleFonts.inter(
                               fontWeight: FontWeight.w600,
@@ -1510,7 +1482,7 @@ class _AddGroupMembersDialogState extends State<_AddGroupMembersDialog> {
                   controller: _searchController,
                   onChanged: (_) => _performSearch(availableUsers),
                   decoration: InputDecoration(
-                    hintText: 'Search users...',
+                    hintText: ffTranslate(context, 'Search users...'),
                     hintStyle: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.inter(
                             fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
@@ -1565,8 +1537,7 @@ class _AddGroupMembersDialogState extends State<_AddGroupMembersDialog> {
                 if (_selectedMembers.isNotEmpty)
                   Padding(
                     padding: EdgeInsets.only(bottom: 8.0),
-                    child: Text(
-                      '${_selectedMembers.length} member(s) selected',
+                    child: Text('${_selectedMembers.length} member(s) selected',
                       style: FlutterFlowTheme.of(context).bodySmall.override(
                             font: GoogleFonts.inter(
                               fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,

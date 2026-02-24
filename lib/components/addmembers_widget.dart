@@ -112,7 +112,7 @@ class _AddmembersWidgetState extends State<AddmembersWidget> {
             child: SizedBox(
               width: 50.0,
               height: 50.0,
-              child: CircularProgressIndicator(
+              child: FFShimmerLoadingIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(
                   FlutterFlowTheme.of(context).primary,
                 ),
@@ -154,8 +154,7 @@ class _AddmembersWidgetState extends State<AddmembersWidget> {
                           Navigator.pop(context);
                         },
                       ),
-                      Text(
-                        'Add Member',
+                      Text('Add Member',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FontWeight.w500,
@@ -198,8 +197,7 @@ class _AddmembersWidgetState extends State<AddmembersWidget> {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text(
-                                  'Group Created successful',
+                                content: Text('Group Created successful',
                                   style: TextStyle(
                                     color: FlutterFlowTheme.of(context)
                                         .primaryText,
@@ -281,7 +279,7 @@ class _AddmembersWidgetState extends State<AddmembersWidget> {
                                     .labelMedium
                                     .fontStyle,
                               ),
-                      hintText: 'search for user',
+                      hintText: ffTranslate(context, 'search for user'),
                       hintStyle:
                           FlutterFlowTheme.of(context).labelMedium.override(
                                 font: GoogleFonts.inter(
@@ -416,7 +414,7 @@ class _AddmembersWidgetState extends State<AddmembersWidget> {
                                     child: SizedBox(
                                       width: 50.0,
                                       height: 50.0,
-                                      child: CircularProgressIndicator(
+                                      child: FFShimmerLoadingIndicator(
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(
                                           FlutterFlowTheme.of(context).primary,
@@ -506,8 +504,7 @@ class _AddmembersWidgetState extends State<AddmembersWidget> {
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     children: [
-                      Text(
-                        'Members',
+                      Text('Members',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FontWeight.w600,
@@ -648,7 +645,7 @@ class _AddmembersWidgetState extends State<AddmembersWidget> {
                               child: SizedBox(
                                 width: 50.0,
                                 height: 50.0,
-                                child: CircularProgressIndicator(
+                                child: FFShimmerLoadingIndicator(
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                     FlutterFlowTheme.of(context).primary,
                                   ),

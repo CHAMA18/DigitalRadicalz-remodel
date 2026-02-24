@@ -83,8 +83,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                           print('IconButton pressed ...');
                         },
                       ),
-                      Text(
-                        'Back',
+                      Text('Back',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FlutterFlowTheme.of(context)
@@ -114,8 +113,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'MY WALLET',
+                  Text('MY WALLET',
                     textAlign: TextAlign.center,
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.inter(
@@ -171,8 +169,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                           Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(
                                 12.0, 0.0, 0.0, 0.0),
-                            child: Text(
-                              '325',
+                            child: Text('325',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -242,8 +239,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                         Row(
                           mainAxisSize: MainAxisSize.max,
                           children: [
-                            Text(
-                              'Your account history',
+                            Text('Your account history',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -274,8 +270,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(
-                                    'September 2022',
+                                  Text('September 2022',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -317,8 +312,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'K.Beerschot VS Lierse',
+                                      Text('K.Beerschot VS Lierse',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -345,8 +339,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                                                       .fontStyle,
                                             ),
                                       ),
-                                      Text(
-                                        'Tickets',
+                                      Text('Tickets',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -396,8 +389,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 6.0, 0.0, 0.0),
-                                        child: Text(
-                                          '+200',
+                                        child: Text('+200',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -446,8 +438,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(
-                                    'September 2022',
+                                  Text('September 2022',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -489,8 +480,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Defected opening',
+                                      Text('Defected opening',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -517,8 +507,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                                                       .fontStyle,
                                             ),
                                       ),
-                                      Text(
-                                        'Tickets',
+                                      Text('Tickets',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -568,8 +557,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 6.0, 0.0, 0.0),
-                                        child: Text(
-                                          '+200',
+                                        child: Text('+200',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -618,8 +606,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                               child: Row(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(
-                                    '25 august 15:00',
+                                  Text('25 august 15:00',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -661,8 +648,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Starter coins',
+                                      Text('Starter coins',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -689,8 +675,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                                                       .fontStyle,
                                             ),
                                       ),
-                                      Text(
-                                        'Welcome to the game',
+                                      Text('Welcome to the game',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -740,8 +725,7 @@ class _WalletcoinsWidgetState extends State<WalletcoinsWidget> {
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 6.0, 0.0, 0.0),
-                                        child: Text(
-                                          '+200',
+                                        child: Text('+200',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(

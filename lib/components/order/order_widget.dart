@@ -61,7 +61,7 @@ class _OrderWidgetState extends State<OrderWidget> {
             child: SizedBox(
               width: 50.0,
               height: 50.0,
-              child: CircularProgressIndicator(
+              child: FFShimmerLoadingIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(
                   FlutterFlowTheme.of(context).primary,
                 ),
@@ -118,8 +118,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                 // no-op to keep spacing consistent
                               },
                             ),
-                            Text(
-                              'Back',
+                            Text('Back',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -146,8 +145,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                       Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Text(
-                            'Order',
+                          Text('Order',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -180,8 +178,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                             ),
                             onPressed: () {},
                           ),
-                          Text(
-                            'Back',
+                          Text('Back',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -338,8 +335,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Date & Time',
+                              Text('Date & Time',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -414,8 +410,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Location',
+                              Text('Location',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -483,7 +478,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                             child: SizedBox(
                               width: 50.0,
                               height: 50.0,
-                              child: CircularProgressIndicator(
+                              child: FFShimmerLoadingIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   FlutterFlowTheme.of(context).primary,
                                 ),
@@ -694,8 +689,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                           .fontStyle,
                                                                     ),
                                                               ),
-                                                              const TextSpan(
-                                                                text: ' + ',
+                                                              TextSpan(
+                                                                text: ffTranslate(context, ' + '),
                                                                 style:
                                                                     TextStyle(),
                                                               ),
@@ -711,8 +706,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                                 style:
                                                                     const TextStyle(),
                                                               ),
-                                                              const TextSpan(
-                                                                text: ' ',
+                                                              TextSpan(
+                                                                text: ffTranslate(context, ' '),
                                                                 style:
                                                                     TextStyle(),
                                                               ),
@@ -945,7 +940,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                           child: SizedBox(
                             width: 50.0,
                             height: 50.0,
-                            child: CircularProgressIndicator(
+                            child: FFShimmerLoadingIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 FlutterFlowTheme.of(context).primary,
                               ),
@@ -978,8 +973,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                             child: Column(
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                Text(
-                                  'Ticketprijzen zijn exclusief transactie kosten van minimaal 0,50',
+                                Text('Ticketprijzen zijn exclusief transactie kosten van minimaal 0,50',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -1017,8 +1011,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                   mainAxisSize: MainAxisSize.max,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Total',
+                                    Text('Total',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -1038,8 +1031,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                                                     .fontStyle,
                                           ),
                                     ),
-                                    Text(
-                                      'Tickets',
+                                    Text('Tickets',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -1112,7 +1104,7 @@ class _OrderWidgetState extends State<OrderWidget> {
                             child: SizedBox(
                               width: 50.0,
                               height: 50.0,
-                              child: CircularProgressIndicator(
+                              child: FFShimmerLoadingIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   FlutterFlowTheme.of(context).primary,
                                 ),
@@ -1173,7 +1165,7 @@ class _OrderWidgetState extends State<OrderWidget> {
 
                             context.pushNamed(TicketCompletionWidget.routeName);
                           },
-                          text: 'Next',
+                          text: ffTranslate(context, 'Next'),
                           options: FFButtonOptions(
                             width: double.infinity,
                             height: 40.0,

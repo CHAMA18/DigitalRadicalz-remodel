@@ -80,7 +80,7 @@ class _MediaWidgetState extends State<MediaWidget> {
                                     child: SizedBox(
                                       width: 50.0,
                                       height: 50.0,
-                                      child: CircularProgressIndicator(
+                                      child: FFShimmerLoadingIndicator(
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(
                                           FlutterFlowTheme.of(context).primary,
@@ -140,7 +140,7 @@ class _MediaWidgetState extends State<MediaWidget> {
                                 child: SizedBox(
                                   width: 50.0,
                                   height: 50.0,
-                                  child: CircularProgressIndicator(
+                                  child: FFShimmerLoadingIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                       FlutterFlowTheme.of(context).primary,
                                     ),
@@ -274,8 +274,7 @@ class _MediaWidgetState extends State<MediaWidget> {
                                                                       .secondaryBackground,
                                                                   size: 24.0,
                                                                 ),
-                                                                Text(
-                                                                  '42:36',
+                                                                Text('42:36',
                                                                   style: FlutterFlowTheme.of(
                                                                           context)
                                                                       .bodyMedium
@@ -451,7 +450,7 @@ class _MediaWidgetState extends State<MediaWidget> {
                                 _model.onnewscategory = 'Course';
                                 safeSetState(() {});
                               },
-                              text: 'Course',
+                              text: ffTranslate(context, 'Course'),
                               options: FFButtonOptions(
                                 height: 40.0,
                                 padding: EdgeInsetsDirectional.fromSTEB(
@@ -509,7 +508,7 @@ class _MediaWidgetState extends State<MediaWidget> {
                                 _model.onnewscategory = 'Workshop';
                                 safeSetState(() {});
                               },
-                              text: 'Workshop',
+                              text: ffTranslate(context, 'Workshop'),
                               options: FFButtonOptions(
                                 height: 40.0,
                                 padding: EdgeInsetsDirectional.fromSTEB(
@@ -567,7 +566,7 @@ class _MediaWidgetState extends State<MediaWidget> {
                                 _model.onnewscategory = 'Training';
                                 safeSetState(() {});
                               },
-                              text: 'Training',
+                              text: ffTranslate(context, 'Training'),
                               options: FFButtonOptions(
                                 height: 40.0,
                                 padding: EdgeInsetsDirectional.fromSTEB(
@@ -625,7 +624,7 @@ class _MediaWidgetState extends State<MediaWidget> {
                                 _model.onnewscategory = 'Podcast';
                                 safeSetState(() {});
                               },
-                              text: 'Podcast',
+                              text: ffTranslate(context, 'Podcast'),
                               options: FFButtonOptions(
                                 height: 40.0,
                                 padding: EdgeInsetsDirectional.fromSTEB(
@@ -729,7 +728,7 @@ class _MediaWidgetState extends State<MediaWidget> {
                                 child: SizedBox(
                                   width: 50.0,
                                   height: 50.0,
-                                  child: CircularProgressIndicator(
+                                  child: FFShimmerLoadingIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                       FlutterFlowTheme.of(context).primary,
                                     ),

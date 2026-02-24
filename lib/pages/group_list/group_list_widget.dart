@@ -65,7 +65,7 @@ class _GroupListWidgetState extends State<GroupListWidget> {
                   child: SizedBox(
                     width: 50.0,
                     height: 50.0,
-                    child: CircularProgressIndicator(
+                    child: FFShimmerLoadingIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
                         FlutterFlowTheme.of(context).primary,
                       ),
@@ -165,8 +165,7 @@ class _GroupListWidgetState extends State<GroupListWidget> {
                                                 color: FlutterFlowTheme.of(context).primary,
                                                 borderRadius: BorderRadius.circular(12.0),
                                               ),
-                                              child: Text(
-                                                'Admin',
+                                              child: Text('Admin',
                                                 style: FlutterFlowTheme.of(context).bodySmall.override(
                                                       font: GoogleFonts.inter(
                                                         fontWeight: FontWeight.w500,
@@ -214,8 +213,7 @@ class _GroupListWidgetState extends State<GroupListWidget> {
                                             ),
                                             Padding(
                                               padding: EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 0.0, 0.0),
-                                              child: Text(
-                                                '${listViewGroupsRecord.userid.length} members',
+                                              child: Text('${listViewGroupsRecord.userid.length} members',
                                                 style: FlutterFlowTheme.of(context).bodySmall.override(
                                                       font: GoogleFonts.inter(
                                                         fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
@@ -231,8 +229,7 @@ class _GroupListWidgetState extends State<GroupListWidget> {
                                             if (listViewGroupsRecord.timestamp != null)
                                               Padding(
                                                 padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 0.0, 0.0),
-                                                child: Text(
-                                                  '• ${TimestampFormatter.formatChatListPreview(listViewGroupsRecord.timestamp)}',
+                                                child: Text('• ${TimestampFormatter.formatChatListPreview(listViewGroupsRecord.timestamp)}',
                                                   style: FlutterFlowTheme.of(context).bodySmall.override(
                                                         font: GoogleFonts.inter(
                                                           fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,

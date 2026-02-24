@@ -3,14 +3,6 @@ import 'package:provider/provider.dart';
 
 import '../app_state.dart';
 
-/// Lightweight, dependency-free shimmer shims.
-///
-/// This file intentionally avoids external packages so the app compiles
-/// even if shimmer was previously removed. The API mirrors the earlier
-/// version so existing usages continue to work, but behavior is a no-op
-/// (no actual shimmer animation) to keep things stable.
-
-/// Simple data holder to keep API compatibility with earlier code.
 class ShimmerEffect {
   final Color baseColor;
   final Color highlightColor;
@@ -20,7 +12,29 @@ class ShimmerEffect {
   });
 }
 
-/// Scope wrapper that previously enabled shimmer; now it just returns child.
+class _ShimmerScopeData extends InheritedWidget {
+  final bool enabled;
+  final ShimmerEffect effect;
+  final Color? containersColor;
+
+  const _ShimmerScopeData({
+    required this.enabled,
+    required this.effect,
+    required this.containersColor,
+    required super.child,
+  });
+
+  static _ShimmerScopeData? maybeOf(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<_ShimmerScopeData>();
+
+  @override
+  bool updateShouldNotify(_ShimmerScopeData oldWidget) =>
+      enabled != oldWidget.enabled ||
+      effect.baseColor != oldWidget.effect.baseColor ||
+      effect.highlightColor != oldWidget.effect.highlightColor ||
+      containersColor != oldWidget.containersColor;
+}
+
 class ShimmerScope extends StatelessWidget {
   final bool enabled;
   final Widget child;
@@ -37,26 +51,33 @@ class ShimmerScope extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // No-op: simply return child so layout remains unaffected.
-    return child;
+    return _ShimmerScopeData(
+      enabled: enabled,
+      effect: effect ?? const ShimmerEffect(),
+      containersColor: containersColor,
+      child: child,
+    );
   }
 }
 
-/// Convenient builder that ties shimmer to FFAppState().shimmerEnabled.
 class GlobalShimmerWrapper extends StatelessWidget {
   final Widget? child;
   const GlobalShimmerWrapper({super.key, this.child});
 
   @override
   Widget build(BuildContext context) {
-    // Keep listening to app state so future re-enables are easy.
-    final _ = context.watch<FFAppState>().shimmerEnabled;
-    return child ?? const SizedBox();
+    final enabled = context.watch<FFAppState>().shimmerEnabled;
+    return ShimmerScope(
+      enabled: enabled,
+      effect: const ShimmerEffect(
+        baseColor: Color(0x1A9E9E9E),
+        highlightColor: Color(0x3AFFFFFF),
+      ),
+      child: child ?? const SizedBox(),
+    );
   }
 }
 
-/// A simple box that previously shimmered while loading.
-/// Now it renders a static placeholder box when isLoading is true.
 class ShimmerContainer extends StatelessWidget {
   final double? width;
   final double? height;
@@ -85,11 +106,15 @@ class ShimmerContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Keep API compatibility: construct effect but do not use it.
-    final _ = ShimmerEffect(
-      baseColor: baseColor ?? Colors.grey.withValues(alpha: 0.18),
-      highlightColor: highlightColor ?? Colors.grey.withValues(alpha: 0.06),
-    );
+    final scope = _ShimmerScopeData.maybeOf(context);
+    final shimmerEnabled = scope?.enabled ?? true;
+    final effectiveBaseColor = scope?.containersColor ??
+        baseColor ??
+        scope?.effect.baseColor ??
+        Colors.grey.withValues(alpha: 0.18);
+    final effectiveHighlightColor = highlightColor ??
+        scope?.effect.highlightColor ??
+        Colors.grey.withValues(alpha: 0.06);
 
     final box = Container(
       width: width,
@@ -97,27 +122,96 @@ class ShimmerContainer extends StatelessWidget {
       margin: margin,
       padding: padding,
       decoration: BoxDecoration(
-        color: (baseColor ?? Colors.grey.withValues(alpha: 0.18)),
+        color: effectiveBaseColor,
         borderRadius: borderRadius ?? BorderRadius.circular(12),
         border: border,
       ),
       child: child,
     );
 
-    // No-op shimmer: when loading, still return the placeholder box.
-    // When not loading, also return the box as-is (with child).
-    return box;
+    if (!isLoading || !shimmerEnabled) {
+      return box;
+    }
+
+    return _ShimmerMask(
+      baseColor: effectiveBaseColor,
+      highlightColor: effectiveHighlightColor,
+      child: box,
+    );
   }
 }
 
-/// Utility: easily toggle shimmer for a subtree without touching state above.
+class _ShimmerMask extends StatefulWidget {
+  final Widget child;
+  final Color baseColor;
+  final Color highlightColor;
+
+  const _ShimmerMask({
+    required this.child,
+    required this.baseColor,
+    required this.highlightColor,
+  });
+
+  @override
+  State<_ShimmerMask> createState() => _ShimmerMaskState();
+}
+
+class _ShimmerMaskState extends State<_ShimmerMask>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1200),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        final t = _controller.value;
+        return ShaderMask(
+          blendMode: BlendMode.srcATop,
+          shaderCallback: (bounds) => LinearGradient(
+            begin: Alignment(-1.8 + (t * 2.6), -0.2),
+            end: Alignment(-0.2 + (t * 2.6), 0.2),
+            colors: [
+              widget.baseColor,
+              widget.highlightColor,
+              widget.baseColor,
+            ],
+            stops: const [0.1, 0.5, 0.9],
+          ).createShader(bounds),
+          child: child!,
+        );
+      },
+      child: widget.child,
+    );
+  }
+}
+
 extension ShimmerWidgetX on Widget {
   Widget withShimmer({
     required bool enabled,
     ShimmerEffect? effect,
     Color? containersColor,
   }) {
-    // No-op wrapper to keep signatures intact.
-    return this;
+    return ShimmerScope(
+      enabled: enabled,
+      effect: effect,
+      containersColor: containersColor,
+      child: this,
+    );
   }
 }

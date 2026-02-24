@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mime_type/mime_type.dart';
 import 'package:video_player/video_player.dart';
@@ -52,7 +51,7 @@ Future<List<SelectedFile>?> selectMediaWithSourceBottomSheet({
   int? imageQuality,
   required bool allowPhoto,
   bool allowVideo = false,
-  String pickerFontFamily = 'Roboto',
+  String pickerFontFamily = kAppFontFamily,
   Color textColor = const Color(0xFF111417),
   Color backgroundColor = const Color(0xFFF5F5F5),
   bool includeDimensions = false,
@@ -63,8 +62,8 @@ Future<List<SelectedFile>?> selectMediaWithSourceBottomSheet({
             title: Text(
               label,
               textAlign: TextAlign.center,
-              style: GoogleFonts.getFont(
-                pickerFontFamily,
+              style: TextStyle(
+                fontFamily: pickerFontFamily,
                 color: textColor,
                 fontWeight: FontWeight.w600,
                 fontSize: 20,
@@ -88,11 +87,10 @@ Future<List<SelectedFile>?> selectMediaWithSourceBottomSheet({
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 8, 0, 0),
                 child: ListTile(
-                  title: Text(
-                    'Choose Source',
+                  title: Text('Choose Source',
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.getFont(
-                      pickerFontFamily,
+                    style: TextStyle(
+                      fontFamily: pickerFontFamily,
                       color: textColor.applyAlpha(0.65),
                       fontWeight: FontWeight.w500,
                       fontSize: 20,
@@ -232,7 +230,9 @@ bool validateFileFormat(String filePath, BuildContext context) {
   ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
     ..showSnackBar(SnackBar(
-      content: Text('Invalid file format: ${mime(filePath)}'),
+      content: Text(
+        '${ffTranslate(context, 'Invalid file format')}: ${mime(filePath)}',
+      ),
     ));
   return false;
 }
@@ -361,7 +361,7 @@ void showUploadMessage(
             if (showLoading)
               Padding(
                 padding: EdgeInsetsDirectional.only(end: 10.0),
-                child: CircularProgressIndicator(
+                child: FFShimmerLoadingIndicator(
                   valueColor: Theme.of(context).brightness == Brightness.dark
                       ? AlwaysStoppedAnimation<Color>(
                           FlutterFlowTheme.of(context).accent4)

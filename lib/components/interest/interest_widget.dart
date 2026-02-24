@@ -69,7 +69,7 @@ class _InterestWidgetState extends State<InterestWidget> {
                 child: SizedBox(
                   width: 50.0,
                   height: 50.0,
-                  child: CircularProgressIndicator(
+                  child: FFShimmerLoadingIndicator(
                     valueColor: AlwaysStoppedAnimation<Color>(
                       FlutterFlowTheme.of(context).primary,
                     ),
@@ -111,8 +111,7 @@ class _InterestWidgetState extends State<InterestWidget> {
                             Navigator.pop(context);
                           },
                         ),
-                        Text(
-                          'Back',
+                        Text('Back',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -134,8 +133,7 @@ class _InterestWidgetState extends State<InterestWidget> {
                         ),
                       ],
                     ),
-                    Text(
-                      'Interests',
+                    Text('Interests',
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.inter(
                               fontWeight: FontWeight.w500,
@@ -167,8 +165,7 @@ class _InterestWidgetState extends State<InterestWidget> {
                             print('IconButton pressed ...');
                           },
                         ),
-                        Text(
-                          'Back',
+                        Text('Back',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -225,7 +222,7 @@ class _InterestWidgetState extends State<InterestWidget> {
                                     child: SizedBox(
                                       width: 50.0,
                                       height: 50.0,
-                                      child: CircularProgressIndicator(
+                                      child: FFShimmerLoadingIndicator(
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(
                                           FlutterFlowTheme.of(context).primary,

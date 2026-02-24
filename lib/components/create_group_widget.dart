@@ -88,8 +88,7 @@ class _CreateGroupWidgetState extends State<CreateGroupWidget> {
             Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Text(
-                  'Create a Group',
+                Text('Create a Group',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         font: GoogleFonts.inter(
                           fontWeight: FontWeight.w600,
@@ -110,8 +109,7 @@ class _CreateGroupWidgetState extends State<CreateGroupWidget> {
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text(
-                    'Add Photo',
+                  Text('Add Photo',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.inter(
                             fontWeight: FontWeight.normal,
@@ -211,8 +209,7 @@ class _CreateGroupWidgetState extends State<CreateGroupWidget> {
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Title',
+                  Text('Title',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.inter(
                             fontWeight: FlutterFlowTheme.of(context)
@@ -263,7 +260,7 @@ class _CreateGroupWidgetState extends State<CreateGroupWidget> {
                                       .labelMedium
                                       .fontStyle,
                                 ),
-                            hintText: 'Add a title to your group',
+                            hintText: ffTranslate(context, 'Add a title to your group'),
                             hintStyle: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
@@ -350,8 +347,7 @@ class _CreateGroupWidgetState extends State<CreateGroupWidget> {
                 mainAxisSize: MainAxisSize.max,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Title',
+                  Text('Title',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.inter(
                             fontWeight: FlutterFlowTheme.of(context)
@@ -402,7 +398,7 @@ class _CreateGroupWidgetState extends State<CreateGroupWidget> {
                                       .labelMedium
                                       .fontStyle,
                                 ),
-                            hintText: 'Describe your Group',
+                            hintText: ffTranslate(context, 'Describe your Group'),
                             hintStyle: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
@@ -497,8 +493,7 @@ class _CreateGroupWidgetState extends State<CreateGroupWidget> {
                       ));
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(
-                        'Group has been Created',
+                      content: Text('Group has been Created',
                         style: TextStyle(
                           color: FlutterFlowTheme.of(context).primaryText,
                         ),
@@ -509,7 +504,7 @@ class _CreateGroupWidgetState extends State<CreateGroupWidget> {
                   );
                   context.safePop();
                 },
-                text: 'Continue',
+                text: ffTranslate(context, 'Continue'),
                 options: FFButtonOptions(
                   width: double.infinity,
                   height: 40.0,

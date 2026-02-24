@@ -115,8 +115,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                               print('IconButton pressed ...');
                                             },
                                           ),
-                                          Text(
-                                            'Skip intro',
+                                          Text('Skip intro',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -176,8 +175,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                   mainAxisSize: MainAxisSize.max,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'WELCOME TO BRIGHTWARE ALLIANCE',
+                                    Text('WELCOME TO BRIGHTWARE ALLIANCE',
                                       style: FlutterFlowTheme.of(context)
                                           .displayMedium
                                           .override(
@@ -200,8 +198,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                             lineHeight: 1.1,
                                           ),
                                     ),
-                                    Text(
-                                      'This is the official app. Boost your experience. Get your tickets, don\'t miss out on any event and listen to our tunes. Save for exclusive access, giveaways and more...',
+                                    Text('This is the official app. Boost your experience. Get your tickets, don\'t miss out on any event and listen to our tunes. Save for exclusive access, giveaways and more...',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -236,7 +233,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                             curve: Curves.ease,
                                           );
                                         },
-                                        text: 'NEXT',
+                                        text: ffTranslate(context, 'NEXT'),
                                         options: FFButtonOptions(
                                           width: double.infinity,
                                           height: 50.0,
@@ -333,8 +330,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                               print('IconButton pressed ...');
                                             },
                                           ),
-                                          Text(
-                                            'Skip intro',
+                                          Text('Skip intro',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -397,8 +393,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                     Container(
                                       width: 187.79,
                                       decoration: BoxDecoration(),
-                                      child: Text(
-                                        'DON\'T MISS ANYTHING!',
+                                      child: Text('DON\'T MISS ANYTHING!',
                                         style: FlutterFlowTheme.of(context)
                                             .displayMedium
                                             .override(
@@ -423,8 +418,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                             ),
                                       ),
                                     ),
-                                    Text(
-                                      'Don\'t miss any event with our overview and get early access to the latest event announcements',
+                                    Text('Don\'t miss any event with our overview and get early access to the latest event announcements',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -492,8 +486,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                                     .info,
                                           ),
                                         ),
-                                        Text(
-                                          'Turn on notification',
+                                        Text('Turn on notification',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -534,7 +527,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                             curve: Curves.ease,
                                           );
                                         },
-                                        text: 'NEXT',
+                                        text: ffTranslate(context, 'NEXT'),
                                         options: FFButtonOptions(
                                           width: double.infinity,
                                           height: 50.0,
@@ -631,8 +624,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                               print('IconButton pressed ...');
                                             },
                                           ),
-                                          Text(
-                                            'Skip intro',
+                                          Text('Skip intro',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -695,8 +687,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                     Container(
                                       width: 249.9,
                                       decoration: BoxDecoration(),
-                                      child: Text(
-                                        'GET YOUR TICKETS AND STORE THEM DRECTLY!',
+                                      child: Text('GET YOUR TICKETS AND STORE THEM DRECTLY!',
                                         style: FlutterFlowTheme.of(context)
                                             .displayMedium
                                             .override(
@@ -721,8 +712,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                             ),
                                       ),
                                     ),
-                                    Text(
-                                      'Get first dibs on tickets through our in-app ticket shop and store them directly in your in-app ticket wallet    ',
+                                    Text('Get first dibs on tickets through our in-app ticket shop and store them directly in your in-app ticket wallet    ',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -757,7 +747,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                             curve: Curves.ease,
                                           );
                                         },
-                                        text: 'NEXT',
+                                        text: ffTranslate(context, 'NEXT'),
                                         options: FFButtonOptions(
                                           width: double.infinity,
                                           height: 50.0,
@@ -854,8 +844,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                               print('IconButton pressed ...');
                                             },
                                           ),
-                                          Text(
-                                            'Skip intro',
+                                          Text('Skip intro',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -918,8 +907,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                     Container(
                                       width: 249.9,
                                       decoration: BoxDecoration(),
-                                      child: Text(
-                                        'SWIPE AND GET REWARDED',
+                                      child: Text('SWIPE AND GET REWARDED',
                                         style: FlutterFlowTheme.of(context)
                                             .displayMedium
                                             .override(
@@ -944,8 +932,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                             ),
                                       ),
                                     ),
-                                    Text(
-                                      'By playing the swipe game you let us know what you like. By doing this you will receive more promotions based on your interest and you will be rewarded at the end for sure   ',
+                                    Text('By playing the swipe game you let us know what you like. By doing this you will receive more promotions based on your interest and you will be rewarded at the end for sure   ',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -980,7 +967,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                             curve: Curves.ease,
                                           );
                                         },
-                                        text: 'NEXT',
+                                        text: ffTranslate(context, 'NEXT'),
                                         options: FFButtonOptions(
                                           width: double.infinity,
                                           height: 50.0,
@@ -1077,8 +1064,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                               print('IconButton pressed ...');
                                             },
                                           ),
-                                          Text(
-                                            'Skip intro',
+                                          Text('Skip intro',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -1141,8 +1127,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                     Container(
                                       width: 249.9,
                                       decoration: BoxDecoration(),
-                                      child: Text(
-                                        'GET IN STYLLE WITH OUR MERCH',
+                                      child: Text('GET IN STYLLE WITH OUR MERCH',
                                         style: FlutterFlowTheme.of(context)
                                             .displayMedium
                                             .override(
@@ -1167,8 +1152,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                             ),
                                       ),
                                     ),
-                                    Text(
-                                      'Can\'t get enough of our vibe? Get in style and shop one of our merchandise items; caps, t-shirts and more...',
+                                    Text('Can\'t get enough of our vibe? Get in style and shop one of our merchandise items; caps, t-shirts and more...',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -1199,7 +1183,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                                           context.pushNamed(
                                               SplashWidget.routeName);
                                         },
-                                        text: 'NEXT',
+                                        text: ffTranslate(context, 'NEXT'),
                                         options: FFButtonOptions(
                                           width: double.infinity,
                                           height: 50.0,

@@ -80,26 +80,14 @@ class MainTabAppBar extends StatelessWidget implements PreferredSizeWidget {
                   hoverColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: () async {
-                    await showModalBottomSheet(
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      enableDrag: false,
-                      context: context,
-                      builder: (context) {
-                        return GestureDetector(
-                          onTap: () {
-                            FocusScope.of(context).unfocus();
-                            FocusManager.instance.primaryFocus?.unfocus();
-                          },
-                          child: Padding(
-                            padding: MediaQuery.viewInsetsOf(context),
-                            child: SizedBox(
-                              height: MediaQuery.sizeOf(context).height * 0.98,
-                              child: ProfileWidget(),
-                            ),
-                          ),
-                        );
-                      },
+                    await Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => Scaffold(
+                          backgroundColor:
+                              FlutterFlowTheme.of(context).secondaryBackground,
+                          body: const ProfileWidget(),
+                        ),
+                      ),
                     );
                   },
                   child: Container(

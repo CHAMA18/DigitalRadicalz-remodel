@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 
 class FlutterFlowIconButton extends StatefulWidget {
@@ -164,7 +165,7 @@ class _FlutterFlowIconButtonState extends State<FlutterFlowIconButton> {
                 ? Container(
                     width: iconSize,
                     height: iconSize,
-                    child: CircularProgressIndicator(
+                    child: FFShimmerLoadingIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(
                         iconColor ?? Colors.white,
                       ),

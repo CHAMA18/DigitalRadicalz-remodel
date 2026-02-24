@@ -84,8 +84,7 @@ class _DealsvouchersWidgetState extends State<DealsvouchersWidget> {
                           Navigator.pop(context);
                         },
                       ),
-                      Text(
-                        'Back',
+                      Text('Back',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FlutterFlowTheme.of(context)
@@ -107,8 +106,7 @@ class _DealsvouchersWidgetState extends State<DealsvouchersWidget> {
                     ],
                   ),
                 ),
-                Text(
-                  'My profile',
+                Text('My profile',
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         font: GoogleFonts.inter(
                           fontWeight: FontWeight.w500,
@@ -137,8 +135,7 @@ class _DealsvouchersWidgetState extends State<DealsvouchersWidget> {
                         print('IconButton pressed ...');
                       },
                     ),
-                    Text(
-                      'Back',
+                    Text('Back',
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.inter(
                               fontWeight: FlutterFlowTheme.of(context)
@@ -207,8 +204,7 @@ class _DealsvouchersWidgetState extends State<DealsvouchersWidget> {
                                   mainAxisSize: MainAxisSize.max,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'K.Beerschot VS Ckub',
+                                    Text('K.Beerschot VS Ckub',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -231,8 +227,7 @@ class _DealsvouchersWidgetState extends State<DealsvouchersWidget> {
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0.0, 4.0, 0.0, 0.0),
-                                      child: Text(
-                                        'Valid till 18/02/2022 11:00 - 23:00 ',
+                                      child: Text('Valid till 18/02/2022 11:00 - 23:00 ',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -265,8 +260,7 @@ class _DealsvouchersWidgetState extends State<DealsvouchersWidget> {
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 4.0, 0.0, 0.0),
-                                        child: Text(
-                                          'Stadionweg 41-43, \n3077 AS Rotterdam',
+                                        child: Text('Stadionweg 41-43, \n3077 AS Rotterdam',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -368,8 +362,7 @@ class _DealsvouchersWidgetState extends State<DealsvouchersWidget> {
                                   mainAxisSize: MainAxisSize.max,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'K.Beerschot VS Ckub',
+                                    Text('K.Beerschot VS Ckub',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -392,8 +385,7 @@ class _DealsvouchersWidgetState extends State<DealsvouchersWidget> {
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0.0, 4.0, 0.0, 0.0),
-                                      child: Text(
-                                        'Valid till 18/02/2022 11:00 - 23:00 ',
+                                      child: Text('Valid till 18/02/2022 11:00 - 23:00 ',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -426,8 +418,7 @@ class _DealsvouchersWidgetState extends State<DealsvouchersWidget> {
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 4.0, 0.0, 0.0),
-                                        child: Text(
-                                          'Stadionweg 41-43, \n3077 AS Rotterdam',
+                                        child: Text('Stadionweg 41-43, \n3077 AS Rotterdam',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -529,8 +520,7 @@ class _DealsvouchersWidgetState extends State<DealsvouchersWidget> {
                                   mainAxisSize: MainAxisSize.max,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'K.Beerschot VS Ckub',
+                                    Text('K.Beerschot VS Ckub',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -553,8 +543,7 @@ class _DealsvouchersWidgetState extends State<DealsvouchersWidget> {
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           0.0, 4.0, 0.0, 0.0),
-                                      child: Text(
-                                        'Valid till 18/02/2022 11:00 - 23:00 ',
+                                      child: Text('Valid till 18/02/2022 11:00 - 23:00 ',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -587,8 +576,7 @@ class _DealsvouchersWidgetState extends State<DealsvouchersWidget> {
                                       child: Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 4.0, 0.0, 0.0),
-                                        child: Text(
-                                          'Stadionweg 41-43, \n3077 AS Rotterdam',
+                                        child: Text('Stadionweg 41-43, \n3077 AS Rotterdam',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(

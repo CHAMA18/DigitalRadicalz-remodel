@@ -60,7 +60,7 @@ class _VideoWidgetState extends State<VideoWidget> {
               child: SizedBox(
                 width: 50.0,
                 height: 50.0,
-                child: CircularProgressIndicator(
+                child: FFShimmerLoadingIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
                     FlutterFlowTheme.of(context).primary,
                   ),
@@ -303,8 +303,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Related video news',
+                          Text('Related video news',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -341,7 +340,7 @@ class _VideoWidgetState extends State<VideoWidget> {
                             child: SizedBox(
                               width: 50.0,
                               height: 50.0,
-                              child: CircularProgressIndicator(
+                              child: FFShimmerLoadingIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   FlutterFlowTheme.of(context).primary,
                                 ),

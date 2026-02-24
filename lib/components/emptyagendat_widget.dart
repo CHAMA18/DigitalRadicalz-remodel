@@ -45,8 +45,7 @@ class _EmptyagendatWidgetState extends State<EmptyagendatWidget> {
       children: [
         Padding(
           padding: EdgeInsetsDirectional.fromSTEB(30.0, 15.0, 30.0, 0.0),
-          child: Text(
-            'Currently, this community has no agendas.',
+          child: Text('Currently, this community has no agendas.',
             textAlign: TextAlign.center,
             style: FlutterFlowTheme.of(context).bodyMedium.override(
                   font: GoogleFonts.inter(

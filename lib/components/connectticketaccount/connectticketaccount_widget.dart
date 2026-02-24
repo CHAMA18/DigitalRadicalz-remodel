@@ -90,8 +90,7 @@ class _ConnectticketaccountWidgetState
                           Navigator.pop(context);
                         },
                       ),
-                      Text(
-                        'Back',
+                      Text('Back',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FlutterFlowTheme.of(context)
@@ -116,8 +115,7 @@ class _ConnectticketaccountWidgetState
                 Row(
                   mainAxisSize: MainAxisSize.max,
                   children: [
-                    Text(
-                      'Settings',
+                    Text('Settings',
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.inter(
                               fontWeight: FontWeight.w500,
@@ -150,8 +148,7 @@ class _ConnectticketaccountWidgetState
                         print('IconButton pressed ...');
                       },
                     ),
-                    Text(
-                      'Back',
+                    Text('Back',
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.inter(
                               fontWeight: FlutterFlowTheme.of(context)
@@ -184,8 +181,7 @@ class _ConnectticketaccountWidgetState
                   Container(
                     width: 211.11,
                     decoration: BoxDecoration(),
-                    child: Text(
-                      'Connect ticketaccount',
+                    child: Text('Connect ticketaccount',
                       style:
                           FlutterFlowTheme.of(context).displayMedium.override(
                                 font: GoogleFonts.interTight(
@@ -205,8 +201,7 @@ class _ConnectticketaccountWidgetState
                               ),
                     ),
                   ),
-                  Text(
-                    'And earn 500 extra coins!',
+                  Text('And earn 500 extra coins!',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.inter(
                             fontWeight: FontWeight.bold,
@@ -220,8 +215,7 @@ class _ConnectticketaccountWidgetState
                               FlutterFlowTheme.of(context).bodyMedium.fontStyle,
                         ),
                   ),
-                  Text(
-                    'Lorem ipsum dolor sit amet, consect etuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
+                  Text('Lorem ipsum dolor sit amet, consect etuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.inter(
                             fontWeight: FontWeight.w500,
@@ -242,8 +236,7 @@ class _ConnectticketaccountWidgetState
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Email',
+                      Text('Email',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FlutterFlowTheme.of(context)
@@ -293,7 +286,7 @@ class _ConnectticketaccountWidgetState
                                         .labelMedium
                                         .fontStyle,
                                   ),
-                              hintText: 'example@fanceesoftware.com',
+                              hintText: ffTranslate(context, 'example@fanceesoftware.com'),
                               hintStyle: FlutterFlowTheme.of(context)
                                   .labelMedium
                                   .override(
@@ -378,7 +371,7 @@ class _ConnectticketaccountWidgetState
                     onPressed: () {
                       print('Button pressed ...');
                     },
-                    text: 'Send code',
+                    text: ffTranslate(context, 'Send code'),
                     options: FFButtonOptions(
                       width: double.infinity,
                       height: 50.0,

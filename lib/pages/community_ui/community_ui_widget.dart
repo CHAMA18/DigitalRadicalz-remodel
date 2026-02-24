@@ -175,7 +175,7 @@ class _CommunityUiWidgetState extends State<CommunityUiWidget> {
                                                       .labelMedium
                                                       .fontStyle,
                                             ),
-                                        hintText: 'Search....',
+                                        hintText: ffTranslate(context, 'Search....'),
                                         hintStyle: FlutterFlowTheme.of(context)
                                             .labelMedium
                                             .override(
@@ -347,8 +347,7 @@ class _CommunityUiWidgetState extends State<CommunityUiWidget> {
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       6.0, 0.0, 0.0, 0.0),
-                                  child: Text(
-                                    'LOSE IT! BLOG',
+                                  child: Text('LOSE IT! BLOG',
                                     textAlign: TextAlign.center,
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -381,8 +380,7 @@ class _CommunityUiWidgetState extends State<CommunityUiWidget> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                Text(
-                                  'Quick tips to make logging with Lose It! easier.',
+                                Text('Quick tips to make logging with Lose It! easier.',
                                   textAlign: TextAlign.center,
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
@@ -414,8 +412,7 @@ class _CommunityUiWidgetState extends State<CommunityUiWidget> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Expanded(
-                                  child: Text(
-                                    'From time to time, we all scream for ice cream…From time to time, we all scream for ice cream…From time to time, we all scream for ice cream…From time to time, we all scream for ice cream…',
+                                  child: Text('From time to time, we all scream for ice cream…From time to time, we all scream for ice cream…From time to time, we all scream for ice cream…From time to time, we all scream for ice cream…',
                                     textAlign: TextAlign.start,
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -497,8 +494,7 @@ class _CommunityUiWidgetState extends State<CommunityUiWidget> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
                                           children: [
-                                            Text(
-                                              'We are all in this together',
+                                            Text('We are all in this together',
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -533,8 +529,7 @@ class _CommunityUiWidgetState extends State<CommunityUiWidget> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.center,
                                             children: [
-                                              Text(
-                                                'Date Created',
+                                              Text('Date Created',
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .bodyMedium
@@ -586,8 +581,7 @@ class _CommunityUiWidgetState extends State<CommunityUiWidget> {
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       0.0, 0.0, 0.0, 8.0),
-                                  child: Text(
-                                    'No matter what challenges come our way, we are in this together. Each step forward becomes lighter when we walk side by side, supporting and encouraging one another.',
+                                  child: Text('No matter what challenges come our way, we are in this together. Each step forward becomes lighter when we walk side by side, supporting and encouraging one another.',
                                     textAlign: TextAlign.start,
                                     maxLines: 6,
                                     style: FlutterFlowTheme.of(context)
@@ -633,7 +627,7 @@ class _CommunityUiWidgetState extends State<CommunityUiWidget> {
                                 onPressed: () {
                                   print('Button pressed ...');
                                 },
-                                text: 'Laura',
+                                text: ffTranslate(context, 'Laura'),
                                 options: FFButtonOptions(
                                   height: 19.3,
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -671,7 +665,7 @@ class _CommunityUiWidgetState extends State<CommunityUiWidget> {
                                   text: TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: '123',
+                                        text: ffTranslate(context, '123'),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -695,7 +689,7 @@ class _CommunityUiWidgetState extends State<CommunityUiWidget> {
                                             ),
                                       ),
                                       TextSpan(
-                                        text: ' Members',
+                                        text: ffTranslate(context, ' Members'),
                                         style: TextStyle(),
                                       )
                                     ],

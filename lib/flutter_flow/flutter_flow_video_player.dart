@@ -5,6 +5,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
 
+import '/flutter_flow/ff_localization.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart' show routeObserver;
 
@@ -207,14 +208,14 @@ class _FlutterFlowVideoPlayerState extends State<FlutterFlowVideoPlayer>
                         SizedBox(
                           width: 50.0,
                           height: 50.0,
-                          child: CircularProgressIndicator(
+                          child: FFShimmerLoadingIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
                               FlutterFlowTheme.of(context).primary,
                             ),
                           ),
                         ),
                         const SizedBox(height: 20),
-                        const Text('Loading'),
+                        Text('Loading'),
                       ],
                     ),
         ),

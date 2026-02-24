@@ -85,7 +85,7 @@ class _AgendaoverviewWidgetState extends State<AgendaoverviewWidget> {
                                     child: SizedBox(
                                       width: 50.0,
                                       height: 50.0,
-                                      child: CircularProgressIndicator(
+                                      child: FFShimmerLoadingIndicator(
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(
                                           FlutterFlowTheme.of(context).primary,
@@ -270,8 +270,7 @@ class _AgendaoverviewWidgetState extends State<AgendaoverviewWidget> {
                                     });
                                   },
                                   child: Semantics(
-                                    label:
-                                        'Drag handle: drag vertically to resize agenda panel',
+                                    label: ffTranslate(context, 'Drag handle: drag vertically to resize agenda panel'),
                                     button: true,
                                     child: Container(
                                       width: double.infinity,
@@ -302,8 +301,7 @@ class _AgendaoverviewWidgetState extends State<AgendaoverviewWidget> {
                                                           context)
                                                       .secondaryText),
                                               SizedBox(width: 4),
-                                              Text(
-                                                'Hold to resize',
+                                              Text('Hold to resize',
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .labelSmall

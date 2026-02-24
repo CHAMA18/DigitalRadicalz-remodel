@@ -86,7 +86,7 @@ class _Angenda2WidgetState extends State<Angenda2Widget>
           child: SizedBox(
             width: 50.0,
             height: 50.0,
-            child: CircularProgressIndicator(
+            child: FFShimmerLoadingIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
                 FlutterFlowTheme.of(context).primary,
               ),
@@ -176,7 +176,7 @@ class _Angenda2WidgetState extends State<Angenda2Widget>
                                       .bodyMedium
                                       .fontStyle,
                                 ),
-                            hintText: 'Search',
+                            hintText: ffTranslate(context, 'Search'),
                             hintStyle: FlutterFlowTheme.of(context)
                                 .labelMedium
                                 .override(
@@ -326,13 +326,13 @@ class _Angenda2WidgetState extends State<Angenda2Widget>
                       indicatorColor: FlutterFlowTheme.of(context).primary,
                       tabs: [
                         Tab(
-                          text: 'Alle events',
+                          text: ffTranslate(context, 'Alle events'),
                         ),
                         Tab(
-                          text: 'In de buurt',
+                          text: ffTranslate(context, 'In de buurt'),
                         ),
                         Tab(
-                          text: 'Niet missen',
+                          text: ffTranslate(context, 'Niet missen'),
                         ),
                       ],
                       controller: _model.tabBarController,
@@ -358,7 +358,7 @@ class _Angenda2WidgetState extends State<Angenda2Widget>
                                   child: SizedBox(
                                     width: 50.0,
                                     height: 50.0,
-                                    child: CircularProgressIndicator(
+                                    child: FFShimmerLoadingIndicator(
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                         FlutterFlowTheme.of(context).primary,
                                       ),
@@ -399,7 +399,7 @@ class _Angenda2WidgetState extends State<Angenda2Widget>
                                                 width: 50.0,
                                                 height: 50.0,
                                                 child:
-                                                    CircularProgressIndicator(
+                                                    FFShimmerLoadingIndicator(
                                                   valueColor:
                                                       AlwaysStoppedAnimation<
                                                           Color>(
@@ -769,7 +769,7 @@ class _Angenda2WidgetState extends State<Angenda2Widget>
                                   child: SizedBox(
                                     width: 50.0,
                                     height: 50.0,
-                                    child: CircularProgressIndicator(
+                                    child: FFShimmerLoadingIndicator(
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                         FlutterFlowTheme.of(context).primary,
                                       ),
@@ -810,7 +810,7 @@ class _Angenda2WidgetState extends State<Angenda2Widget>
                                                 width: 50.0,
                                                 height: 50.0,
                                                 child:
-                                                    CircularProgressIndicator(
+                                                    FFShimmerLoadingIndicator(
                                                   valueColor:
                                                       AlwaysStoppedAnimation<
                                                           Color>(
@@ -1179,7 +1179,7 @@ class _Angenda2WidgetState extends State<Angenda2Widget>
                                   child: SizedBox(
                                     width: 50.0,
                                     height: 50.0,
-                                    child: CircularProgressIndicator(
+                                    child: FFShimmerLoadingIndicator(
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                         FlutterFlowTheme.of(context).primary,
                                       ),
@@ -1219,7 +1219,7 @@ class _Angenda2WidgetState extends State<Angenda2Widget>
                                                 width: 50.0,
                                                 height: 50.0,
                                                 child:
-                                                    CircularProgressIndicator(
+                                                    FFShimmerLoadingIndicator(
                                                   valueColor:
                                                       AlwaysStoppedAnimation<
                                                           Color>(

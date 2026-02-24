@@ -65,7 +65,7 @@ class CmsEventCard extends StatelessWidget {
                             placeholder: (context, url) => Container(
                               color: FlutterFlowTheme.of(context).alternate,
                               child: Center(
-                                child: CircularProgressIndicator(
+                                child: FFShimmerLoadingIndicator(
                                   strokeWidth: 2,
                                   color: FlutterFlowTheme.of(context).primary,
                                 ),
@@ -139,8 +139,7 @@ class CmsEventCard extends StatelessWidget {
                         children: [
                           const Icon(Icons.star, color: Colors.white, size: 14),
                           const SizedBox(width: 4),
-                          Text(
-                            'Featured',
+                          Text('Featured',
                             style: FlutterFlowTheme.of(context).bodySmall.override(
                               font: GoogleFonts.inter(fontWeight: FontWeight.w600),
                               color: Colors.white,
@@ -198,8 +197,7 @@ class CmsEventCard extends StatelessWidget {
                           color: FlutterFlowTheme.of(context).secondaryText,
                         ),
                         const SizedBox(width: 4),
-                        Text(
-                          '${event.startTime}${event.endTime != null ? ' - ${event.endTime}' : ''}',
+                        Text('${event.startTime}${event.endTime != null ? ' - ${event.endTime}' : ''}',
                           style: FlutterFlowTheme.of(context).bodySmall.override(
                             font: GoogleFonts.inter(),
                             color: FlutterFlowTheme.of(context).secondaryText,
@@ -238,16 +236,14 @@ class CmsEventCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         if (event.ticketPrice != null)
-                          Text(
-                            'R${event.ticketPrice!.toStringAsFixed(0)}',
+                          Text('R${event.ticketPrice!.toStringAsFixed(0)}',
                             style: FlutterFlowTheme.of(context).titleMedium.override(
                               font: GoogleFonts.inter(fontWeight: FontWeight.bold),
                               color: FlutterFlowTheme.of(context).primary,
                             ),
                           )
                         else
-                          Text(
-                            'Free',
+                          Text('Free',
                             style: FlutterFlowTheme.of(context).titleMedium.override(
                               font: GoogleFonts.inter(fontWeight: FontWeight.bold),
                               color: Colors.green,
@@ -259,8 +255,7 @@ class CmsEventCard extends StatelessWidget {
                             color: FlutterFlowTheme.of(context).primary,
                             borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Text(
-                            'Get Tickets',
+                          child: Text('Get Tickets',
                             style: FlutterFlowTheme.of(context).bodySmall.override(
                               font: GoogleFonts.inter(fontWeight: FontWeight.w600),
                               color: Colors.white,

@@ -114,27 +114,17 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        await showModalBottomSheet(
-                          isScrollControlled: true,
-                          backgroundColor: Colors.transparent,
-                          enableDrag: false,
-                          context: context,
-                          builder: (context) {
-                            return GestureDetector(
-                              onTap: () {
-                                FocusScope.of(context).unfocus();
-                                FocusManager.instance.primaryFocus?.unfocus();
-                              },
-                              child: Padding(
-                                padding: MediaQuery.viewInsetsOf(context),
-                                child: SizedBox(
-                                  height: MediaQuery.sizeOf(context).height * 0.98,
-                                  child: const ProfileWidget(),
+                        await Navigator.of(context)
+                            .push(
+                              MaterialPageRoute(
+                                builder: (context) => Scaffold(
+                                  backgroundColor: FlutterFlowTheme.of(context)
+                                      .secondaryBackground,
+                                  body: const ProfileWidget(),
                                 ),
                               ),
-                            );
-                          },
-                        ).then((value) => safeSetState(() {}));
+                            )
+                            .then((value) => safeSetState(() {}));
                       },
                       child: Container(
                         width: 32.0,
@@ -172,12 +162,12 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
             ),
             indicatorColor: FlutterFlowTheme.of(context).primary,
             indicatorWeight: 3,
-            tabs: const [
-              Tab(text: 'News'),
-              Tab(text: 'Events'),
-              Tab(text: 'Products'),
-              Tab(text: 'Media'),
-              Tab(text: 'Courses'),
+            tabs: [
+              Tab(text: ffTranslate(context, 'News')),
+              Tab(text: ffTranslate(context, 'Events')),
+              Tab(text: ffTranslate(context, 'Products')),
+              Tab(text: ffTranslate(context, 'Media')),
+              Tab(text: ffTranslate(context, 'Courses')),
             ],
           ),
         ),
@@ -500,8 +490,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
                       color: FlutterFlowTheme.of(context).secondaryText,
                     ),
                     const SizedBox(width: 4),
-                    Text(
-                      '${course.moduleCount} modules',
+                    Text('${course.moduleCount} modules',
                       style: FlutterFlowTheme.of(context).bodySmall.override(
                         font: GoogleFonts.inter(),
                         color: FlutterFlowTheme.of(context).secondaryText,
@@ -514,8 +503,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
                       color: FlutterFlowTheme.of(context).secondaryText,
                     ),
                     const SizedBox(width: 4),
-                    Text(
-                      '${course.enrolledCount} enrolled',
+                    Text('${course.enrolledCount} enrolled',
                       style: FlutterFlowTheme.of(context).bodySmall.override(
                         font: GoogleFonts.inter(),
                         color: FlutterFlowTheme.of(context).secondaryText,
@@ -528,8 +516,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'R${course.price!.toStringAsFixed(0)}',
+                      Text('R${course.price!.toStringAsFixed(0)}',
                         style: FlutterFlowTheme.of(context).titleMedium.override(
                           font: GoogleFonts.inter(fontWeight: FontWeight.bold),
                           color: FlutterFlowTheme.of(context).primary,
@@ -541,8 +528,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
                           color: FlutterFlowTheme.of(context).primary,
                           borderRadius: BorderRadius.circular(20),
                         ),
-                        child: Text(
-                          'Enroll Now',
+                        child: Text('Enroll Now',
                           style: FlutterFlowTheme.of(context).bodySmall.override(
                             font: GoogleFonts.inter(fontWeight: FontWeight.w600),
                             color: Colors.white,
@@ -562,7 +548,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
 
   Widget _buildLoadingState(BuildContext context) {
     return Center(
-      child: CircularProgressIndicator(
+      child: FFShimmerLoadingIndicator(
         color: FlutterFlowTheme.of(context).primary,
       ),
     );
@@ -581,8 +567,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
               color: FlutterFlowTheme.of(context).secondaryText,
             ),
             const SizedBox(height: 16),
-            Text(
-              'Failed to load content',
+            Text('Failed to load content',
               style: FlutterFlowTheme.of(context).titleMedium,
             ),
             const SizedBox(height: 8),
@@ -598,7 +583,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
             ElevatedButton.icon(
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
+              label: Text('Retry'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: FlutterFlowTheme.of(context).primary,
                 foregroundColor: Colors.white,
@@ -631,8 +616,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
               ),
             ),
             const SizedBox(height: 8),
-            Text(
-              'Check back later for new content',
+            Text('Check back later for new content',
               style: FlutterFlowTheme.of(context).bodySmall.override(
                 font: GoogleFonts.inter(),
                 color: FlutterFlowTheme.of(context).secondaryText,
@@ -753,8 +737,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
                             color: FlutterFlowTheme.of(context).secondaryText,
                           ),
                           const SizedBox(width: 4),
-                          Text(
-                            '${news.viewCount} views',
+                          Text('${news.viewCount} views',
                             style: FlutterFlowTheme.of(context).bodySmall.override(
                               font: GoogleFonts.inter(),
                               color: FlutterFlowTheme.of(context).secondaryText,
@@ -817,8 +800,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'About this event',
+                        Text('About this event',
                           style: FlutterFlowTheme.of(context).titleMedium.override(
                             font: GoogleFonts.inter(fontWeight: FontWeight.bold),
                           ),
@@ -912,8 +894,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
                         const SizedBox(height: 12),
                         Row(
                           children: [
-                            Text(
-                              'R${product.effectivePrice.toStringAsFixed(2)}',
+                            Text('R${product.effectivePrice.toStringAsFixed(2)}',
                               style: FlutterFlowTheme.of(context).headlineSmall.override(
                                 font: GoogleFonts.inter(fontWeight: FontWeight.bold),
                                 color: FlutterFlowTheme.of(context).primary,
@@ -921,8 +902,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
                             ),
                             if (product.isOnSale) ...[
                               const SizedBox(width: 12),
-                              Text(
-                                'R${product.price.toStringAsFixed(2)}',
+                              Text('R${product.price.toStringAsFixed(2)}',
                                 style: FlutterFlowTheme.of(context).bodyMedium.override(
                                   font: GoogleFonts.inter(),
                                   color: FlutterFlowTheme.of(context).secondaryText,
@@ -934,8 +914,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
                         ),
                         if (product.description != null) ...[
                           const SizedBox(height: 20),
-                          Text(
-                            'Description',
+                          Text('Description',
                             style: FlutterFlowTheme.of(context).titleMedium.override(
                               font: GoogleFonts.inter(fontWeight: FontWeight.bold),
                             ),
@@ -1070,8 +1049,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
                               color: FlutterFlowTheme.of(context).secondaryText,
                             ),
                             const SizedBox(width: 4),
-                            Text(
-                              '${media.viewCount} views',
+                            Text('${media.viewCount} views',
                               style: FlutterFlowTheme.of(context).bodySmall.override(
                                 font: GoogleFonts.inter(),
                                 color: FlutterFlowTheme.of(context).secondaryText,
@@ -1084,8 +1062,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
                               color: FlutterFlowTheme.of(context).secondaryText,
                             ),
                             const SizedBox(width: 4),
-                            Text(
-                              '${media.likeCount} likes',
+                            Text('${media.likeCount} likes',
                               style: FlutterFlowTheme.of(context).bodySmall.override(
                                 font: GoogleFonts.inter(),
                                 color: FlutterFlowTheme.of(context).secondaryText,
@@ -1111,8 +1088,7 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
                         ),
                         if (media.description != null) ...[
                           const SizedBox(height: 20),
-                          Text(
-                            'Description',
+                          Text('Description',
                             style: FlutterFlowTheme.of(context).titleMedium.override(
                               font: GoogleFonts.inter(fontWeight: FontWeight.bold),
                             ),

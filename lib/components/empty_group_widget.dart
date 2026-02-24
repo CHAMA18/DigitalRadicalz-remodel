@@ -45,8 +45,7 @@ class _EmptyGroupWidgetState extends State<EmptyGroupWidget> {
       children: [
         Padding(
           padding: EdgeInsetsDirectional.fromSTEB(30.0, 15.0, 30.0, 0.0),
-          child: Text(
-            'Uh-oh! Looks like you’re not part of any group. Try creating one and invite friends to get started!',
+          child: Text('Uh-oh! Looks like you’re not part of any group. Try creating one and invite friends to get started!',
             textAlign: TextAlign.center,
             style: FlutterFlowTheme.of(context).bodyMedium.override(
                   font: GoogleFonts.inter(

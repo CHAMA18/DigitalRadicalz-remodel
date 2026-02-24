@@ -103,7 +103,7 @@ class _CommentsectionWidgetState extends State<CommentsectionWidget> {
                                 child: SizedBox(
                                   width: 50.0,
                                   height: 50.0,
-                                  child: CircularProgressIndicator(
+                                  child: FFShimmerLoadingIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                       FlutterFlowTheme.of(context).primary,
                                     ),
@@ -124,8 +124,7 @@ class _CommentsectionWidgetState extends State<CommentsectionWidget> {
                                   commentcount: textCount.toDouble(),
                                 ));
                               },
-                              child: Text(
-                                '${valueOrDefault<String>(
+                              child: Text('${valueOrDefault<String>(
                                   formatNumber(
                                     textCount,
                                     formatType: FormatType.decimal,
@@ -185,7 +184,7 @@ class _CommentsectionWidgetState extends State<CommentsectionWidget> {
                           child: SizedBox(
                             width: 50.0,
                             height: 50.0,
-                            child: CircularProgressIndicator(
+                            child: FFShimmerLoadingIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 FlutterFlowTheme.of(context).primary,
                               ),
@@ -222,7 +221,7 @@ class _CommentsectionWidgetState extends State<CommentsectionWidget> {
                                     child: SizedBox(
                                       width: 50.0,
                                       height: 50.0,
-                                      child: CircularProgressIndicator(
+                                      child: FFShimmerLoadingIndicator(
                                         valueColor: AlwaysStoppedAnimation<Color>(
                                           FlutterFlowTheme.of(context).primary,
                                         ),
@@ -244,16 +243,16 @@ class _CommentsectionWidgetState extends State<CommentsectionWidget> {
                                           context: context,
                                           builder: (dialogContext) {
                                             return AlertDialog(
-                                              title: const Text('Delete comment?'),
-                                              content: const Text('This action cannot be undone.'),
+                                              title: Text(ffTranslate(context, 'Delete comment?')),
+                                              content: Text(ffTranslate(context, 'This action cannot be undone.')),
                                               actions: [
                                                 TextButton(
                                                   onPressed: () => Navigator.of(dialogContext).pop(false),
-                                                  child: const Text('Cancel'),
+                                                  child: Text(ffTranslate(context, 'Cancel')),
                                                 ),
                                                 TextButton(
                                                   onPressed: () => Navigator.of(dialogContext).pop(true),
-                                                  child: const Text('Delete'),
+                                                  child: Text(ffTranslate(context, 'Delete')),
                                                 ),
                                               ],
                                             );
@@ -265,13 +264,21 @@ class _CommentsectionWidgetState extends State<CommentsectionWidget> {
                                         await columnCommentsecctionRecord.reference.delete();
                                         if (mounted) {
                                           ScaffoldMessenger.of(context).showSnackBar(
-                                            const SnackBar(content: Text('Comment deleted')),
+                                            SnackBar(
+                                              content: Text(
+                                                ffTranslate(context, 'Comment deleted'),
+                                              ),
+                                            ),
                                           );
                                         }
                                       } catch (e) {
                                         if (mounted) {
                                           ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(content: Text('Failed to delete comment: $e')),
+                                            SnackBar(
+                                              content: Text(
+                                                '${ffTranslate(context, 'Failed to delete comment')}: $e',
+                                              ),
+                                            ),
                                           );
                                         }
                                       }
@@ -532,7 +539,7 @@ class _CommentsectionWidgetState extends State<CommentsectionWidget> {
                                   fontWeight: FlutterFlowTheme.of(context).labelMedium.fontWeight,
                                   fontStyle: FlutterFlowTheme.of(context).labelMedium.fontStyle,
                                 ),
-                            hintText: 'Add a comment',
+                            hintText: ffTranslate(context, 'Add a comment'),
                             hintStyle: FlutterFlowTheme.of(context).labelMedium.override(
                                   font: GoogleFonts.inter(
                                     fontWeight: FlutterFlowTheme.of(context).labelMedium.fontWeight,

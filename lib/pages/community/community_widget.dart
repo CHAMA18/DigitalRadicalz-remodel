@@ -127,7 +127,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                             .labelMedium
                                             .fontStyle,
                                       ),
-                                  hintText: 'Search....',
+                                  hintText: ffTranslate(context, 'Search....'),
                                   hintStyle: FlutterFlowTheme.of(context)
                                       .labelMedium
                                       .override(
@@ -231,7 +231,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                     child: SizedBox(
                                       width: 50.0,
                                       height: 50.0,
-                                      child: CircularProgressIndicator(
+                                      child: FFShimmerLoadingIndicator(
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(
                                           FlutterFlowTheme.of(context).primary,
@@ -287,7 +287,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                       _model.onbutton = 'Interest';
                                       safeSetState(() {});
                                     },
-                                    text: 'Interest',
+                                    text: ffTranslate(context, 'Interest'),
                                     options: FFButtonOptions(
                                       width: 108.0,
                                       height: 24.0,
@@ -340,7 +340,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                       _model.onbutton = 'Purpose';
                                       safeSetState(() {});
                                     },
-                                    text: 'Purpose',
+                                    text: ffTranslate(context, 'Purpose'),
                                     options: FFButtonOptions(
                                       width: 108.0,
                                       height: 24.0,
@@ -393,7 +393,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                       _model.onbutton = 'Role';
                                       safeSetState(() {});
                                     },
-                                    text: 'Role',
+                                    text: ffTranslate(context, 'Role'),
                                     options: FFButtonOptions(
                                       width: 108.0,
                                       height: 24.0,
@@ -463,7 +463,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                       child: SizedBox(
                                         width: 50.0,
                                         height: 50.0,
-                                        child: CircularProgressIndicator(
+                                        child: FFShimmerLoadingIndicator(
                                           valueColor:
                                               AlwaysStoppedAnimation<Color>(
                                             FlutterFlowTheme.of(context)
@@ -604,7 +604,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                       child: SizedBox(
                                         width: 50.0,
                                         height: 50.0,
-                                        child: CircularProgressIndicator(
+                                        child: FFShimmerLoadingIndicator(
                                           valueColor:
                                               AlwaysStoppedAnimation<Color>(
                                             FlutterFlowTheme.of(context)
@@ -672,7 +672,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                     child: SizedBox(
                                       width: 50.0,
                                       height: 50.0,
-                                      child: CircularProgressIndicator(
+                                      child: FFShimmerLoadingIndicator(
                                         valueColor:
                                             AlwaysStoppedAnimation<Color>(
                                           FlutterFlowTheme.of(context).primary,
@@ -1090,7 +1090,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                           child: SizedBox(
                             width: 50.0,
                             height: 50.0,
-                            child: CircularProgressIndicator(
+                            child: FFShimmerLoadingIndicator(
                               valueColor: AlwaysStoppedAnimation<Color>(
                                 FlutterFlowTheme.of(context).primary,
                               ),

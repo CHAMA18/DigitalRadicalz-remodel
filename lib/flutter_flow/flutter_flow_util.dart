@@ -14,10 +14,12 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
 
 import '../main.dart';
+import 'flutter_flow_theme.dart';
 
 import 'lat_lng.dart';
 
 export 'keep_alive_wrapper.dart';
+export 'ff_localization.dart';
 export 'lat_lng.dart';
 export 'place.dart';
 export 'uploaded_file.dart';
@@ -470,7 +472,8 @@ void setDarkModeSetting(BuildContext context, ThemeMode themeMode) =>
 void setAppLanguage(BuildContext context, String languageCode) =>
     MyApp.of(context).setLocale(Locale(languageCode));
 
-void useSystemLanguage(BuildContext context) => MyApp.of(context).setLocale(null);
+void useSystemLanguage(BuildContext context) =>
+    MyApp.of(context).setLocale(null);
 
 void showSnackbar(
   BuildContext context,
@@ -489,7 +492,7 @@ void showSnackbar(
               child: Container(
                 height: 20,
                 width: 20,
-                child: const CircularProgressIndicator(
+                child: const FFShimmerLoadingIndicator(
                   color: Colors.white,
                 ),
               ),

@@ -68,7 +68,7 @@ class _AgendaWidgetState extends State<AgendaWidget>
           child: SizedBox(
             width: 50.0,
             height: 50.0,
-            child: CircularProgressIndicator(
+            child: FFShimmerLoadingIndicator(
               valueColor: AlwaysStoppedAnimation<Color>(
                 FlutterFlowTheme.of(context).primary,
               ),
@@ -149,16 +149,16 @@ class _AgendaWidgetState extends State<AgendaWidget>
                     indicatorColor: FlutterFlowTheme.of(context).primary,
                     tabs: [
                       Tab(
-                        text: 'Alle events',
+                        text: ffTranslate(context, 'Alle events'),
                       ),
                       Tab(
-                        text: 'In de buurt',
+                        text: ffTranslate(context, 'In de buurt'),
                       ),
                       Tab(
-                        text: 'Niet missen',
+                        text: ffTranslate(context, 'Niet missen'),
                       ),
                       Tab(
-                        text: 'Uitnodiging',
+                        text: ffTranslate(context, 'Uitnodiging'),
                       ),
                     ],
                     controller: _model.tabBarController,
@@ -183,7 +183,7 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                 child: SizedBox(
                                   width: 50.0,
                                   height: 50.0,
-                                  child: CircularProgressIndicator(
+                                  child: FFShimmerLoadingIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                       FlutterFlowTheme.of(context).primary,
                                     ),
@@ -222,7 +222,7 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                             child: SizedBox(
                                               width: 50.0,
                                               height: 50.0,
-                                              child: CircularProgressIndicator(
+                                              child: FFShimmerLoadingIndicator(
                                                 valueColor:
                                                     AlwaysStoppedAnimation<
                                                         Color>(
@@ -531,7 +531,7 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                 child: SizedBox(
                                   width: 50.0,
                                   height: 50.0,
-                                  child: CircularProgressIndicator(
+                                  child: FFShimmerLoadingIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                       FlutterFlowTheme.of(context).primary,
                                     ),
@@ -570,7 +570,7 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                             child: SizedBox(
                                               width: 50.0,
                                               height: 50.0,
-                                              child: CircularProgressIndicator(
+                                              child: FFShimmerLoadingIndicator(
                                                 valueColor:
                                                     AlwaysStoppedAnimation<
                                                         Color>(
@@ -930,7 +930,7 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                 child: SizedBox(
                                   width: 50.0,
                                   height: 50.0,
-                                  child: CircularProgressIndicator(
+                                  child: FFShimmerLoadingIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                       FlutterFlowTheme.of(context).primary,
                                     ),
@@ -967,7 +967,7 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                             child: SizedBox(
                                               width: 50.0,
                                               height: 50.0,
-                                              child: CircularProgressIndicator(
+                                              child: FFShimmerLoadingIndicator(
                                                 valueColor:
                                                     AlwaysStoppedAnimation<
                                                         Color>(
@@ -1321,7 +1321,7 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                 child: SizedBox(
                                   width: 50.0,
                                   height: 50.0,
-                                  child: CircularProgressIndicator(
+                                  child: FFShimmerLoadingIndicator(
                                     valueColor: AlwaysStoppedAnimation<Color>(
                                       FlutterFlowTheme.of(context).primary,
                                     ),
@@ -1353,7 +1353,7 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                             child: SizedBox(
                                               width: 50.0,
                                               height: 50.0,
-                                              child: CircularProgressIndicator(
+                                              child: FFShimmerLoadingIndicator(
                                                 valueColor: AlwaysStoppedAnimation<Color>(
                                                   FlutterFlowTheme.of(context)
                                                       .primary,
@@ -1555,8 +1555,7 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                                                         .circular(
                                                                             8),
                                                               ),
-                                                              child: Text(
-                                                                'Gratis',
+                                                              child: Text('Gratis',
                                                                 style: FlutterFlowTheme.of(
                                                                         context)
                                                                     .labelMedium

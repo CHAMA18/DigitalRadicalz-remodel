@@ -66,7 +66,7 @@ class _CoursemodulesWidgetState extends State<CoursemodulesWidget> {
               child: SizedBox(
                 width: 50.0,
                 height: 50.0,
-                child: CircularProgressIndicator(
+                child: FFShimmerLoadingIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
                     FlutterFlowTheme.of(context).primary,
                   ),
@@ -269,8 +269,7 @@ class _CoursemodulesWidgetState extends State<CoursemodulesWidget> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Modules',
+                          Text('Modules',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -306,7 +305,7 @@ class _CoursemodulesWidgetState extends State<CoursemodulesWidget> {
                             child: SizedBox(
                               width: 50.0,
                               height: 50.0,
-                              child: CircularProgressIndicator(
+                              child: FFShimmerLoadingIndicator(
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   FlutterFlowTheme.of(context).primary,
                                 ),

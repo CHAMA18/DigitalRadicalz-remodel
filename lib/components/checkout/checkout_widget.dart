@@ -80,8 +80,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Checkout',
+                      Text('Checkout',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FontWeight.w500,
@@ -138,8 +137,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Delivery',
+                          Text('Delivery',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -187,7 +185,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                       .bodyMedium
                                       .fontStyle,
                                 ),
-                            hintText: 'Select Method',
+                            hintText: ffTranslate(context, 'Select Method'),
                             icon: Icon(
                               Icons.chevron_right,
                               color: FlutterFlowTheme.of(context).secondaryText,
@@ -237,8 +235,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Payment',
+                          Text('Payment',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -286,7 +283,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                       .bodyMedium
                                       .fontStyle,
                                 ),
-                            hintText: 'Select payment ',
+                            hintText: ffTranslate(context, 'Select payment '),
                             icon: Icon(
                               Icons.chevron_right,
                               color: FlutterFlowTheme.of(context).secondaryText,
@@ -336,8 +333,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Promo Code',
+                          Text('Promo Code',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -383,7 +379,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                          .fontStyle,
                                    ),
                                decoration: InputDecoration(
-                                 hintText: 'Enter code',
+                                 hintText: ffTranslate(context, 'Enter code'),
                                  hintStyle: FlutterFlowTheme.of(context)
                                      .labelMedium
                                      .override(
@@ -451,8 +447,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Total Cost',
+                          Text('Total Cost',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -539,8 +534,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                               text: TextSpan(
                                 children: [
                                   TextSpan(
-                                    text:
-                                        'By placing an order you agree to our ',
+                                    text: ffTranslate(context, 'By placing an order you agree to our '),
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -563,7 +557,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                         ),
                                   ),
                                   TextSpan(
-                                    text: 'Terms',
+                                    text: ffTranslate(context, 'Terms'),
                                     style: TextStyle(
                                       color:
                                           FlutterFlowTheme.of(context).primary,
@@ -571,13 +565,13 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                                     ),
                                   ),
                                   TextSpan(
-                                    text: ' And ',
+                                    text: ffTranslate(context, ' And '),
                                     style: TextStyle(
                                       fontSize: 14.0,
                                     ),
                                   ),
                                   TextSpan(
-                                    text: 'Conditions',
+                                    text: ffTranslate(context, 'Conditions'),
                                     style: TextStyle(
                                       color:
                                           FlutterFlowTheme.of(context).primary,
@@ -635,7 +629,7 @@ class _CheckoutWidgetState extends State<CheckoutWidget> {
                       
                       context.pushNamed(OrderSuccessWidget.routeName);
                     },
-                    text: 'Place Order',
+                    text: ffTranslate(context, 'Place Order'),
                     options: FFButtonOptions(
                       width: 350.0,
                       height: 64.0,

@@ -62,7 +62,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
               child: SizedBox(
                 width: 50.0,
                 height: 50.0,
-                child: CircularProgressIndicator(
+                child: FFShimmerLoadingIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
                     FlutterFlowTheme.of(context).primary,
                   ),
@@ -99,8 +99,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                   context.pop();
                 },
               ),
-              title: Text(
-                'Product Detail',
+              title: Text('Product Detail',
                 style: FlutterFlowTheme.of(context).headlineMedium.override(
                       font: GoogleFonts.interTight(
                         fontWeight: FlutterFlowTheme.of(context)
@@ -460,8 +459,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     children: [
-                                      Text(
-                                        'Product detail',
+                                      Text('Product detail',
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium
                                             .override(
@@ -560,8 +558,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
 
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(
-                                'Added to cart',
+                              content: Text('Added to cart',
                                 style: TextStyle(
                                   color:
                                       FlutterFlowTheme.of(context).primaryText,
@@ -600,7 +597,7 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
                             },
                           );
                         },
-                        text: 'Add To Cart',
+                        text: ffTranslate(context, 'Add To Cart'),
                         options: FFButtonOptions(
                           width: double.infinity,
                           height: 67.0,

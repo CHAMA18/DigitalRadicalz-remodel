@@ -14,14 +14,6 @@ class Settings3Model extends FlutterFlowModel<Settings3Widget> {
 
   // State field(s) for Switch widget.
   bool? switchValue1;
-  // State field(s) for Switch widget.
-  bool? switchValue2;
-  // State field(s) for Switch widget.
-  bool? switchValue3;
-  // State field(s) for Switch widget.
-  bool? switchValue4;
-  // State field(s) for Switch widget.
-  bool? switchValue5;
 
   @override
   void initState(BuildContext context) {}

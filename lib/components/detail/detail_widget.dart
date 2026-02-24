@@ -51,8 +51,7 @@ class _DetailWidgetState extends State<DetailWidget> {
       if (_model.timerMilliseconds == 00) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              'The timer has expired!',
+            content: Text('The timer has expired!',
               style: TextStyle(
                 color: FlutterFlowTheme.of(context).primaryText,
               ),
@@ -135,8 +134,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                               Navigator.pop(context);
                             },
                           ),
-                          Text(
-                            'Back',
+                          Text('Back',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -163,8 +161,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
-                          'Order',
+                        Text('Order',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -198,8 +195,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                             print('IconButton pressed ...');
                           },
                         ),
-                        Text(
-                          'Back',
+                        Text('Back',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -320,8 +316,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                                     text: TextSpan(
                                       children: [
                                         TextSpan(
-                                          text:
-                                              'Left to order tickets for\nExample festival',
+                                          text: ffTranslate(context, 'Left to order tickets for\nExample festival'),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -379,8 +374,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Email*',
+                      Text('Email*',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FontWeight.w500,
@@ -426,7 +420,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                                         .labelMedium
                                         .fontStyle,
                                   ),
-                              hintText: 'Enter your email',
+                              hintText: ffTranslate(context, 'Enter your email'),
                               hintStyle: FlutterFlowTheme.of(context)
                                   .labelMedium
                                   .override(
@@ -514,8 +508,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Name*',
+                      Text('Name*',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FontWeight.w500,
@@ -561,7 +554,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                                         .labelMedium
                                         .fontStyle,
                                   ),
-                              hintText: 'Enter your name',
+                              hintText: ffTranslate(context, 'Enter your name'),
                               hintStyle: FlutterFlowTheme.of(context)
                                   .labelMedium
                                   .override(
@@ -656,8 +649,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Terms & conditions',
+                        Text('Terms & conditions',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -689,8 +681,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              Text(
-                                'Lorem ipsum dolor sit amet consectetur. Scelerisque habitant in viverra ultricies purus. Aliquet tristique praesent placerat pulvinar. Nibh augue at proin id amet fermentum sed tempus quam. Blandit nunc tincidunt quam egestas augue nulla scelerisque in. Pulvinar arcu non quam dolor magna. Sollicitudin morbi vitae nulla diam fames',
+                              Text('Lorem ipsum dolor sit amet consectetur. Scelerisque habitant in viverra ultricies purus. Aliquet tristique praesent placerat pulvinar. Nibh augue at proin id amet fermentum sed tempus quam. Blandit nunc tincidunt quam egestas augue nulla scelerisque in. Pulvinar arcu non quam dolor magna. Sollicitudin morbi vitae nulla diam fames',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -757,8 +748,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                             checkColor: FlutterFlowTheme.of(context).info,
                           ),
                         ),
-                        Text(
-                          'I accept the Terms & Conditions',
+                        Text('I accept the Terms & Conditions',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -818,7 +808,7 @@ class _DetailWidgetState extends State<DetailWidget> {
                           },
                         ).then((value) => safeSetState(() {}));
                       },
-                      text: 'Next',
+                      text: ffTranslate(context, 'Next'),
                       options: FFButtonOptions(
                         width: double.infinity,
                         height: 40.0,

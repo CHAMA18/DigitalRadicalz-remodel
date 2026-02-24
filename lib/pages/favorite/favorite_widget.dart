@@ -66,8 +66,7 @@ class _FavoriteWidgetState extends State<FavoriteWidget> {
               context.pop();
             },
           ),
-          title: Text(
-            'Favourite',
+          title: Text('Favourite',
             style: FlutterFlowTheme.of(context).headlineMedium.override(
                   font: GoogleFonts.interTight(
                     fontWeight:
@@ -135,8 +134,7 @@ class _FavoriteWidgetState extends State<FavoriteWidget> {
                                       Row(
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
-                                          Text(
-                                            'Black Shirt',
+                                          Text('Black Shirt',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -163,8 +161,7 @@ class _FavoriteWidgetState extends State<FavoriteWidget> {
                                       Row(
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
-                                          Text(
-                                            'Medium',
+                                          Text('Medium',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -208,8 +205,7 @@ class _FavoriteWidgetState extends State<FavoriteWidget> {
                                       Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 0.0, 12.0, 0.0),
-                                        child: Text(
-                                          '\$12.99',
+                                        child: Text('\$12.99',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -270,8 +266,7 @@ class _FavoriteWidgetState extends State<FavoriteWidget> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          'Add All To Cart',
+                        Text('Add All To Cart',
                           style: FlutterFlowTheme.of(context)
                               .bodyMedium
                               .override(

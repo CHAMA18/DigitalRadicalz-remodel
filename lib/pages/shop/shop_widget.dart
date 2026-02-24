@@ -113,8 +113,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                                       .primaryText,
                                         ),
                                         SizedBox(height: 8.0),
-                                        Text(
-                                          'Scanner',
+                                        Text('Scanner',
                                           style: FlutterFlowTheme.of(context)
                                               .labelMedium
                                               .override(
@@ -187,8 +186,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                                   .primaryText,
                                         ),
                                         SizedBox(height: 8.0),
-                                        Text(
-                                          'T-shirt',
+                                        Text('T-shirt',
                                           style: FlutterFlowTheme.of(context)
                                               .labelMedium
                                               .override(
@@ -260,8 +258,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                                       .primaryText,
                                         ),
                                         SizedBox(height: 8.0),
-                                        Text(
-                                          'Assessoires',
+                                        Text('Assessoires',
                                           style: FlutterFlowTheme.of(context)
                                               .labelMedium
                                               .override(
@@ -332,8 +329,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                                   .primaryText,
                                         ),
                                         SizedBox(height: 8.0),
-                                        Text(
-                                          'Stickers',
+                                        Text('Stickers',
                                           style: FlutterFlowTheme.of(context)
                                               .labelMedium
                                               .override(
@@ -371,8 +367,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                           mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              '15 van de 231 producten',
+                            Text('15 van de 231 producten',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -396,8 +391,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                         .fontStyle,
                                   ),
                             ),
-                            Text(
-                              'Best verkocht',
+                            Text('Best verkocht',
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -443,8 +437,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(
-                                    'Alles',
+                                  Text('Alles',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -504,8 +497,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(
-                                    'T-shirt',
+                                  Text('T-shirt',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -565,8 +557,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(
-                                    'Mokken',
+                                  Text('Mokken',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -626,8 +617,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text(
-                                    'Sticker',
+                                  Text('Sticker',
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -774,7 +764,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                   child: SizedBox(
                                     width: 50.0,
                                     height: 50.0,
-                                    child: CircularProgressIndicator(
+                                    child: FFShimmerLoadingIndicator(
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                         FlutterFlowTheme.of(context).primary,
                                       ),
@@ -1008,7 +998,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                   child: SizedBox(
                                     width: 50.0,
                                     height: 50.0,
-                                    child: CircularProgressIndicator(
+                                    child: FFShimmerLoadingIndicator(
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                         FlutterFlowTheme.of(context).primary,
                                       ),
@@ -1342,7 +1332,7 @@ class _SearchResultsList extends StatelessWidget {
             child: SizedBox(
               width: 50.0,
               height: 50.0,
-              child: CircularProgressIndicator(
+              child: FFShimmerLoadingIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(
                   FlutterFlowTheme.of(context).primary,
                 ),
@@ -1619,7 +1609,7 @@ class _FilteredResultsList extends StatelessWidget {
             child: SizedBox(
               width: 50.0,
               height: 50.0,
-              child: CircularProgressIndicator(
+              child: FFShimmerLoadingIndicator(
                 valueColor: AlwaysStoppedAnimation<Color>(
                   FlutterFlowTheme.of(context).primary,
                 ),

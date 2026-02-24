@@ -90,8 +90,7 @@ class _SelectyourbankWidgetState extends State<SelectyourbankWidget> {
                               print('IconButton pressed ...');
                             },
                           ),
-                          Text(
-                            'Back',
+                          Text('Back',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -118,8 +117,7 @@ class _SelectyourbankWidgetState extends State<SelectyourbankWidget> {
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
-                          'Select your bank',
+                        Text('Select your bank',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -153,8 +151,7 @@ class _SelectyourbankWidgetState extends State<SelectyourbankWidget> {
                             print('IconButton pressed ...');
                           },
                         ),
-                        Text(
-                          'Back',
+                        Text('Back',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -218,8 +215,7 @@ class _SelectyourbankWidgetState extends State<SelectyourbankWidget> {
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Select your bank',
+                          Text('Select your bank',
                             textAlign: TextAlign.center,
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
@@ -274,8 +270,7 @@ class _SelectyourbankWidgetState extends State<SelectyourbankWidget> {
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   12.0, 0.0, 0.0, 0.0),
-                              child: Text(
-                                'Ideal',
+                              child: Text('Ideal',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -342,8 +337,7 @@ class _SelectyourbankWidgetState extends State<SelectyourbankWidget> {
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     12.0, 0.0, 0.0, 0.0),
-                                child: Text(
-                                  'ING',
+                                child: Text('ING',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -400,8 +394,7 @@ class _SelectyourbankWidgetState extends State<SelectyourbankWidget> {
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     12.0, 0.0, 0.0, 0.0),
-                                child: Text(
-                                  'BLG Wonen Bank',
+                                child: Text('BLG Wonen Bank',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -458,8 +451,7 @@ class _SelectyourbankWidgetState extends State<SelectyourbankWidget> {
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     12.0, 0.0, 0.0, 0.0),
-                                child: Text(
-                                  'Rabobank',
+                                child: Text('Rabobank',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -516,8 +508,7 @@ class _SelectyourbankWidgetState extends State<SelectyourbankWidget> {
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     12.0, 0.0, 0.0, 0.0),
-                                child: Text(
-                                  'ABN AMRO',
+                                child: Text('ABN AMRO',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -574,8 +565,7 @@ class _SelectyourbankWidgetState extends State<SelectyourbankWidget> {
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     12.0, 0.0, 0.0, 0.0),
-                                child: Text(
-                                  'SNS Bank',
+                                child: Text('SNS Bank',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -632,8 +622,7 @@ class _SelectyourbankWidgetState extends State<SelectyourbankWidget> {
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     12.0, 0.0, 0.0, 0.0),
-                                child: Text(
-                                  'ASN Bank',
+                                child: Text('ASN Bank',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -690,8 +679,7 @@ class _SelectyourbankWidgetState extends State<SelectyourbankWidget> {
                               Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     12.0, 0.0, 0.0, 0.0),
-                                child: Text(
-                                  'RegioBank',
+                                child: Text('RegioBank',
                                   style: FlutterFlowTheme.of(context)
                                       .bodyMedium
                                       .override(
@@ -726,7 +714,7 @@ class _SelectyourbankWidgetState extends State<SelectyourbankWidget> {
                 onPressed: () {
                   print('Button pressed ...');
                 },
-                text: 'Make payment',
+                text: ffTranslate(context, 'Make payment'),
                 options: FFButtonOptions(
                   width: double.infinity,
                   height: 40.0,

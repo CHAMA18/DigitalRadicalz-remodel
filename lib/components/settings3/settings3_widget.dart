@@ -31,11 +31,7 @@ class _Settings3WidgetState extends State<Settings3Widget> {
     super.initState();
     _model = createModel(context, () => Settings3Model());
 
-    _model.switchValue1 = true;
-    _model.switchValue2 = true;
-    _model.switchValue3 = true;
-    _model.switchValue4 = true;
-    _model.switchValue5 = true;
+    _model.switchValue1 = FFAppState().useSystemLocale;
   }
 
   @override
@@ -93,7 +89,7 @@ class _Settings3WidgetState extends State<Settings3Widget> {
                         },
                       ),
                       Text(
-                        'Back',
+                        ffTranslate(context, 'Back'),
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FlutterFlowTheme.of(context)
@@ -119,7 +115,7 @@ class _Settings3WidgetState extends State<Settings3Widget> {
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Text(
-                      'Settings',
+                      ffTranslate(context, 'Settings'),
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.inter(
                               fontWeight: FontWeight.w500,
@@ -153,7 +149,7 @@ class _Settings3WidgetState extends State<Settings3Widget> {
                       },
                     ),
                     Text(
-                      'Back',
+                      ffTranslate(context, 'Back'),
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             font: GoogleFonts.inter(
                               fontWeight: FlutterFlowTheme.of(context)
@@ -190,7 +186,7 @@ class _Settings3WidgetState extends State<Settings3Widget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Text(
-                            'Ticketaccount',
+                            ffTranslate(context, 'Ticketaccount'),
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -254,7 +250,7 @@ class _Settings3WidgetState extends State<Settings3Widget> {
                           mainAxisSize: MainAxisSize.max,
                           children: [
                             Text(
-                              'Connect ticketaccount',
+                              ffTranslate(context, 'Connect ticketaccount'),
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -312,7 +308,7 @@ class _Settings3WidgetState extends State<Settings3Widget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Text(
-                            'Language',
+                            ffTranslate(context, 'Language'),
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -352,7 +348,7 @@ class _Settings3WidgetState extends State<Settings3Widget> {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text(
-                          'Use Language of the phone',
+                          ffTranslate(context, 'Use Language of the phone'),
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -419,7 +415,7 @@ class _Settings3WidgetState extends State<Settings3Widget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Text(
-                            'Select a language',
+                            ffTranslate(context, 'Select a language'),
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -455,23 +451,27 @@ class _Settings3WidgetState extends State<Settings3Widget> {
                             context: context,
                             builder: (context) {
                               return SimpleDialog(
-                                title: Text('Select a language'),
+                                title: Text(ffTranslate(context, 'Select a language')),
                                 children: [
                                   SimpleDialogOption(
-                                    onPressed: () => Navigator.pop(context, 'en'),
-                                    child: const Text('English'),
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'en'),
+                                    child: Text(ffTranslate(context, 'English')),
                                   ),
                                   SimpleDialogOption(
-                                    onPressed: () => Navigator.pop(context, 'es'),
-                                    child: const Text('Spanish'),
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'es'),
+                                    child: Text(ffTranslate(context, 'Spanish')),
                                   ),
                                   SimpleDialogOption(
-                                    onPressed: () => Navigator.pop(context, 'de'),
-                                    child: const Text('German'),
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'de'),
+                                    child: Text(ffTranslate(context, 'German')),
                                   ),
                                   SimpleDialogOption(
-                                    onPressed: () => Navigator.pop(context, 'fr'),
-                                    child: const Text('French'),
+                                    onPressed: () =>
+                                        Navigator.pop(context, 'fr'),
+                                    child: Text(ffTranslate(context, 'French')),
                                   ),
                                 ],
                               );
@@ -495,318 +495,6 @@ class _Settings3WidgetState extends State<Settings3Widget> {
                   ),
                 ],
               ),
-            ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                'Notification',
-                                style: FlutterFlowTheme.of(context)
-                                    .bodyMedium
-                                    .override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FontWeight.bold,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium
-                                            .fontStyle,
-                                      ),
-                                      fontSize: 18.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.bold,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Divider(
-                    thickness: 2.0,
-                    color: FlutterFlowTheme.of(context).alternate,
-                  ),
-                ],
-              ),
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'All notifications',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                        ),
-                      ],
-                    ),
-                    Switch.adaptive(
-                      value: _model.switchValue2!,
-                      onChanged: (newValue) async {
-                        safeSetState(() => _model.switchValue2 = newValue!);
-                      },
-                      activeColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                      activeTrackColor: FlutterFlowTheme.of(context).primary,
-                      inactiveTrackColor:
-                          FlutterFlowTheme.of(context).alternate,
-                      inactiveThumbColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                    ),
-                  ],
-                ),
-                Divider(
-                  thickness: 2.0,
-                  color: FlutterFlowTheme.of(context).alternate,
-                ),
-              ],
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Reccommended ',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                        ),
-                      ],
-                    ),
-                    Switch.adaptive(
-                      value: _model.switchValue3!,
-                      onChanged: (newValue) async {
-                        safeSetState(() => _model.switchValue3 = newValue!);
-                      },
-                      activeColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                      activeTrackColor: FlutterFlowTheme.of(context).primary,
-                      inactiveTrackColor:
-                          FlutterFlowTheme.of(context).alternate,
-                      inactiveThumbColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                    ),
-                  ],
-                ),
-                Divider(
-                  thickness: 2.0,
-                  color: FlutterFlowTheme.of(context).alternate,
-                ),
-              ],
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'New post from community',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                        ),
-                      ],
-                    ),
-                    Switch.adaptive(
-                      value: _model.switchValue4!,
-                      onChanged: (newValue) async {
-                        safeSetState(() => _model.switchValue4 = newValue!);
-                      },
-                      activeColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                      activeTrackColor: FlutterFlowTheme.of(context).primary,
-                      inactiveTrackColor:
-                          FlutterFlowTheme.of(context).alternate,
-                      inactiveThumbColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                    ),
-                  ],
-                ),
-                Divider(
-                  thickness: 2.0,
-                  color: FlutterFlowTheme.of(context).alternate,
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text(
-                            'Preference',
-                            style: FlutterFlowTheme.of(context)
-                                .bodyMedium
-                                .override(
-                                  font: GoogleFonts.inter(
-                                    fontWeight: FontWeight.bold,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                                  fontSize: 18.0,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FontWeight.bold,
-                                  fontStyle: FlutterFlowTheme.of(context)
-                                      .bodyMedium
-                                      .fontStyle,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            Divider(
-              thickness: 2.0,
-              color: FlutterFlowTheme.of(context).alternate,
-            ),
-            Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Text(
-                          'Darkmode/Lightmode',
-                          style:
-                              FlutterFlowTheme.of(context).bodyMedium.override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                        ),
-                      ],
-                    ),
-                    Switch.adaptive(
-                      value: _model.switchValue5!,
-                      onChanged: (newValue) async {
-                        safeSetState(() => _model.switchValue5 = newValue!);
-                        if (newValue!) {
-                          setDarkModeSetting(context, ThemeMode.dark);
-                        } else {
-                          setDarkModeSetting(context, ThemeMode.light);
-                        }
-                      },
-                      activeColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                      activeTrackColor: FlutterFlowTheme.of(context).primary,
-                      inactiveTrackColor:
-                          FlutterFlowTheme.of(context).alternate,
-                      inactiveThumbColor:
-                          FlutterFlowTheme.of(context).secondaryBackground,
-                    ),
-                  ],
-                ),
-                Divider(
-                  thickness: 2.0,
-                  color: FlutterFlowTheme.of(context).alternate,
-                ),
-              ],
             ),
           ],
         ),

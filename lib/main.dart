@@ -230,7 +230,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'DigitalRadicalz',
+      title: ffTranslate(context, 'DigitalRadicalz'),
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -246,10 +246,12 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         brightness: Brightness.light,
         useMaterial3: false,
+        fontFamily: kAppFontFamily,
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         useMaterial3: false,
+        fontFamily: kAppFontFamily,
       ),
       themeMode: _themeMode,
       builder: (context, child) => GlobalShimmerWrapper(child: child),

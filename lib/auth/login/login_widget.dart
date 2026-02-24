@@ -156,8 +156,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          'Employer',
+                                        Text('Employer',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -207,8 +206,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          'Member',
+                                        Text('Member',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -258,8 +256,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          'Email',
+                                        Text('Email',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -330,7 +327,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                                   .labelMedium
                                                                   .fontStyle,
                                                         ),
-                                                hintText: 'Email',
+                                                hintText: ffTranslate(context, 'Email'),
                                                 hintStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .labelMedium
@@ -459,8 +456,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          'Watchwoord',
+                                        Text('Watchwoord',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -532,7 +528,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                                   .labelMedium
                                                                   .fontStyle,
                                                         ),
-                                                hintText: 'Password',
+                                                hintText: ffTranslate(context, 'Password'),
                                                 hintStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .labelMedium
@@ -694,7 +690,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                             HomePageWidget.routeName,
                                             context.mounted);
                                       },
-                                      text: 'Login',
+                                      text: ffTranslate(context, 'Login'),
                                       options: FFButtonOptions(
                                         width: double.infinity,
                                         height: 40.0,
@@ -742,8 +738,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        Text(
-                                          'Forgot password?',
+                                        Text('Forgot password?',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -797,8 +792,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   12.0, 0.0, 12.0, 0.0),
-                                          child: Text(
-                                            'Or',
+                                          child: Text('Or',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -916,8 +910,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          'Continue as a guest',
+                                        Text('Continue as a guest',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -958,8 +951,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Text(
-                                            'Create account',
+                                          Text('Create account',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -1009,8 +1001,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          'Email',
+                                        Text('Email',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -1081,7 +1072,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                                   .labelMedium
                                                                   .fontStyle,
                                                         ),
-                                                hintText: 'Email',
+                                                hintText: ffTranslate(context, 'Email'),
                                                 hintStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .labelMedium
@@ -1210,8 +1201,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          'Watchwoord',
+                                        Text('Watchwoord',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -1283,7 +1273,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                                   .labelMedium
                                                                   .fontStyle,
                                                         ),
-                                                hintText: 'Password',
+                                                hintText: ffTranslate(context, 'Password'),
                                                 hintStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .labelMedium
@@ -1444,7 +1434,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                             HomePageWidget.routeName,
                                             context.mounted);
                                       },
-                                      text: 'Login',
+                                      text: ffTranslate(context, 'Login'),
                                       options: FFButtonOptions(
                                         width: double.infinity,
                                         height: 40.0,
@@ -1492,8 +1482,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: [
-                                        Text(
-                                          'Forgot password?',
+                                        Text('Forgot password?',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -1547,8 +1536,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   12.0, 0.0, 12.0, 0.0),
-                                          child: Text(
-                                            'Or',
+                                          child: Text('Or',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -1666,8 +1654,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Text(
-                                          'Continue as a guest',
+                                        Text('Continue as a guest',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -1708,8 +1695,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Text(
-                                            'Create account',
+                                          Text('Create account',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -1759,8 +1745,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          'User Name',
+                                        Text('User Name',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -1831,7 +1816,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                                   .labelMedium
                                                                   .fontStyle,
                                                         ),
-                                                hintText: 'Name',
+                                                hintText: ffTranslate(context, 'Name'),
                                                 hintStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .labelMedium
@@ -1960,8 +1945,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          'Email',
+                                        Text('Email',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -2032,7 +2016,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                                   .labelMedium
                                                                   .fontStyle,
                                                         ),
-                                                hintText: 'Email',
+                                                hintText: ffTranslate(context, 'Email'),
                                                 hintStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .labelMedium
@@ -2161,8 +2145,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          'Role',
+                                        Text('Role',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -2232,7 +2215,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                               .bodyMedium
                                                               .fontStyle,
                                                     ),
-                                            hintText: 'Member',
+                                            hintText: ffTranslate(context, 'Member'),
                                             icon: Icon(
                                               Icons.keyboard_arrow_down_rounded,
                                               color:
@@ -2267,8 +2250,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                'Watchwoord',
+                                              Text('Watchwoord',
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -2343,7 +2325,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                                     .labelMedium
                                                                     .fontStyle,
                                                               ),
-                                                      hintText: 'Password',
+                                                      hintText: ffTranslate(context, 'Password'),
                                                       hintStyle:
                                                           FlutterFlowTheme.of(
                                                                   context)
@@ -2498,8 +2480,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
-                                          'Watchwoord',
+                                        Text('Watchwoord',
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -2571,7 +2552,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                                   .labelMedium
                                                                   .fontStyle,
                                                         ),
-                                                hintText: 'Confirm Password',
+                                                hintText: ffTranslate(context, 'Confirm Password'),
                                                 hintStyle:
                                                     FlutterFlowTheme.of(context)
                                                         .labelMedium
@@ -2725,8 +2706,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             SnackBar(
-                                              content: Text(
-                                                'Passwords don\'t match!',
+                                              content: Text('Passwords don\'t match!',
                                               ),
                                             ),
                                           );
@@ -2766,7 +2746,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                             HomePageWidget.routeName,
                                             context.mounted);
                                       },
-                                      text: 'Registrate',
+                                      text: ffTranslate(context, 'Registrate'),
                                       options: FFButtonOptions(
                                         width: double.infinity,
                                         height: 40.0,
@@ -2828,8 +2808,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   12.0, 0.0, 12.0, 0.0),
-                                          child: Text(
-                                            'Or',
+                                          child: Text('Or',
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium
                                                 .override(
@@ -2945,8 +2924,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                           text: TextSpan(
                                             children: [
                                               TextSpan(
-                                                text:
-                                                    'Already have an account?',
+                                                text: ffTranslate(context, 'Already have an account?'),
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .bodyMedium
@@ -2972,7 +2950,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                                     ),
                                               ),
                                               TextSpan(
-                                                text: ' Log in',
+                                                text: ffTranslate(context, ' Log in'),
                                                 style: TextStyle(),
                                               )
                                             ],

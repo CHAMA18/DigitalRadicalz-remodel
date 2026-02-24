@@ -113,27 +113,16 @@ class _TicketCompletionWidgetState extends State<TicketCompletionWidget> {
                             12.0, 0.0, 12.0, 0.0),
                         child: FFButtonWidget(
                           onPressed: () async {
-                            await showModalBottomSheet(
-                              isScrollControlled: true,
-                              backgroundColor: Colors.transparent,
-                              enableDrag: false,
-                              context: context,
-                              builder: (context) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    FocusScope.of(context).unfocus();
-                                    FocusManager.instance.primaryFocus
-                                        ?.unfocus();
-                                  },
-                                  child: Padding(
-                                    padding: MediaQuery.viewInsetsOf(context),
-                                    child: MyTicketWidget(),
+                            await Navigator.of(context, rootNavigator: true)
+                                .push(
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const MyTicketWidget(),
                                   ),
-                                );
-                              },
-                            ).then((value) => safeSetState(() {}));
+                                )
+                                .then((value) => safeSetState(() {}));
                           },
-                          text: 'View in account',
+                          text: ffTranslate(context, 'View in account'),
                           options: FFButtonOptions(
                             width: double.infinity,
                             height: 40.0,
@@ -174,7 +163,7 @@ class _TicketCompletionWidgetState extends State<TicketCompletionWidget> {
                           onPressed: () async {
                             context.pushNamed(HomePageWidget.routeName);
                           },
-                          text: 'Back to home',
+                          text: ffTranslate(context, 'Back to home'),
                           options: FFButtonOptions(
                             width: double.infinity,
                             height: 40.0,

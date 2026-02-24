@@ -96,8 +96,7 @@ class _Ticketingorder03WidgetState extends State<Ticketingorder03Widget> {
                               print('IconButton pressed ...');
                             },
                           ),
-                          Text(
-                            'Back',
+                          Text('Back',
                             style: FlutterFlowTheme.of(context)
                                 .bodyMedium
                                 .override(
@@ -124,8 +123,7 @@ class _Ticketingorder03WidgetState extends State<Ticketingorder03Widget> {
                     Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text(
-                          'Confirmation',
+                        Text('Confirmation',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -159,8 +157,7 @@ class _Ticketingorder03WidgetState extends State<Ticketingorder03Widget> {
                             print('IconButton pressed ...');
                           },
                         ),
-                        Text(
-                          'Back',
+                        Text('Back',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -233,8 +230,7 @@ class _Ticketingorder03WidgetState extends State<Ticketingorder03Widget> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Text(
-                                    '09:52 left to order tickets for\nExample festival',
+                                  Text('09:52 left to order tickets for\nExample festival',
                                     textAlign: TextAlign.center,
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
@@ -270,8 +266,7 @@ class _Ticketingorder03WidgetState extends State<Ticketingorder03Widget> {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Email*',
+                      Text('Email*',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FontWeight.w500,
@@ -317,7 +312,7 @@ class _Ticketingorder03WidgetState extends State<Ticketingorder03Widget> {
                                         .labelMedium
                                         .fontStyle,
                                   ),
-                              hintText: 'Enter your text',
+                              hintText: ffTranslate(context, 'Enter your text'),
                               hintStyle: FlutterFlowTheme.of(context)
                                   .labelMedium
                                   .override(
@@ -405,8 +400,7 @@ class _Ticketingorder03WidgetState extends State<Ticketingorder03Widget> {
                     mainAxisSize: MainAxisSize.max,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Name*',
+                      Text('Name*',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FontWeight.w500,
@@ -452,7 +446,7 @@ class _Ticketingorder03WidgetState extends State<Ticketingorder03Widget> {
                                         .labelMedium
                                         .fontStyle,
                                   ),
-                              hintText: 'Enter your text',
+                              hintText: ffTranslate(context, 'Enter your text'),
                               hintStyle: FlutterFlowTheme.of(context)
                                   .labelMedium
                                   .override(
@@ -547,8 +541,7 @@ class _Ticketingorder03WidgetState extends State<Ticketingorder03Widget> {
                       mainAxisSize: MainAxisSize.max,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Terms & conditions',
+                        Text('Terms & conditions',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -580,8 +573,7 @@ class _Ticketingorder03WidgetState extends State<Ticketingorder03Widget> {
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              Text(
-                                'Lorem ipsum dolor sit amet consectetur. Scelerisque habitant in viverra ultricies purus. Aliquet tristique praesent placerat pulvinar. Nibh augue at proin id amet fermentum sed tempus quam. Blandit nunc tincidunt quam egestas augue nulla scelerisque in. Pulvinar arcu non quam dolor magna. Sollicitudin morbi vitae nulla diam fames',
+                              Text('Lorem ipsum dolor sit amet consectetur. Scelerisque habitant in viverra ultricies purus. Aliquet tristique praesent placerat pulvinar. Nibh augue at proin id amet fermentum sed tempus quam. Blandit nunc tincidunt quam egestas augue nulla scelerisque in. Pulvinar arcu non quam dolor magna. Sollicitudin morbi vitae nulla diam fames',
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
                                     .override(
@@ -648,8 +640,7 @@ class _Ticketingorder03WidgetState extends State<Ticketingorder03Widget> {
                             checkColor: FlutterFlowTheme.of(context).info,
                           ),
                         ),
-                        Text(
-                          'I accept the Terms & Conditions',
+                        Text('I accept the Terms & Conditions',
                           style:
                               FlutterFlowTheme.of(context).bodyMedium.override(
                                     font: GoogleFonts.inter(
@@ -679,7 +670,7 @@ class _Ticketingorder03WidgetState extends State<Ticketingorder03Widget> {
                       onPressed: () async {
                         context.pushNamed(TicketCompletionWidget.routeName);
                       },
-                      text: 'Next',
+                      text: ffTranslate(context, 'Next'),
                       options: FFButtonOptions(
                         width: double.infinity,
                         height: 40.0,

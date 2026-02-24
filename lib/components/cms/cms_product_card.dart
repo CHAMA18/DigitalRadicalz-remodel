@@ -65,7 +65,7 @@ class CmsProductCard extends StatelessWidget {
                               placeholder: (context, url) => Container(
                                 color: FlutterFlowTheme.of(context).alternate,
                                 child: Center(
-                                  child: CircularProgressIndicator(
+                                  child: FFShimmerLoadingIndicator(
                                     strokeWidth: 2,
                                     color: FlutterFlowTheme.of(context).primary,
                                   ),
@@ -101,8 +101,7 @@ class CmsProductCard extends StatelessWidget {
                           color: Colors.red,
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        child: Text(
-                          '-${product.discountPercentage}%',
+                        child: Text('-${product.discountPercentage}%',
                           style: FlutterFlowTheme.of(context).bodySmall.override(
                             font: GoogleFonts.inter(fontWeight: FontWeight.bold),
                             color: Colors.white,
@@ -120,8 +119,7 @@ class CmsProductCard extends StatelessWidget {
                           borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
                         ),
                         child: Center(
-                          child: Text(
-                            'Out of Stock',
+                          child: Text('Out of Stock',
                             style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(fontWeight: FontWeight.bold),
                               color: Colors.white,
@@ -164,8 +162,7 @@ class CmsProductCard extends StatelessWidget {
                   // Price
                   Row(
                     children: [
-                      Text(
-                        'R${product.effectivePrice.toStringAsFixed(2)}',
+                      Text('R${product.effectivePrice.toStringAsFixed(2)}',
                         style: FlutterFlowTheme.of(context).titleSmall.override(
                           font: GoogleFonts.inter(fontWeight: FontWeight.bold),
                           color: FlutterFlowTheme.of(context).primary,
@@ -173,8 +170,7 @@ class CmsProductCard extends StatelessWidget {
                       ),
                       if (product.isOnSale) ...[
                         const SizedBox(width: 8),
-                        Text(
-                          'R${product.price.toStringAsFixed(2)}',
+                        Text('R${product.price.toStringAsFixed(2)}',
                           style: FlutterFlowTheme.of(context).bodySmall.override(
                             font: GoogleFonts.inter(),
                             color: FlutterFlowTheme.of(context).secondaryText,
@@ -199,8 +195,7 @@ class CmsProductCard extends StatelessWidget {
                           );
                         }),
                         const SizedBox(width: 4),
-                        Text(
-                          '(${product.reviewCount})',
+                        Text('(${product.reviewCount})',
                           style: FlutterFlowTheme.of(context).bodySmall.override(
                             font: GoogleFonts.inter(),
                             color: FlutterFlowTheme.of(context).secondaryText,
@@ -273,8 +268,7 @@ class CmsProductCard extends StatelessWidget {
                         color: Colors.red,
                         borderRadius: BorderRadius.circular(4),
                       ),
-                      child: Text(
-                        '-${product.discountPercentage}%',
+                      child: Text('-${product.discountPercentage}%',
                         style: FlutterFlowTheme.of(context).bodySmall.override(
                           font: GoogleFonts.inter(fontWeight: FontWeight.bold),
                           color: Colors.white,
@@ -330,16 +324,14 @@ class CmsProductCard extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'R${product.effectivePrice.toStringAsFixed(2)}',
+                          Text('R${product.effectivePrice.toStringAsFixed(2)}',
                             style: FlutterFlowTheme.of(context).titleSmall.override(
                               font: GoogleFonts.inter(fontWeight: FontWeight.bold),
                               color: FlutterFlowTheme.of(context).primary,
                             ),
                           ),
                           if (product.isOnSale)
-                            Text(
-                              'R${product.price.toStringAsFixed(2)}',
+                            Text('R${product.price.toStringAsFixed(2)}',
                               style: FlutterFlowTheme.of(context).bodySmall.override(
                                 font: GoogleFonts.inter(),
                                 color: FlutterFlowTheme.of(context).secondaryText,
@@ -374,8 +366,7 @@ class CmsProductCard extends StatelessWidget {
                             color: Colors.grey,
                             borderRadius: BorderRadius.circular(4),
                           ),
-                          child: Text(
-                            'Sold Out',
+                          child: Text('Sold Out',
                             style: FlutterFlowTheme.of(context).bodySmall.override(
                               font: GoogleFonts.inter(fontWeight: FontWeight.w500),
                               color: Colors.white,

@@ -67,7 +67,7 @@ class CmsMediaCard extends StatelessWidget {
                             placeholder: (context, url) => Container(
                               color: FlutterFlowTheme.of(context).alternate,
                               child: Center(
-                                child: CircularProgressIndicator(
+                                child: FFShimmerLoadingIndicator(
                                   strokeWidth: 2,
                                   color: FlutterFlowTheme.of(context).primary,
                                 ),
@@ -158,8 +158,7 @@ class CmsMediaCard extends StatelessWidget {
                           children: [
                             const Icon(Icons.star, color: Colors.white, size: 12),
                             const SizedBox(width: 4),
-                            Text(
-                              'Featured',
+                            Text('Featured',
                               style: FlutterFlowTheme.of(context).bodySmall.override(
                                 font: GoogleFonts.inter(fontWeight: FontWeight.w600),
                                 color: Colors.white,
@@ -373,8 +372,7 @@ class CmsMediaCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        Text(
-                          '•',
+                        Text('•',
                           style: FlutterFlowTheme.of(context).bodySmall.override(
                             font: GoogleFonts.inter(),
                             color: FlutterFlowTheme.of(context).secondaryText,

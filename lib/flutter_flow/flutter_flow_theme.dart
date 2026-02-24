@@ -1,11 +1,12 @@
 // ignore_for_file: overridden_fields, annotate_overrides
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
 const kThemeModeKey = '__theme_mode__';
+const kAppFontFamily = 'Satoshi';
+const kAppFontFallback = <String>['Satoshi'];
 
 SharedPreferences? _prefs;
 
@@ -213,107 +214,120 @@ class ThemeTypography extends Typography {
 
   final FlutterFlowTheme theme;
 
-  String get displayLargeFamily => 'Inter Tight';
-  bool get displayLargeIsCustom => false;
-  TextStyle get displayLarge => GoogleFonts.interTight(
+  TextStyle _style({
+    required Color color,
+    required FontWeight fontWeight,
+    required double fontSize,
+  }) =>
+      TextStyle(
+        fontFamily: kAppFontFamily,
+        fontFamilyFallback: kAppFontFallback,
+        color: color,
+        fontWeight: fontWeight,
+        fontSize: fontSize,
+      );
+
+  String get displayLargeFamily => kAppFontFamily;
+  bool get displayLargeIsCustom => true;
+  TextStyle get displayLarge => _style(
         color: theme.primaryText,
         fontWeight: FontWeight.w600,
         fontSize: 64.0,
       );
-  String get displayMediumFamily => 'Inter Tight';
-  bool get displayMediumIsCustom => false;
-  TextStyle get displayMedium => GoogleFonts.interTight(
+  String get displayMediumFamily => kAppFontFamily;
+  bool get displayMediumIsCustom => true;
+  TextStyle get displayMedium => _style(
         color: theme.primaryText,
         fontWeight: FontWeight.w600,
         fontSize: 44.0,
       );
-  String get displaySmallFamily => 'Inter Tight';
-  bool get displaySmallIsCustom => false;
-  TextStyle get displaySmall => GoogleFonts.interTight(
+  String get displaySmallFamily => kAppFontFamily;
+  bool get displaySmallIsCustom => true;
+  TextStyle get displaySmall => _style(
         color: theme.primaryText,
         fontWeight: FontWeight.w600,
         fontSize: 36.0,
       );
-  String get headlineLargeFamily => 'Inter Tight';
-  bool get headlineLargeIsCustom => false;
-  TextStyle get headlineLarge => GoogleFonts.interTight(
+  String get headlineLargeFamily => kAppFontFamily;
+  bool get headlineLargeIsCustom => true;
+  TextStyle get headlineLarge => _style(
         color: theme.primaryText,
         fontWeight: FontWeight.w600,
         fontSize: 32.0,
       );
-  String get headlineMediumFamily => 'Inter Tight';
-  bool get headlineMediumIsCustom => false;
-  TextStyle get headlineMedium => GoogleFonts.interTight(
+  String get headlineMediumFamily => kAppFontFamily;
+  bool get headlineMediumIsCustom => true;
+  TextStyle get headlineMedium => _style(
         color: theme.primaryText,
         fontWeight: FontWeight.w600,
         fontSize: 28.0,
       );
-  String get headlineSmallFamily => 'Inter Tight';
-  bool get headlineSmallIsCustom => false;
-  TextStyle get headlineSmall => GoogleFonts.interTight(
+  String get headlineSmallFamily => kAppFontFamily;
+  bool get headlineSmallIsCustom => true;
+  TextStyle get headlineSmall => _style(
         color: theme.primaryText,
         fontWeight: FontWeight.w600,
         fontSize: 24.0,
       );
-  String get titleLargeFamily => 'Inter Tight';
-  bool get titleLargeIsCustom => false;
-  TextStyle get titleLarge => GoogleFonts.interTight(
+  String get titleLargeFamily => kAppFontFamily;
+  bool get titleLargeIsCustom => true;
+  TextStyle get titleLarge => _style(
         color: theme.primaryText,
         fontWeight: FontWeight.w600,
         fontSize: 20.0,
       );
-  String get titleMediumFamily => 'Inter Tight';
-  bool get titleMediumIsCustom => false;
-  TextStyle get titleMedium => GoogleFonts.interTight(
+  String get titleMediumFamily => kAppFontFamily;
+  bool get titleMediumIsCustom => true;
+  TextStyle get titleMedium => _style(
         color: theme.primaryText,
         fontWeight: FontWeight.w600,
         fontSize: 18.0,
       );
-  String get titleSmallFamily => 'Inter Tight';
-  bool get titleSmallIsCustom => false;
-  TextStyle get titleSmall => GoogleFonts.interTight(
+  String get titleSmallFamily => kAppFontFamily;
+  bool get titleSmallIsCustom => true;
+  TextStyle get titleSmall => _style(
         color: theme.primaryText,
         fontWeight: FontWeight.w600,
         fontSize: 16.0,
       );
-  String get labelLargeFamily => 'Inter';
-  bool get labelLargeIsCustom => false;
-  TextStyle get labelLarge => GoogleFonts.inter(
+  String get labelLargeFamily => kAppFontFamily;
+  bool get labelLargeIsCustom => true;
+  TextStyle get labelLarge => _style(
         color: theme.secondaryText,
         fontWeight: FontWeight.normal,
         fontSize: 16.0,
       );
-  String get labelMediumFamily => 'Inter';
-  bool get labelMediumIsCustom => false;
-  TextStyle get labelMedium => GoogleFonts.inter(
+  String get labelMediumFamily => kAppFontFamily;
+  bool get labelMediumIsCustom => true;
+  TextStyle get labelMedium => _style(
         color: theme.secondaryText,
         fontWeight: FontWeight.normal,
         fontSize: 14.0,
       );
-  String get labelSmallFamily => 'Inter';
-  bool get labelSmallIsCustom => false;
-  TextStyle get labelSmall => GoogleFonts.inter(
+  String get labelSmallFamily => kAppFontFamily;
+  bool get labelSmallIsCustom => true;
+  TextStyle get labelSmall => _style(
         color: theme.secondaryText,
         fontWeight: FontWeight.normal,
         fontSize: 12.0,
       );
-  String get bodyLargeFamily => 'Inter';
-  bool get bodyLargeIsCustom => false;
-  TextStyle get bodyLarge => GoogleFonts.inter(
+  String get bodyLargeFamily => kAppFontFamily;
+  bool get bodyLargeIsCustom => true;
+  TextStyle get bodyLarge => _style(
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 16.0,
       );
-  String get bodyMediumFamily => 'Inter';
-  bool get bodyMediumIsCustom => false;
-  TextStyle get bodyMedium => GoogleFonts.inter(
+  String get bodyMediumFamily => kAppFontFamily;
+  bool get bodyMediumIsCustom => true;
+  TextStyle get bodyMedium => _style(
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 14.0,
       );
-  String get bodySmallFamily => 'Inter';
-  bool get bodySmallIsCustom => false;
-  TextStyle get bodySmall => GoogleFonts.inter(
+  String get bodySmallFamily => kAppFontFamily;
+  bool get bodySmallIsCustom => true;
+  TextStyle get bodySmall => _style(
         color: theme.primaryText,
         fontWeight: FontWeight.normal,
         fontSize: 12.0,
@@ -361,34 +375,130 @@ extension TextStyleHelper on TextStyle {
     List<Shadow>? shadows,
     String? package,
   }) {
+    final resolvedWeight = fontWeight ?? this.fontWeight;
+    final resolvedStyle = fontStyle ?? this.fontStyle;
+
     if (useGoogleFonts && fontFamily != null) {
-      font = GoogleFonts.getFont(fontFamily,
-          fontWeight: fontWeight ?? this.fontWeight,
-          fontStyle: fontStyle ?? this.fontStyle);
+      font = TextStyle(
+        fontFamily: kAppFontFamily,
+        fontFamilyFallback: kAppFontFallback,
+        fontWeight: resolvedWeight,
+        fontStyle: resolvedStyle,
+      );
     }
 
-    return font != null
+    final styled = font != null
         ? font.copyWith(
             color: color ?? this.color,
             fontSize: fontSize ?? this.fontSize,
             letterSpacing: letterSpacing ?? this.letterSpacing,
-            fontWeight: fontWeight ?? this.fontWeight,
-            fontStyle: fontStyle ?? this.fontStyle,
+            fontWeight: resolvedWeight,
+            fontStyle: resolvedStyle,
             decoration: decoration,
             height: lineHeight,
             shadows: shadows,
           )
         : copyWith(
-            fontFamily: fontFamily,
+            fontFamily: kAppFontFamily,
+            fontFamilyFallback: kAppFontFallback,
             package: package,
             color: color,
             fontSize: fontSize,
             letterSpacing: letterSpacing,
-            fontWeight: fontWeight,
-            fontStyle: fontStyle,
+            fontWeight: resolvedWeight,
+            fontStyle: resolvedStyle,
             decoration: decoration,
             height: lineHeight,
             shadows: shadows,
           );
+
+    return styled.copyWith(
+      fontFamily: kAppFontFamily,
+      fontFamilyFallback: kAppFontFallback,
+      package: null,
+    );
+  }
+}
+
+class FFShimmerLoadingIndicator extends StatefulWidget {
+  const FFShimmerLoadingIndicator({
+    super.key,
+    this.value,
+    this.backgroundColor,
+    this.valueColor,
+    this.strokeWidth = 4.0,
+    this.semanticsLabel,
+    this.semanticsValue,
+    this.strokeCap,
+    this.color,
+  });
+
+  final double? value;
+  final Color? backgroundColor;
+  final Animation<Color?>? valueColor;
+  final double strokeWidth;
+  final String? semanticsLabel;
+  final String? semanticsValue;
+  final StrokeCap? strokeCap;
+  final Color? color;
+
+  @override
+  State<FFShimmerLoadingIndicator> createState() =>
+      _FFShimmerLoadingIndicatorState();
+}
+
+class _FFShimmerLoadingIndicatorState extends State<FFShimmerLoadingIndicator>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1250),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = FlutterFlowTheme.of(context);
+    final base = (widget.color ?? widget.valueColor?.value ?? theme.primary);
+    final dark = base.withValues(alpha: 0.45);
+    final light = base.withValues(alpha: 0.95);
+
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (context, child) {
+        return ShaderMask(
+          blendMode: BlendMode.srcATop,
+          shaderCallback: (rect) {
+            final t = _controller.value;
+            return LinearGradient(
+              begin: Alignment(-1.8 + (t * 2.6), -0.25),
+              end: Alignment(-0.2 + (t * 2.6), 0.25),
+              colors: [dark, light, dark],
+              stops: const [0.1, 0.5, 0.9],
+            ).createShader(rect);
+          },
+          child: child,
+        );
+      },
+      child: CircularProgressIndicator(
+        value: widget.value,
+        backgroundColor: widget.backgroundColor,
+        valueColor: AlwaysStoppedAnimation<Color>(light),
+        strokeWidth: widget.strokeWidth,
+        semanticsLabel: widget.semanticsLabel,
+        semanticsValue: widget.semanticsValue,
+        strokeCap: widget.strokeCap,
+      ),
+    );
   }
 }

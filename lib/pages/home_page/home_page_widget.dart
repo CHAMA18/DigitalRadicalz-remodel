@@ -256,7 +256,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
               child: SizedBox(
                 width: 50.0,
                 height: 50.0,
-                child: CircularProgressIndicator(
+                child: FFShimmerLoadingIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(
                     FlutterFlowTheme.of(context).primary,
                   ),
@@ -304,7 +304,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                   child: SizedBox(
                                     width: 24.0,
                                     height: 24.0,
-                                    child: CircularProgressIndicator(
+                                    child: FFShimmerLoadingIndicator(
                                       strokeWidth: 2,
                                       valueColor: AlwaysStoppedAnimation<Color>(
                                         FlutterFlowTheme.of(context).primary,
@@ -927,7 +927,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                   width: 50.0,
                                                                   height: 50.0,
                                                                   child:
-                                                                      CircularProgressIndicator(
+                                                                      FFShimmerLoadingIndicator(
                                                                     valueColor:
                                                                         AlwaysStoppedAnimation<
                                                                             Color>(
@@ -962,8 +962,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                           .toDouble(),
                                                                 ));
                                                               },
-                                                              child: Text(
-                                                                '${valueOrDefault<String>(
+                                                              child: Text('${valueOrDefault<String>(
                                                                   formatNumber(
                                                                     textCount,
                                                                     formatType:
@@ -1216,8 +1215,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                   padding: EdgeInsetsDirectional
                                                       .fromSTEB(
                                                           12.0, 0.0, 0.0, 0.0),
-                                                  child: Text(
-                                                    'Plaats een opmerking',
+                                                  child: Text('Plaats een opmerking',
                                                     style: FlutterFlowTheme.of(
                                                             context)
                                                         .bodyMedium
@@ -1575,7 +1573,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                 width: 50.0,
                                                                 height: 50.0,
                                                                 child:
-                                                                    CircularProgressIndicator(
+                                                                    FFShimmerLoadingIndicator(
                                                                   valueColor:
                                                                       AlwaysStoppedAnimation<
                                                                           Color>(
@@ -1610,8 +1608,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                         .toDouble(),
                                                               ));
                                                             },
-                                                            child: Text(
-                                                              '${valueOrDefault<String>(
+                                                            child: Text('${valueOrDefault<String>(
                                                                 formatNumber(
                                                                   textCount,
                                                                   formatType:
@@ -1862,8 +1859,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(
                                                         12.0, 0.0, 0.0, 0.0),
-                                                child: Text(
-                                                  'Plaats een opmerking',
+                                                child: Text('Plaats een opmerking',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .bodyMedium

@@ -87,8 +87,7 @@ class _EventDetailsWidgetState extends State<EventDetailsWidget> {
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text(
-                    'Event details',
+                  Text('Event details',
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
                           font: GoogleFonts.inter(
                             fontWeight: FontWeight.bold,
@@ -113,8 +112,7 @@ class _EventDetailsWidgetState extends State<EventDetailsWidget> {
                     Padding(
                       padding:
                           EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
-                      child: Text(
-                        'Lorem ipsum dolor sit amet consectetur. Sem orci quis sagittis sit ornare aliquam egestas. Viverra est ornare risus non malesuada scelerisque porttitor in eu. \n\nVestibulum quis sapien platea eget urna. Lectus et lorem dictum lectus. Sed adipiscing egestas leo tellus tem. Lorem ipsum dolor sit amet consectetur. Sem orci quis sagittis sit ornare aliquam egestas. Viverra est ornare risus non malesuada scelerisque porttitor in eu. ',
+                      child: Text('Lorem ipsum dolor sit amet consectetur. Sem orci quis sagittis sit ornare aliquam egestas. Viverra est ornare risus non malesuada scelerisque porttitor in eu. \n\nVestibulum quis sapien platea eget urna. Lectus et lorem dictum lectus. Sed adipiscing egestas leo tellus tem. Lorem ipsum dolor sit amet consectetur. Sem orci quis sagittis sit ornare aliquam egestas. Viverra est ornare risus non malesuada scelerisque porttitor in eu. ',
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FlutterFlowTheme.of(context)
