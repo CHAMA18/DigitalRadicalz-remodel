@@ -180,11 +180,28 @@ class _MyAppState extends State<MyApp> {
         debugPrint('Error querying direct chats for unread count: $error');
         return <ChatsRecord>[];
       }).map((chats) {
-        int count = 0;
+        // Deduplicate chats by other user, keeping the most recent one
+        final uniqueChats = <DocumentReference, ChatsRecord>{};
+        
         for (final chat in chats) {
-          // Only count chats with exactly 2 participants (direct messages)
-          if (chat.userid.length == 2 &&
-              !chat.lastmessageseenby.contains(currentUserReference)) {
+          if (chat.userid.length != 2) continue;
+          
+          final otherUser = chat.userid.firstWhere(
+            (ref) => ref != currentUserReference,
+            orElse: () => chat.reference,
+          );
+
+          if (!uniqueChats.containsKey(otherUser) ||
+              (chat.timestamp != null &&
+                  (uniqueChats[otherUser]!.timestamp == null ||
+                      chat.timestamp!.isAfter(uniqueChats[otherUser]!.timestamp!)))) {
+            uniqueChats[otherUser] = chat;
+          }
+        }
+
+        int count = 0;
+        for (final chat in uniqueChats.values) {
+          if (!chat.lastmessageseenby.contains(currentUserReference)) {
             count++;
           }
         }
@@ -207,6 +224,9 @@ class _MyAppState extends State<MyApp> {
           final name = group.groupName.trim().toLowerCase().replaceAll('!', '');
           final last = group.lastmessage.trim().toLowerCase().replaceAll('!', '');
           if (name == 'say hello' || last == 'say hello') continue;
+          
+          // Also skip groups with no messages, matching ChatWidget logic
+          if (group.lastmessage.isEmpty) continue;
           
           if (!group.lastmessageseenby.contains(currentUserReference)) {
             count++;
