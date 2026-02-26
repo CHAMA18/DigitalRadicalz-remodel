@@ -158,14 +158,7 @@ class _CreateGroupPageState extends State<CreateGroupPage> {
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(18),
-                      gradient: LinearGradient(
-                        begin: const Alignment(-1, -1),
-                        end: const Alignment(1, 1),
-                        colors: [
-                          theme.primary.withValues(alpha: 0.16),
-                          theme.secondaryBackground,
-                        ],
-                      ),
+                      color: theme.primary.withValues(alpha: 0.16),
                       border: Border.all(
                         color: theme.primary.withValues(alpha: 0.24),
                         width: 1,
@@ -534,11 +527,12 @@ class _AddMembersPageState extends State<AddMembersPage> {
             backgroundColor: FlutterFlowTheme.of(context).primary,
           ),
         );
-        context.pushNamed(
+        context.goNamed(
           GrouchatsWidget.routeName,
           queryParameters: {
             'receivedgroupchats':
                 serializeParam(docRef, ParamType.DocumentReference),
+            'showBackButton': serializeParam(false, ParamType.bool),
           }.withoutNulls,
         );
       }
@@ -642,18 +636,26 @@ class _AddMembersPageState extends State<AddMembersPage> {
                       final user = _selectedUsers[ref];
                       final name = user?.displayName.isNotEmpty == true
                           ? user!.displayName
-                          : (user?.email ?? 'User Name');
-                      final photo = (user?.photoUrl ?? '').isNotEmpty
-                          ? user!.photoUrl
-                          : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/gbh03g8a6d5k/placeholder-profile-icon-8qmjk1094ijhbem9-removebg-preview.png';
+                          : 'No Name';
                       return Column(
                         children: [
                           Stack(
                             children: [
-                              CircleAvatar(
-                                radius: 28,
-                                backgroundImage: NetworkImage(photo),
-                              ),
+                              (user?.photoUrl ?? '').isNotEmpty
+                                  ? CircleAvatar(
+                                      radius: 28,
+                                      backgroundImage:
+                                          NetworkImage(user!.photoUrl),
+                                    )
+                                  : CircleAvatar(
+                                      radius: 28,
+                                      backgroundColor: theme.alternate,
+                                      child: Icon(
+                                        Icons.person,
+                                        color: theme.secondaryText,
+                                        size: 32,
+                                      ),
+                                    ),
                               Positioned(
                                 right: -4,
                                 top: -4,
@@ -733,12 +735,9 @@ class _AddMembersPageState extends State<AddMembersPage> {
                       itemBuilder: (context, index) {
                         final user = users[index];
                         final selected = _selected.contains(user.reference);
-                        final photo = user.photoUrl.isNotEmpty
-                            ? user.photoUrl
-                            : 'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/gbh03g8a6d5k/placeholder-profile-icon-8qmjk1094ijhbem9-removebg-preview.png';
                         final name = user.displayName.isNotEmpty
                             ? user.displayName
-                            : user.email;
+                            : 'No Name';
                         return InkWell(
                           onTap: () {
                             setState(() {
@@ -761,9 +760,21 @@ class _AddMembersPageState extends State<AddMembersPage> {
                                 horizontal: 12, vertical: 8),
                             child: Row(
                               children: [
-                                CircleAvatar(
-                                    radius: 22,
-                                    backgroundImage: NetworkImage(photo)),
+                                user.photoUrl.isNotEmpty
+                                    ? CircleAvatar(
+                                        radius: 22,
+                                        backgroundImage:
+                                            NetworkImage(user.photoUrl),
+                                      )
+                                    : CircleAvatar(
+                                        radius: 22,
+                                        backgroundColor: theme.alternate,
+                                        child: Icon(
+                                          Icons.person,
+                                          color: theme.secondaryText,
+                                          size: 24,
+                                        ),
+                                      ),
                                 const SizedBox(width: 12),
                                 Expanded(
                                   child: Text(

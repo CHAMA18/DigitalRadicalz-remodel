@@ -1,5 +1,6 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/components/shimmer_loaders/shimmer_loaders.dart';
 import '/flutter_flow/flutter_flow_count_controller.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -58,14 +59,29 @@ class _ProductDetailWidgetState extends State<ProductDetailWidget> {
         if (!snapshot.hasData) {
           return Scaffold(
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            body: Center(
-              child: SizedBox(
-                width: 50.0,
-                height: 50.0,
-                child: FFShimmerLoadingIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    FlutterFlowTheme.of(context).primary,
-                  ),
+            appBar: AppBar(
+              backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+              automaticallyImplyLeading: true,
+              elevation: 0,
+            ),
+            body: SafeArea(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const ShimmerBox(width: double.infinity, height: 300),
+                    const SizedBox(height: 24),
+                    const ShimmerBar(width: 200, height: 24),
+                    const SizedBox(height: 12),
+                    const ShimmerBar(width: 80, height: 20),
+                    const SizedBox(height: 24),
+                    const ShimmerBar(width: double.infinity, height: 14),
+                    const SizedBox(height: 8),
+                    const ShimmerBar(width: double.infinity, height: 14),
+                    const SizedBox(height: 8),
+                    const ShimmerBar(width: 180, height: 14),
+                  ],
                 ),
               ),
             ),

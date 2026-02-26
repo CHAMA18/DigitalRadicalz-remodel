@@ -41,3 +41,7 @@ export '/pages/community_ui/community_ui_widget.dart' show CommunityUiWidget;
 export '/communityposts/communityposts_widget.dart' show CommunitypostsWidget;
 export '/pages/creategroup/creategroup_widget.dart' show CreateGroupPage, AddMembersPage;
 export '/pages/cms_content/cms_content_widget.dart' show CmsContentWidget;
+export '/components/interest/interest_widget.dart' show InterestWidget;
+export '/components/settings3/settings3_widget.dart' show Settings3Widget;
+export '/pages/connect_ticket_account/connect_ticket_account_widget.dart' show ConnectTicketAccountWidget;
+export '/pages/comments/comments_page_widget.dart' show CommentsPageWidget;

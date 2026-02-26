@@ -1,7 +1,9 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/components/shared_media/shared_media_widget.dart';
 import '/backend/firebase_storage/storage.dart';
 import '/components/emptychat/emptychat_widget.dart';
+import '/components/shimmer_loaders/shimmer_loaders.dart';
 import '/flutter_flow/flutter_flow_audio_player.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -22,1673 +24,1851 @@ import 'chat2_model.dart';
 export 'chat2_model.dart';
 
 class Chat2Widget extends StatefulWidget {
-  const Chat2Widget({
-    super.key,
-    this.receiveChat,
-    String? username,
-    this.profile,
-    this.receivedgroupchats,
-  }) : this.username = username ?? '';
+const Chat2Widget({
+super.key,
+this.receiveChat,
+String? username,
+this.profile,
+this.receivedgroupchats,
+}) : this.username = username ?? '';
 
-  final DocumentReference? receiveChat;
-  final String username;
-  final String? profile;
-  final DocumentReference? receivedgroupchats;
+final DocumentReference? receiveChat;
+final String username;
+final String? profile;
+final DocumentReference? receivedgroupchats;
 
-  static String routeName = 'Chat2';
-  static String routePath = '/chat2';
+static String routeName = 'Chat2';
+static String routePath = '/chat2';
 
-  @override
-  State<Chat2Widget> createState() => _Chat2WidgetState();
+@override
+State<Chat2Widget> createState() => _Chat2WidgetState();
 }
 
 class _Chat2WidgetState extends State<Chat2Widget> {
-  late Chat2Model _model;
+late Chat2Model _model;
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  @override
-  void initState() {
-    super.initState();
-    _model = createModel(context, () => Chat2Model());
+@override
+void initState() {
+super.initState();
+_model = createModel(context, () => Chat2Model());
 
-    _model.textController ??= TextEditingController();
-    _model.textFieldFocusNode ??= FocusNode();
-  }
+_model.textController ??= TextEditingController();
+_model.textFieldFocusNode ??= FocusNode();
 
-  @override
-  void dispose() {
-    _model.dispose();
+// Mark as seen immediately when opening the chat
+_markAsSeen();
+}
 
-    super.dispose();
-  }
+Future<void> _markAsSeen() async {
+try {
+if (currentUserReference != null && widget.receiveChat != null) {
+await widget.receiveChat!.update({
+...mapToFirestore(
+{
+'lastmessageseenby': FieldValue.arrayUnion([currentUserReference]),
+},
+),
+});
+}
+} catch (e) {
+debugPrint('Failed to mark last message seen in initState: $e');
+}
+}
 
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<ChatsRecord>(
-      stream: ChatsRecord.getDocument(widget!.receiveChat!),
-      builder: (context, snapshot) {
-        if (snapshot.hasError) {
-          return Scaffold(
-            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            appBar: AppBar(
-              backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-              automaticallyImplyLeading: false,
-              leading: FlutterFlowIconButton(
-                borderRadius: 20.0,
-                buttonSize: 40.0,
-                icon: Icon(
-                  Icons.chevron_left,
-                  color: FlutterFlowTheme.of(context).primaryText,
-                  size: 24.0,
-                ),
-                onPressed: () async {
-                  context.safePop();
-                },
-              ),
-              titleSpacing: 0.0,
-              title: Text(
-                widget.username.isNotEmpty ? widget.username : 'Chat',
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: FlutterFlowTheme.of(context).bodyLarge.override(
-                      font: GoogleFonts.inter(
-                        fontWeight: FontWeight.w600,
-                        fontStyle:
-                            FlutterFlowTheme.of(context).bodyLarge.fontStyle,
-                      ),
-                      letterSpacing: 0.0,
-                      fontWeight: FontWeight.w600,
-                      fontStyle:
-                          FlutterFlowTheme.of(context).bodyLarge.fontStyle,
-                    ),
-              ),
-              actions: [
-                FlutterFlowIconButton(
-                  borderRadius: 20.0,
-                  buttonSize: 40.0,
-                  icon: Icon(
-                    Icons.settings_outlined,
-                    color: FlutterFlowTheme.of(context).primaryText,
-                    size: 22.0,
-                  ),
-                  onPressed: () async {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                          'Chat settings are unavailable right now.',
-                          style: TextStyle(
-                            color: FlutterFlowTheme.of(context).primaryText,
-                          ),
-                        ),
-                        duration: Duration(milliseconds: 2000),
-                        backgroundColor: FlutterFlowTheme.of(context).secondary,
-                      ),
-                    );
-                  },
-                ),
-              ],
-              elevation: 2.0,
-            ),
-            body: Center(
-              child: Padding(
-                padding: EdgeInsets.all(24.0),
-                child: Text(
-                  'Unable to load this chat right now.',
-                  textAlign: TextAlign.center,
-                  style: FlutterFlowTheme.of(context).bodyMedium.override(
-                        font: GoogleFonts.inter(
-                          fontWeight: FlutterFlowTheme.of(context)
-                              .bodyMedium
-                              .fontWeight,
-                          fontStyle:
-                              FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                        ),
-                        letterSpacing: 0.0,
-                        fontWeight:
-                            FlutterFlowTheme.of(context).bodyMedium.fontWeight,
-                        fontStyle:
-                            FlutterFlowTheme.of(context).bodyMedium.fontStyle,
-                      ),
-                ),
-              ),
-            ),
-          );
-        }
+@override
+void dispose() {
+_model.dispose();
 
-        // Customize what your widget looks like when it's loading.
-        if (!snapshot.hasData) {
-          return Scaffold(
-            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            body: Center(
-              child: SizedBox(
-                width: 50.0,
-                height: 50.0,
-                child: FFShimmerLoadingIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    FlutterFlowTheme.of(context).primary,
-                  ),
-                ),
-              ),
-            ),
-          );
-        }
+super.dispose();
+}
 
-        final chat2ChatsRecord = snapshot.data!;
-        final chatTitle = widget.username.isNotEmpty
-            ? widget.username
-            : functions.getOtherUserName(
-                chat2ChatsRecord.usernames.toList(), currentUserDisplayName);
+@override
+Widget build(BuildContext context) {
+return StreamBuilder<ChatsRecord>(
+stream: ChatsRecord.getDocument(widget!.receiveChat!),
+builder: (context, snapshot) {
+if (snapshot.hasError) {
+return Scaffold(
+backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+appBar: AppBar(
+backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+automaticallyImplyLeading: false,
+leading: FlutterFlowIconButton(
+borderRadius: 20.0,
+buttonSize: 40.0,
+icon: Icon(
+Icons.chevron_left,
+color: FlutterFlowTheme.of(context).primaryText,
+size: 24.0,
+),
+onPressed: () async {
+context.safePop();
+},
+),
+titleSpacing: 0.0,
+title: Row(
+children: [
+Container(
+width: 36.0,
+height: 36.0,
+decoration: BoxDecoration(
+color: FlutterFlowTheme.of(context).alternate,
+shape: BoxShape.circle,
+),
+child: ClipRRect(
+borderRadius: BorderRadius.circular(18.0),
+child: widget.profile != null && widget.profile!.isNotEmpty
+? Image.network(
+widget.profile!,
+width: 36.0,
+height: 36.0,
+fit: BoxFit.cover,
+errorBuilder: (context, error, stackTrace) => Icon(
+Icons.person,
+color: FlutterFlowTheme.of(context).secondaryText,
+size: 20.0,
+),
+)
+: Icon(
+Icons.person,
+color: FlutterFlowTheme.of(context).secondaryText,
+size: 20.0,
+),
+),
+),
+SizedBox(width: 10.0),
+Expanded(
+child: Text(
+widget.username.isNotEmpty ? widget.username : 'Chat',
+maxLines: 1,
+overflow: TextOverflow.ellipsis,
+style: FlutterFlowTheme.of(context).bodyLarge.override(
+font: GoogleFonts.inter(
+fontWeight: FontWeight.w600,
+fontStyle:
+FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+),
+letterSpacing: 0.0,
+fontWeight: FontWeight.w600,
+fontStyle:
+FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+),
+),
+),
+],
+),
+actions: [
+FlutterFlowIconButton(
+borderRadius: 20.0,
+buttonSize: 40.0,
+icon: Icon(
+Icons.more_vert,
+color: FlutterFlowTheme.of(context).primaryText,
+size: 22.0,
+),
+onPressed: () async {
+ScaffoldMessenger.of(context).showSnackBar(
+SnackBar(
+content: Text(
+'Chat options are unavailable right now.',
+style: TextStyle(
+color: FlutterFlowTheme.of(context).primaryText,
+),
+),
+duration: Duration(milliseconds: 2000),
+backgroundColor: FlutterFlowTheme.of(context).secondary,
+),
+);
+},
+),
+],
+elevation: 2.0,
+),
+body: Center(
+child: Padding(
+padding: EdgeInsets.all(24.0),
+child: Text(
+'Unable to load this chat right now.',
+textAlign: TextAlign.center,
+style: FlutterFlowTheme.of(context).bodyMedium.override(
+font: GoogleFonts.inter(
+fontWeight: FlutterFlowTheme.of(context)
+.bodyMedium
+.fontWeight,
+fontStyle:
+FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+),
+letterSpacing: 0.0,
+fontWeight:
+FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+fontStyle:
+FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+),
+),
+),
+),
+);
+}
 
-        return Scaffold(
-          key: scaffoldKey,
-          backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-          appBar: AppBar(
-            backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            automaticallyImplyLeading: false,
-            leading: FlutterFlowIconButton(
-              borderRadius: 20.0,
-              buttonSize: 40.0,
-              icon: Icon(
-                Icons.chevron_left,
-                color: FlutterFlowTheme.of(context).primaryText,
-                size: 24.0,
-              ),
-              onPressed: () async {
-                try {
-                  if (currentUserReference != null) {
-                    await widget.receiveChat!.update({
-                      ...mapToFirestore(
-                        {
-                          'lastmessageseenby':
-                              FieldValue.arrayUnion([currentUserReference]),
-                        },
-                      ),
-                    });
-                  }
-                } catch (e) {
-                  debugPrint('Failed to mark last message seen: $e');
-                } finally {
-                  context.safePop();
-                }
-              },
-            ),
-            titleSpacing: 0.0,
-            title: Text(
-              chatTitle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: FlutterFlowTheme.of(context).bodyLarge.override(
-                    font: GoogleFonts.inter(
-                      fontWeight: FontWeight.w600,
-                      fontStyle:
-                          FlutterFlowTheme.of(context).bodyLarge.fontStyle,
-                    ),
-                    letterSpacing: 0.0,
-                    fontWeight: FontWeight.w600,
-                    fontStyle: FlutterFlowTheme.of(context).bodyLarge.fontStyle,
-                  ),
-            ),
-            actions: [
-              FlutterFlowIconButton(
-                borderRadius: 20.0,
-                buttonSize: 40.0,
-                icon: Icon(
-                  Icons.settings_outlined,
-                  color: FlutterFlowTheme.of(context).primaryText,
-                  size: 22.0,
-                ),
-                onPressed: () async {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                        'Chat settings - coming soon.',
-                        style: TextStyle(
-                          color: FlutterFlowTheme.of(context).primaryText,
-                        ),
-                      ),
-                      duration: Duration(milliseconds: 2000),
-                      backgroundColor: FlutterFlowTheme.of(context).secondary,
-                    ),
-                  );
-                },
-              ),
-            ],
-            centerTitle: false,
-            elevation: 2.0,
-          ),
-          body: SafeArea(
-            top: true,
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  child: StreamBuilder<List<ChatmessagesRecord>>(
-                    stream: queryChatmessagesRecord(
-                      parent: widget!.receiveChat,
-                      queryBuilder: (chatmessagesRecord) => chatmessagesRecord
-                          .orderBy('timestamp', descending: true),
-                    ),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(24.0),
-                            child: Text(
-                              'Unable to load messages. Please try again.',
-                              textAlign: TextAlign.center,
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                            ),
-                          ),
-                        );
-                      }
+// Customize what your widget looks like when it's loading.
+if (!snapshot.hasData) {
+return Scaffold(
+backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+appBar: AppBar(
+backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+elevation: 0,
+leading: const Padding(
+padding: EdgeInsets.all(12),
+child: ShimmerCircle(size: 32),
+),
+title: Column(
+crossAxisAlignment: CrossAxisAlignment.start,
+children: [
+const ShimmerBar(width: 100, height: 16),
+const SizedBox(height: 4),
+const ShimmerBar(width: 60, height: 12),
+],
+),
+),
+body: const ChatPageShimmer(),
+);
+}
 
-                      // Customize what your widget looks like when it's loading.
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: SizedBox(
-                            width: 50.0,
-                            height: 50.0,
-                            child: FFShimmerLoadingIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                FlutterFlowTheme.of(context).primary,
-                              ),
-                            ),
-                          ),
-                        );
-                      }
-                      List<ChatmessagesRecord> listViewChatmessagesRecordList =
-                          snapshot.data!;
-                      if (listViewChatmessagesRecordList.isEmpty) {
-                        return const EmptychatWidget();
-                      }
+final chat2ChatsRecord = snapshot.data!;
+final chatTitle = widget.username.isNotEmpty
+? widget.username
+: functions.getOtherUserName(
+chat2ChatsRecord.usernames.toList(), currentUserDisplayName);
 
-                      return ListView.builder(
-                        padding: EdgeInsets.zero,
-                        reverse: true,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemCount: listViewChatmessagesRecordList.length,
-                        itemBuilder: (context, listViewIndex) {
-                          final listViewChatmessagesRecord =
-                              listViewChatmessagesRecordList[listViewIndex];
-                          final isCurrentUser =
-                              listViewChatmessagesRecord.uidofsender ==
-                                  currentUserReference;
-                          final previousVisibleMessage = listViewIndex <
-                                  (listViewChatmessagesRecordList.length - 1)
-                              ? listViewChatmessagesRecordList[
-                                  listViewIndex + 1]
-                              : null;
-                          final showMessageMeta =
-                              previousVisibleMessage == null ||
-                                  previousVisibleMessage.uidofsender !=
-                                      listViewChatmessagesRecord.uidofsender;
-                          return Dismissible(
-                            key: Key(listViewChatmessagesRecord.reference.id),
-                            direction: isCurrentUser
-                                ? DismissDirection.endToStart
-                                : DismissDirection.none,
-                            confirmDismiss: isCurrentUser
-                                ? (direction) async {
-                                    return await showDialog<bool>(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              backgroundColor:
-                                                  FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
-                                              title: Text(
-                                                'Delete message?',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .titleMedium
-                                                        .override(
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                              ),
-                                              content: Text(
-                                                'This will permanently delete your message.',
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.of(context)
-                                                          .pop(false),
-                                                  child: Text(
-                                                    'Cancel',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryText,
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                                  ),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.of(context)
-                                                          .pop(true),
-                                                  child: Text(
-                                                    'Delete',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .error,
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                                  ),
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        ) ??
-                                        false;
-                                  }
-                                : null,
-                            onDismissed: (direction) async {
-                              try {
-                                await listViewChatmessagesRecord.reference
-                                    .delete();
-                                debugPrint('Message deleted successfully');
-                              } catch (e) {
-                                debugPrint('Error deleting message: $e');
-                              }
-                            },
-                            background: isCurrentUser
-                                ? Container(
-                                    alignment: Alignment.centerRight,
-                                    padding: EdgeInsets.only(right: 20.0),
-                                    color: FlutterFlowTheme.of(context)
-                                        .error
-                                        .withValues(alpha: 0.8),
-                                    child: Icon(
-                                      Icons.delete,
-                                      color: Colors.white,
-                                      size: 24.0,
-                                    ),
-                                  )
-                                : Container(),
-                            child: SizedBox(
-                              width: double.infinity,
-                              child: Stack(
-                                children: [
-                                  (isCurrentUser)
-                                      ? Align(
-                                          alignment:
-                                              AlignmentDirectional(0.0, 0.0),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    12.0, 0.0, 12.0, 18.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.end,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.end,
-                                              children: [
-                                                GestureDetector(
-                                                  behavior:
-                                                      HitTestBehavior.opaque,
-                                                  onLongPress: () async {
-                                                    final confirmed =
-                                                        await showDialog<bool>(
-                                                              context: context,
-                                                              builder:
-                                                                  (context) {
-                                                                return AlertDialog(
-                                                                  backgroundColor:
-                                                                      FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .secondaryBackground,
-                                                                  title: Text(
-                                                                    'Delete message?',
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .titleMedium
-                                                                        .override(
-                                                                          letterSpacing:
-                                                                              0.0,
-                                                                        ),
-                                                                  ),
-                                                                  content: Text(
-                                                                    'This will permanently delete your message.',
-                                                                    style: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .override(
-                                                                          letterSpacing:
-                                                                              0.0,
-                                                                        ),
-                                                                  ),
-                                                                  actions: [
-                                                                    TextButton(
-                                                                      onPressed:
-                                                                          () =>
-                                                                              Navigator.of(context).pop(false),
-                                                                      child:
-                                                                          Text(
-                                                                        'Cancel',
-                                                                        style: FlutterFlowTheme.of(context)
-                                                                            .bodyMedium
-                                                                            .override(
-                                                                              color: FlutterFlowTheme.of(context).secondaryText,
-                                                                              letterSpacing: 0.0,
-                                                                            ),
-                                                                      ),
-                                                                    ),
-                                                                    TextButton(
-                                                                      onPressed:
-                                                                          () =>
-                                                                              Navigator.of(context).pop(true),
-                                                                      child:
-                                                                          Text(
-                                                                        'Delete',
-                                                                        style: FlutterFlowTheme.of(context)
-                                                                            .bodyMedium
-                                                                            .override(
-                                                                              color: FlutterFlowTheme.of(context).error,
-                                                                              letterSpacing: 0.0,
-                                                                            ),
-                                                                      ),
-                                                                    ),
-                                                                  ],
-                                                                );
-                                                              },
-                                                            ) ??
-                                                            false;
-                                                    if (confirmed) {
-                                                      await listViewChatmessagesRecord
-                                                          .reference
-                                                          .delete();
-                                                    }
-                                                  },
-                                                  child: Container(
-                                                    width: 224.53,
-                                                    decoration: BoxDecoration(),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .end,
-                                                      children: [
-                                                        if (showMessageMeta)
-                                                          Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .end,
-                                                            children: [
-                                                              Text(
-                                                                valueOrDefault<
-                                                                    String>(
-                                                                  currentUserDisplayName,
-                                                                  'You',
-                                                                ),
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .override(
-                                                                      font: GoogleFonts
-                                                                          .inter(
-                                                                        fontWeight:
-                                                                            FontWeight.w500,
-                                                                      ),
-                                                                      fontSize:
-                                                                          10.5,
-                                                                      letterSpacing:
-                                                                          0.0,
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .secondaryText,
-                                                                    ),
-                                                              ),
-                                                              Padding(
-                                                                padding: const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        6.0),
-                                                                child:
-                                                                    Container(
-                                                                  width: 3.0,
-                                                                  height: 3.0,
-                                                                  decoration:
-                                                                      BoxDecoration(
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .secondaryText
-                                                                        .withValues(
-                                                                            alpha:
-                                                                                0.5),
-                                                                    shape: BoxShape
-                                                                        .circle,
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              Text(
-                                                                TimestampFormatter
-                                                                    .formatChatTime(
-                                                                  listViewChatmessagesRecord
-                                                                      .timestamp,
-                                                                ),
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodySmall
-                                                                    .override(
-                                                                      font: GoogleFonts
-                                                                          .inter(
-                                                                        fontWeight:
-                                                                            FontWeight.w400,
-                                                                      ),
-                                                                      fontSize:
-                                                                          10.5,
-                                                                      letterSpacing:
-                                                                          0.0,
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .secondaryText
-                                                                          .withValues(
-                                                                              alpha: 0.72),
-                                                                    ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        Builder(
-                                                          builder: (context) {
-                                                            final imagess =
-                                                                listViewChatmessagesRecord
-                                                                    .images
-                                                                    .map((e) =>
-                                                                        e)
-                                                                    .toList();
+return Scaffold(
+key: scaffoldKey,
+backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+appBar: AppBar(
+backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
+automaticallyImplyLeading: false,
+leading: FlutterFlowIconButton(
+borderRadius: 20.0,
+buttonSize: 40.0,
+icon: Icon(
+Icons.chevron_left,
+color: FlutterFlowTheme.of(context).primaryText,
+size: 24.0,
+),
+onPressed: () async {
+try {
+if (currentUserReference != null) {
+await widget.receiveChat!.update({
+...mapToFirestore(
+{
+'lastmessageseenby':
+FieldValue.arrayUnion([currentUserReference]),
+},
+),
+});
+}
+} catch (e) {
+debugPrint('Failed to mark last message seen: $e');
+} finally {
+context.safePop();
+}
+},
+),
+titleSpacing: 0.0,
+title: Row(
+children: [
+Container(
+width: 36.0,
+height: 36.0,
+decoration: BoxDecoration(
+color: FlutterFlowTheme.of(context).alternate,
+shape: BoxShape.circle,
+),
+child: ClipRRect(
+borderRadius: BorderRadius.circular(18.0),
+child: widget.profile != null && widget.profile!.isNotEmpty
+? Image.network(
+widget.profile!,
+width: 36.0,
+height: 36.0,
+fit: BoxFit.cover,
+errorBuilder: (context, error, stackTrace) => Icon(
+Icons.person,
+color: FlutterFlowTheme.of(context).secondaryText,
+size: 20.0,
+),
+)
+: Icon(
+Icons.person,
+color: FlutterFlowTheme.of(context).secondaryText,
+size: 20.0,
+),
+),
+),
+SizedBox(width: 10.0),
+Expanded(
+child: Text(
+chatTitle,
+maxLines: 1,
+overflow: TextOverflow.ellipsis,
+style: FlutterFlowTheme.of(context).bodyLarge.override(
+font: GoogleFonts.inter(
+fontWeight: FontWeight.w600,
+fontStyle:
+FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+),
+letterSpacing: 0.0,
+fontWeight: FontWeight.w600,
+fontStyle: FlutterFlowTheme.of(context).bodyLarge.fontStyle,
+),
+),
+),
+],
+),
+actions: [
+PopupMenuButton<String>(
+icon: Icon(
+Icons.more_vert,
+color: FlutterFlowTheme.of(context).primaryText,
+size: 22.0,
+),
+color: FlutterFlowTheme.of(context).secondaryBackground,
+shape: RoundedRectangleBorder(
+borderRadius: BorderRadius.circular(12.0),
+),
+onSelected: (value) {
+switch (value) {
+case 'shared_media':
+Navigator.of(context).push(
+MaterialPageRoute(
+builder: (context) => SharedMediaWidget(
+chatRef: widget.receiveChat!,
+chatTitle: chatTitle,
+),
+),
+);
+break;
+case 'search':
+ScaffoldMessenger.of(context).showSnackBar(
+SnackBar(
+content: Text(
+ffTranslate(context, 'Search coming soon'),
+style: TextStyle(
+color: FlutterFlowTheme.of(context).primaryText,
+),
+),
+duration: const Duration(milliseconds: 2000),
+backgroundColor: FlutterFlowTheme.of(context).secondary,
+),
+);
+break;
+case 'mute':
+ScaffoldMessenger.of(context).showSnackBar(
+SnackBar(
+content: Text(
+ffTranslate(context, 'Mute notifications coming soon'),
+style: TextStyle(
+color: FlutterFlowTheme.of(context).primaryText,
+),
+),
+duration: const Duration(milliseconds: 2000),
+backgroundColor: FlutterFlowTheme.of(context).secondary,
+),
+);
+break;
+}
+},
+itemBuilder: (context) => [
+PopupMenuItem<String>(
+value: 'shared_media',
+child: Row(
+children: [
+Icon(
+Icons.photo_library_outlined,
+color: FlutterFlowTheme.of(context).primaryText,
+size: 20.0,
+),
+const SizedBox(width: 12.0),
+Text(
+ffTranslate(context, 'Shared Media'),
+style: FlutterFlowTheme.of(context).bodyMedium,
+),
+],
+),
+),
+PopupMenuItem<String>(
+value: 'search',
+child: Row(
+children: [
+Icon(
+Icons.search,
+color: FlutterFlowTheme.of(context).primaryText,
+size: 20.0,
+),
+const SizedBox(width: 12.0),
+Text(
+ffTranslate(context, 'Search'),
+style: FlutterFlowTheme.of(context).bodyMedium,
+),
+],
+),
+),
+PopupMenuItem<String>(
+value: 'mute',
+child: Row(
+children: [
+Icon(
+Icons.notifications_off_outlined,
+color: FlutterFlowTheme.of(context).primaryText,
+size: 20.0,
+),
+const SizedBox(width: 12.0),
+Text(
+ffTranslate(context, 'Mute Notifications'),
+style: FlutterFlowTheme.of(context).bodyMedium,
+),
+],
+),
+),
+],
+),
+],
+centerTitle: false,
+elevation: 2.0,
+),
+body: SafeArea(
+top: true,
+child: Column(
+mainAxisSize: MainAxisSize.max,
+mainAxisAlignment: MainAxisAlignment.spaceBetween,
+children: [
+Expanded(
+child: StreamBuilder<List<ChatmessagesRecord>>(
+stream: queryChatmessagesRecord(
+parent: widget!.receiveChat,
+queryBuilder: (chatmessagesRecord) => chatmessagesRecord
+.orderBy('timestamp', descending: true),
+),
+builder: (context, snapshot) {
+if (snapshot.hasError) {
+return Center(
+child: Padding(
+padding: EdgeInsets.all(24.0),
+child: Text(
+'Unable to load messages. Please try again.',
+textAlign: TextAlign.center,
+style: FlutterFlowTheme.of(context)
+.bodyMedium
+.override(
+font: GoogleFonts.inter(
+fontWeight: FlutterFlowTheme.of(context)
+.bodyMedium
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(context)
+.bodyMedium
+.fontStyle,
+),
+letterSpacing: 0.0,
+fontWeight: FlutterFlowTheme.of(context)
+.bodyMedium
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(context)
+.bodyMedium
+.fontStyle,
+),
+),
+),
+);
+}
 
-                                                            return ListView
-                                                                .builder(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .zero,
-                                                              reverse: true,
-                                                              shrinkWrap: true,
-                                                              scrollDirection:
-                                                                  Axis.vertical,
-                                                              itemCount: imagess
-                                                                  .length,
-                                                              itemBuilder: (context,
-                                                                  imagessIndex) {
-                                                                final imagessItem =
-                                                                    imagess[
-                                                                        imagessIndex];
-                                                                return Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0.0,
-                                                                          12.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                                  child:
-                                                                      Container(
-                                                                    width:
-                                                                        144.4,
-                                                                    height:
-                                                                        134.5,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      image:
-                                                                          DecorationImage(
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                        image: Image
-                                                                            .network(
-                                                                          listViewChatmessagesRecord
-                                                                              .images
-                                                                              .take(10)
-                                                                              .toList()
-                                                                              .firstOrNull!,
-                                                                        ).image,
-                                                                      ),
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              12.0),
-                                                                    ),
-                                                                  ),
-                                                                );
-                                                              },
-                                                            );
-                                                          },
-                                                        ),
-                                                        if (listViewChatmessagesRecord
-                                                                .hasVoice() &&
-                                                            listViewChatmessagesRecord
-                                                                .voice
-                                                                .isNotEmpty)
-                                                          Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        0.0,
-                                                                        0.0,
-                                                                        0.0,
-                                                                        12.0),
-                                                            child:
-                                                                FlutterFlowAudioPlayer(
-                                                              audio:
-                                                                  Audio.network(
-                                                                listViewChatmessagesRecord
-                                                                    .voice,
-                                                                metas: Metas(),
-                                                              ),
-                                                              titleTextStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .titleLarge
-                                                                      .override(
-                                                                        font: GoogleFonts
-                                                                            .interTight(
-                                                                          fontWeight: FlutterFlowTheme.of(context)
-                                                                              .titleLarge
-                                                                              .fontWeight,
-                                                                          fontStyle: FlutterFlowTheme.of(context)
-                                                                              .titleLarge
-                                                                              .fontStyle,
-                                                                        ),
-                                                                        letterSpacing:
-                                                                            0.0,
-                                                                        fontWeight: FlutterFlowTheme.of(context)
-                                                                            .titleLarge
-                                                                            .fontWeight,
-                                                                        fontStyle: FlutterFlowTheme.of(context)
-                                                                            .titleLarge
-                                                                            .fontStyle,
-                                                                      ),
-                                                              playbackDurationTextStyle:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .labelMedium
-                                                                      .override(
-                                                                        font: GoogleFonts
-                                                                            .inter(
-                                                                          fontWeight: FlutterFlowTheme.of(context)
-                                                                              .labelMedium
-                                                                              .fontWeight,
-                                                                          fontStyle: FlutterFlowTheme.of(context)
-                                                                              .labelMedium
-                                                                              .fontStyle,
-                                                                        ),
-                                                                        letterSpacing:
-                                                                            0.0,
-                                                                        fontWeight: FlutterFlowTheme.of(context)
-                                                                            .labelMedium
-                                                                            .fontWeight,
-                                                                        fontStyle: FlutterFlowTheme.of(context)
-                                                                            .labelMedium
-                                                                            .fontStyle,
-                                                                      ),
-                                                              fillColor: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .secondaryBackground,
-                                                              playbackButtonColor:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primary,
-                                                              activeTrackColor:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .primary,
-                                                              inactiveTrackColor:
-                                                                  FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .alternate,
-                                                              elevation: 0.0,
-                                                              playInBackground:
-                                                                  PlayInBackground
-                                                                      .disabledRestoreOnForeground,
-                                                            ),
-                                                          ),
-                                                        Container(
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: Color(
-                                                                0xFFF4F5F6),
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        9.0),
-                                                          ),
-                                                          child: Padding(
-                                                            padding:
-                                                                EdgeInsetsDirectional
-                                                                    .fromSTEB(
-                                                                        14.0,
-                                                                        9.0,
-                                                                        12.0,
-                                                                        6.0),
-                                                            child: Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .max,
-                                                              children: [
-                                                                Text(
-                                                                  valueOrDefault<
-                                                                      String>(
-                                                                    listViewChatmessagesRecord
-                                                                        .message,
-                                                                    'Er zijn heel veel events, welk genre zoek je?',
-                                                                  ),
-                                                                  style: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .override(
-                                                                        font: GoogleFonts
-                                                                            .inter(
-                                                                          fontWeight: FlutterFlowTheme.of(context)
-                                                                              .bodyMedium
-                                                                              .fontWeight,
-                                                                          fontStyle: FlutterFlowTheme.of(context)
-                                                                              .bodyMedium
-                                                                              .fontStyle,
-                                                                        ),
-                                                                        letterSpacing:
-                                                                            0.0,
-                                                                        fontWeight: FlutterFlowTheme.of(context)
-                                                                            .bodyMedium
-                                                                            .fontWeight,
-                                                                        fontStyle: FlutterFlowTheme.of(context)
-                                                                            .bodyMedium
-                                                                            .fontStyle,
-                                                                      ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ))
-                                      : Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  12.0, 0.0, 12.0, 18.0),
-                                          child: Row(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 0.0, 12.0, 0.0),
-                                                child: Container(
-                                                  width: 25.0,
-                                                  height: 25.0,
-                                                  decoration: BoxDecoration(
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .alternate,
-                                                    image: DecorationImage(
-                                                      fit: BoxFit.cover,
-                                                      image: Image.network(
-                                                        valueOrDefault<String>(
-                                                          widget!.profile,
-                                                          'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/gbh03g8a6d5k/placeholder-profile-icon-8qmjk1094ijhbem9-removebg-preview.png',
-                                                        ),
-                                                      ).image,
-                                                    ),
-                                                    shape: BoxShape.circle,
-                                                  ),
-                                                ),
-                                              ),
-                                              Container(
-                                                width: 224.5,
-                                                decoration: BoxDecoration(),
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    if (showMessageMeta)
-                                                      Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
-                                                        children: [
-                                                          Text(
-                                                            valueOrDefault<
-                                                                String>(
-                                                              widget!.username,
-                                                              'User',
-                                                            ),
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodySmall
-                                                                .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                  ),
-                                                                  fontSize:
-                                                                      10.5,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .secondaryText,
-                                                                ),
-                                                          ),
-                                                          Padding(
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        6.0),
-                                                            child: Container(
-                                                              width: 3.0,
-                                                              height: 3.0,
-                                                              decoration:
-                                                                  BoxDecoration(
-                                                                color: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .secondaryText
-                                                                    .withValues(
-                                                                        alpha:
-                                                                            0.5),
-                                                                shape: BoxShape
-                                                                    .circle,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          Text(
-                                                            TimestampFormatter
-                                                                .formatChatTime(
-                                                              listViewChatmessagesRecord
-                                                                  .timestamp,
-                                                            ),
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodySmall
-                                                                .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400,
-                                                                  ),
-                                                                  fontSize:
-                                                                      10.5,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .secondaryText
-                                                                      .withValues(
-                                                                          alpha:
-                                                                              0.72),
-                                                                ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    Builder(
-                                                      builder: (context) {
-                                                        final imagess =
-                                                            listViewChatmessagesRecord
-                                                                .images
-                                                                .map((e) => e)
-                                                                .toList();
+// Customize what your widget looks like when it's loading.
+if (!snapshot.hasData) {
+return Center(
+child: SizedBox(
+width: 50.0,
+height: 50.0,
+child: FFShimmerLoadingIndicator(
+valueColor: AlwaysStoppedAnimation<Color>(
+FlutterFlowTheme.of(context).primary,
+),
+),
+),
+);
+}
+List<ChatmessagesRecord> listViewChatmessagesRecordList =
+snapshot.data!;
+if (listViewChatmessagesRecordList.isEmpty) {
+return const EmptychatWidget();
+}
 
-                                                        return ListView.builder(
-                                                          padding:
-                                                              EdgeInsets.zero,
-                                                          reverse: true,
-                                                          shrinkWrap: true,
-                                                          scrollDirection:
-                                                              Axis.vertical,
-                                                          itemCount:
-                                                              imagess.length,
-                                                          itemBuilder: (context,
-                                                              imagessIndex) {
-                                                            final imagessItem =
-                                                                imagess[
-                                                                    imagessIndex];
-                                                            return Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0.0,
-                                                                          12.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                              child: Container(
-                                                                width: 144.4,
-                                                                height: 134.5,
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  image:
-                                                                      DecorationImage(
-                                                                    fit: BoxFit
-                                                                        .cover,
-                                                                    image: Image
-                                                                        .network(
-                                                                      listViewChatmessagesRecord
-                                                                          .images
-                                                                          .take(
-                                                                              10)
-                                                                          .toList()
-                                                                          .firstOrNull!,
-                                                                    ).image,
-                                                                  ),
-                                                                  borderRadius:
-                                                                      BorderRadius
-                                                                          .circular(
-                                                                              12.0),
-                                                                ),
-                                                              ),
-                                                            );
-                                                          },
-                                                        );
-                                                      },
-                                                    ),
-                                                    if (listViewChatmessagesRecord
-                                                            .hasVoice() &&
-                                                        listViewChatmessagesRecord
-                                                            .voice.isNotEmpty)
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    12.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        child:
-                                                            FlutterFlowAudioPlayer(
-                                                          audio: Audio.network(
-                                                            listViewChatmessagesRecord
-                                                                .voice,
-                                                            metas: Metas(),
-                                                          ),
-                                                          titleTextStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .titleLarge
-                                                                  .override(
-                                                                    font: GoogleFonts
-                                                                        .interTight(
-                                                                      fontWeight: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .titleLarge
-                                                                          .fontWeight,
-                                                                      fontStyle: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .titleLarge
-                                                                          .fontStyle,
-                                                                    ),
-                                                                    letterSpacing:
-                                                                        0.0,
-                                                                    fontWeight: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .titleLarge
-                                                                        .fontWeight,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .titleLarge
-                                                                        .fontStyle,
-                                                                  ),
-                                                          playbackDurationTextStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .labelMedium
-                                                                  .override(
-                                                                    font: GoogleFonts
-                                                                        .inter(
-                                                                      fontWeight: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .labelMedium
-                                                                          .fontWeight,
-                                                                      fontStyle: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .labelMedium
-                                                                          .fontStyle,
-                                                                    ),
-                                                                    letterSpacing:
-                                                                        0.0,
-                                                                    fontWeight: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .labelMedium
-                                                                        .fontWeight,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .labelMedium
-                                                                        .fontStyle,
-                                                                  ),
-                                                          fillColor: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryBackground,
-                                                          playbackButtonColor:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .primary,
-                                                          activeTrackColor:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .primary,
-                                                          inactiveTrackColor:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .alternate,
-                                                          elevation: 0.0,
-                                                          playInBackground:
-                                                              PlayInBackground
-                                                                  .disabledRestoreOnForeground,
-                                                        ),
-                                                      ),
-                                                    Container(
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            Color(0xFFF4F5F6),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(9.0),
-                                                      ),
-                                                      child: Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    14.0,
-                                                                    9.0,
-                                                                    12.0,
-                                                                    6.0),
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          children: [
-                                                            Text(
-                                                              valueOrDefault<
-                                                                  String>(
-                                                                listViewChatmessagesRecord
-                                                                    .message,
-                                                                'Er zijn heel veel events, welk genre zoek je?',
-                                                              ),
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium
-                                                                  .override(
-                                                                    font: GoogleFonts
-                                                                        .inter(
-                                                                      fontWeight: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .fontWeight,
-                                                                      fontStyle: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .fontStyle,
-                                                                    ),
-                                                                    letterSpacing:
-                                                                        0.0,
-                                                                    fontWeight: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontWeight,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
-                                                                  ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      );
-                    },
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      if (_model.uploadedFileUrls_uploadDataHbj1.length != 0)
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              12.0, 12.0, 12.0, 12.0),
-                          child: Builder(
-                            builder: (context) {
-                              final images = _model
-                                  .uploadedFileUrls_uploadDataHbj1
-                                  .toList();
+return ListView.builder(
+padding: EdgeInsets.zero,
+reverse: true,
+shrinkWrap: true,
+scrollDirection: Axis.vertical,
+itemCount: listViewChatmessagesRecordList.length,
+itemBuilder: (context, listViewIndex) {
+final listViewChatmessagesRecord =
+listViewChatmessagesRecordList[listViewIndex];
+final isCurrentUser =
+listViewChatmessagesRecord.uidofsender ==
+currentUserReference;
+final previousVisibleMessage = listViewIndex <
+(listViewChatmessagesRecordList.length - 1)
+? listViewChatmessagesRecordList[
+listViewIndex + 1]
+: null;
+final showMessageMeta =
+previousVisibleMessage == null ||
+previousVisibleMessage.uidofsender !=
+listViewChatmessagesRecord.uidofsender;
+return Dismissible(
+key: Key(listViewChatmessagesRecord.reference.id),
+direction: isCurrentUser
+? DismissDirection.endToStart
+: DismissDirection.none,
+confirmDismiss: isCurrentUser
+? (direction) async {
+return await showDialog<bool>(
+context: context,
+builder: (context) {
+return AlertDialog(
+backgroundColor:
+FlutterFlowTheme.of(context)
+.secondaryBackground,
+title: Text(
+'Delete message?',
+style:
+FlutterFlowTheme.of(context)
+.titleMedium
+.override(
+letterSpacing: 0.0,
+),
+),
+content: Text(
+'This will permanently delete your message.',
+style:
+FlutterFlowTheme.of(context)
+.bodyMedium
+.override(
+letterSpacing: 0.0,
+),
+),
+actions: [
+TextButton(
+onPressed: () =>
+Navigator.of(context)
+.pop(false),
+child: Text(
+'Cancel',
+style: FlutterFlowTheme.of(
+context)
+.bodyMedium
+.override(
+color: FlutterFlowTheme
+.of(context)
+.secondaryText,
+letterSpacing: 0.0,
+),
+),
+),
+TextButton(
+onPressed: () =>
+Navigator.of(context)
+.pop(true),
+child: Text(
+'Delete',
+style: FlutterFlowTheme.of(
+context)
+.bodyMedium
+.override(
+color: FlutterFlowTheme
+.of(context)
+.error,
+letterSpacing: 0.0,
+),
+),
+),
+],
+);
+},
+) ??
+false;
+}
+: null,
+onDismissed: (direction) async {
+try {
+await listViewChatmessagesRecord.reference
+.delete();
+debugPrint('Message deleted successfully');
+} catch (e) {
+debugPrint('Error deleting message: $e');
+}
+},
+background: isCurrentUser
+? Container(
+alignment: Alignment.centerRight,
+padding: EdgeInsets.only(right: 20.0),
+color: FlutterFlowTheme.of(context)
+.error
+.withValues(alpha: 0.8),
+child: Icon(
+Icons.delete,
+color: Colors.white,
+size: 24.0,
+),
+)
+: Container(),
+child: SizedBox(
+width: double.infinity,
+child: Stack(
+children: [
+(isCurrentUser)
+? Align(
+alignment:
+AlignmentDirectional(0.0, 0.0),
+child: Padding(
+padding:
+EdgeInsetsDirectional.fromSTEB(
+12.0, 0.0, 12.0, 18.0),
+child: Row(
+mainAxisSize: MainAxisSize.max,
+mainAxisAlignment:
+MainAxisAlignment.end,
+crossAxisAlignment:
+CrossAxisAlignment.end,
+children: [
+GestureDetector(
+behavior:
+HitTestBehavior.opaque,
+onLongPress: () async {
+final confirmed =
+await showDialog<bool>(
+context: context,
+builder:
+(context) {
+return AlertDialog(
+backgroundColor:
+FlutterFlowTheme.of(
+context)
+.secondaryBackground,
+title: Text(
+'Delete message?',
+style: FlutterFlowTheme.of(
+context)
+.titleMedium
+.override(
+letterSpacing:
+0.0,
+),
+),
+content: Text(
+'This will permanently delete your message.',
+style: FlutterFlowTheme.of(
+context)
+.bodyMedium
+.override(
+letterSpacing:
+0.0,
+),
+),
+actions: [
+TextButton(
+onPressed:
+() =>
+Navigator.of(context).pop(false),
+child:
+Text(
+'Cancel',
+style: FlutterFlowTheme.of(context)
+.bodyMedium
+.override(
+color: FlutterFlowTheme.of(context).secondaryText,
+letterSpacing: 0.0,
+),
+),
+),
+TextButton(
+onPressed:
+() =>
+Navigator.of(context).pop(true),
+child:
+Text(
+'Delete',
+style: FlutterFlowTheme.of(context)
+.bodyMedium
+.override(
+color: FlutterFlowTheme.of(context).error,
+letterSpacing: 0.0,
+),
+),
+),
+],
+);
+},
+) ??
+false;
+if (confirmed) {
+await listViewChatmessagesRecord
+.reference
+.delete();
+}
+},
+child: Container(
+width: 224.53,
+decoration: BoxDecoration(),
+child: Column(
+mainAxisSize:
+MainAxisSize.max,
+mainAxisAlignment:
+MainAxisAlignment.end,
+crossAxisAlignment:
+CrossAxisAlignment
+.end,
+children: [
+if (showMessageMeta)
+Row(
+mainAxisSize:
+MainAxisSize
+.min,
+mainAxisAlignment:
+MainAxisAlignment
+.end,
+children: [
+Text(
+valueOrDefault<
+String>(
+currentUserDisplayName,
+'You',
+),
+style: FlutterFlowTheme.of(
+context)
+.bodySmall
+.override(
+font: GoogleFonts
+.inter(
+fontWeight:
+FontWeight.w500,
+),
+fontSize:
+10.5,
+letterSpacing:
+0.0,
+color: FlutterFlowTheme.of(
+context)
+.secondaryText,
+),
+),
+Padding(
+padding: const EdgeInsets
+.symmetric(
+horizontal:
+6.0),
+child:
+Container(
+width: 3.0,
+height: 3.0,
+decoration:
+BoxDecoration(
+color: FlutterFlowTheme.of(
+context)
+.secondaryText
+.withValues(
+alpha:
+0.5),
+shape: BoxShape
+.circle,
+),
+),
+),
+Text(
+TimestampFormatter
+.formatChatTime(
+listViewChatmessagesRecord
+.timestamp,
+),
+style: FlutterFlowTheme.of(
+context)
+.bodySmall
+.override(
+font: GoogleFonts
+.inter(
+fontWeight:
+FontWeight.w400,
+),
+fontSize:
+10.5,
+letterSpacing:
+0.0,
+color: FlutterFlowTheme.of(
+context)
+.secondaryText
+.withValues(
+alpha: 0.72),
+),
+),
+],
+),
+Builder(
+builder: (context) {
+final imagess =
+listViewChatmessagesRecord
+.images
+.map((e) =>
+e)
+.toList();
 
-                              return Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children:
-                                    List.generate(images.length, (imagesIndex) {
-                                  final imagesItem = images[imagesIndex];
-                                  return Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                        0.0, 0.0, 12.0, 0.0),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: Image.network(
-                                        imagesItem,
-                                        width: 120.0,
-                                        height: 100.0,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  );
-                                }),
-                              );
-                            },
-                          ),
-                        ),
-                      if (_model.uploadedFileUrl_uploadDataUue11.isNotEmpty)
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              12.0, 0.0, 12.0, 0.0),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              FlutterFlowAudioPlayer(
-                                audio: Audio.network(
-                                  _model.uploadedFileUrl_uploadDataUue11,
-                                  metas: Metas(),
-                                ),
-                                titleTextStyle: FlutterFlowTheme.of(context)
-                                    .titleLarge
-                                    .override(
-                                      font: GoogleFonts.interTight(
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .titleLarge
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .titleLarge
-                                            .fontStyle,
-                                      ),
-                                      letterSpacing: 0.0,
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .titleLarge
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleLarge
-                                          .fontStyle,
-                                    ),
-                                playbackDurationTextStyle: FlutterFlowTheme.of(
-                                        context)
-                                    .labelMedium
-                                    .override(
-                                      font: GoogleFonts.inter(
-                                        fontWeight: FlutterFlowTheme.of(context)
-                                            .labelMedium
-                                            .fontWeight,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .labelMedium
-                                            .fontStyle,
-                                      ),
-                                      letterSpacing: 0.0,
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .fontStyle,
-                                    ),
-                                fillColor: FlutterFlowTheme.of(context)
-                                    .secondaryBackground,
-                                playbackButtonColor:
-                                    FlutterFlowTheme.of(context).primary,
-                                activeTrackColor:
-                                    FlutterFlowTheme.of(context).primary,
-                                inactiveTrackColor:
-                                    FlutterFlowTheme.of(context).alternate,
-                                elevation: 0.0,
-                                playInBackground: PlayInBackground
-                                    .disabledRestoreOnForeground,
-                              ),
-                            ],
-                          ),
-                        ),
-                      Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            12.0, 0.0, 12.0, 12.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            FlutterFlowIconButton(
-                              borderRadius: 8.0,
-                              buttonSize: 40.0,
-                              icon: Icon(
-                                Icons.camera_enhance_outlined,
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                size: 24.0,
-                              ),
-                              onPressed: () async {
-                                final selectedMedia = await selectMedia(
-                                  mediaSource: MediaSource.photoGallery,
-                                  multiImage: true,
-                                );
-                                if (selectedMedia != null &&
-                                    selectedMedia.every((m) =>
-                                        validateFileFormat(
-                                            m.storagePath, context))) {
-                                  safeSetState(() => _model
-                                      .isDataUploading_uploadDataHbj1 = true);
-                                  var selectedUploadedFiles =
-                                      <FFUploadedFile>[];
+return ListView
+.builder(
+padding:
+EdgeInsets
+.zero,
+reverse: true,
+shrinkWrap: true,
+scrollDirection:
+Axis.vertical,
+itemCount: imagess
+.length,
+itemBuilder: (context,
+imagessIndex) {
+final imagessItem =
+imagess[
+imagessIndex];
+return Padding(
+padding: EdgeInsetsDirectional
+.fromSTEB(
+0.0,
+12.0,
+0.0,
+0.0),
+child:
+Container(
+width:
+144.4,
+height:
+134.5,
+decoration:
+BoxDecoration(
+image:
+DecorationImage(
+fit: BoxFit
+.cover,
+image: Image
+.network(
+listViewChatmessagesRecord
+.images
+.take(10)
+.toList()
+.firstOrNull!,
+).image,
+),
+borderRadius:
+BorderRadius.circular(
+12.0),
+),
+),
+);
+},
+);
+},
+),
+if (listViewChatmessagesRecord
+.hasVoice() &&
+listViewChatmessagesRecord
+.voice
+.isNotEmpty)
+Padding(
+padding:
+EdgeInsetsDirectional
+.fromSTEB(
+0.0,
+0.0,
+0.0,
+12.0),
+child:
+FlutterFlowAudioPlayer(
+audio:
+Audio.network(
+listViewChatmessagesRecord
+.voice,
+metas: Metas(),
+),
+titleTextStyle:
+FlutterFlowTheme.of(
+context)
+.titleLarge
+.override(
+font: GoogleFonts
+.interTight(
+fontWeight: FlutterFlowTheme.of(context)
+.titleLarge
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(context)
+.titleLarge
+.fontStyle,
+),
+letterSpacing:
+0.0,
+fontWeight: FlutterFlowTheme.of(context)
+.titleLarge
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(context)
+.titleLarge
+.fontStyle,
+),
+playbackDurationTextStyle:
+FlutterFlowTheme.of(
+context)
+.labelMedium
+.override(
+font: GoogleFonts
+.inter(
+fontWeight: FlutterFlowTheme.of(context)
+.labelMedium
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(context)
+.labelMedium
+.fontStyle,
+),
+letterSpacing:
+0.0,
+fontWeight: FlutterFlowTheme.of(context)
+.labelMedium
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(context)
+.labelMedium
+.fontStyle,
+),
+fillColor: FlutterFlowTheme
+.of(context)
+.secondaryBackground,
+playbackButtonColor:
+FlutterFlowTheme.of(
+context)
+.primary,
+activeTrackColor:
+FlutterFlowTheme.of(
+context)
+.primary,
+inactiveTrackColor:
+FlutterFlowTheme.of(
+context)
+.alternate,
+elevation: 0.0,
+playInBackground:
+PlayInBackground
+.disabledRestoreOnForeground,
+),
+),
+Container(
+decoration:
+BoxDecoration(
+color: Color(
+0xFFF4F5F6),
+borderRadius:
+BorderRadius
+.circular(
+9.0),
+),
+child: Padding(
+padding:
+EdgeInsetsDirectional
+.fromSTEB(
+14.0,
+9.0,
+12.0,
+6.0),
+child: Column(
+mainAxisSize:
+MainAxisSize
+.max,
+children: [
+Text(
+valueOrDefault<
+String>(
+listViewChatmessagesRecord
+.message,
+'Er zijn heel veel events, welk genre zoek je?',
+),
+style: FlutterFlowTheme.of(
+context)
+.bodyMedium
+.override(
+font: GoogleFonts
+.inter(
+fontWeight: FlutterFlowTheme.of(context)
+.bodyMedium
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(context)
+.bodyMedium
+.fontStyle,
+),
+letterSpacing:
+0.0,
+fontWeight: FlutterFlowTheme.of(context)
+.bodyMedium
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(context)
+.bodyMedium
+.fontStyle,
+),
+),
+],
+),
+),
+),
+],
+),
+),
+),
+],
+),
+))
+: Padding(
+padding:
+EdgeInsetsDirectional.fromSTEB(
+12.0, 0.0, 12.0, 18.0),
+child: Row(
+mainAxisSize: MainAxisSize.max,
+mainAxisAlignment:
+MainAxisAlignment.start,
+crossAxisAlignment:
+CrossAxisAlignment.start,
+children: [
+Padding(
+padding: EdgeInsetsDirectional
+.fromSTEB(
+0.0, 0.0, 12.0, 0.0),
+child: Container(
+width: 25.0,
+height: 25.0,
+decoration: BoxDecoration(
+color: FlutterFlowTheme.of(
+context)
+.alternate,
+image: DecorationImage(
+fit: BoxFit.cover,
+image: Image.network(
+valueOrDefault<String>(
+widget!.profile,
+'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/gbh03g8a6d5k/placeholder-profile-icon-8qmjk1094ijhbem9-removebg-preview.png',
+),
+).image,
+),
+shape: BoxShape.circle,
+),
+),
+),
+Container(
+width: 224.5,
+decoration: BoxDecoration(),
+child: Column(
+mainAxisSize:
+MainAxisSize.max,
+crossAxisAlignment:
+CrossAxisAlignment.start,
+children: [
+if (showMessageMeta)
+Row(
+mainAxisSize:
+MainAxisSize.min,
+children: [
+Text(
+valueOrDefault<
+String>(
+widget!.username,
+'User',
+),
+style: FlutterFlowTheme
+.of(context)
+.bodySmall
+.override(
+font:
+GoogleFonts
+.inter(
+fontWeight:
+FontWeight
+.w500,
+),
+fontSize:
+10.5,
+letterSpacing:
+0.0,
+color: FlutterFlowTheme.of(
+context)
+.secondaryText,
+),
+),
+Padding(
+padding:
+const EdgeInsets
+.symmetric(
+horizontal:
+6.0),
+child: Container(
+width: 3.0,
+height: 3.0,
+decoration:
+BoxDecoration(
+color: FlutterFlowTheme.of(
+context)
+.secondaryText
+.withValues(
+alpha:
+0.5),
+shape: BoxShape
+.circle,
+),
+),
+),
+Text(
+TimestampFormatter
+.formatChatTime(
+listViewChatmessagesRecord
+.timestamp,
+),
+style: FlutterFlowTheme
+.of(context)
+.bodySmall
+.override(
+font:
+GoogleFonts
+.inter(
+fontWeight:
+FontWeight
+.w400,
+),
+fontSize:
+10.5,
+letterSpacing:
+0.0,
+color: FlutterFlowTheme.of(
+context)
+.secondaryText
+.withValues(
+alpha:
+0.72),
+),
+),
+],
+),
+Builder(
+builder: (context) {
+final imagess =
+listViewChatmessagesRecord
+.images
+.map((e) => e)
+.toList();
 
-                                  var downloadUrls = <String>[];
-                                  try {
-                                    showUploadMessage(
-                                      context,
-                                      'Uploading file...',
-                                      showLoading: true,
-                                    );
-                                    selectedUploadedFiles = selectedMedia
-                                        .map((m) => FFUploadedFile(
-                                              name:
-                                                  m.storagePath.split('/').last,
-                                              bytes: m.bytes,
-                                              height: m.dimensions?.height,
-                                              width: m.dimensions?.width,
-                                              blurHash: m.blurHash,
-                                            ))
-                                        .toList();
+return ListView.builder(
+padding:
+EdgeInsets.zero,
+reverse: true,
+shrinkWrap: true,
+scrollDirection:
+Axis.vertical,
+itemCount:
+imagess.length,
+itemBuilder: (context,
+imagessIndex) {
+final imagessItem =
+imagess[
+imagessIndex];
+return Padding(
+padding:
+EdgeInsetsDirectional
+.fromSTEB(
+0.0,
+12.0,
+0.0,
+0.0),
+child: Container(
+width: 144.4,
+height: 134.5,
+decoration:
+BoxDecoration(
+image:
+DecorationImage(
+fit: BoxFit
+.cover,
+image: Image
+.network(
+listViewChatmessagesRecord
+.images
+.take(
+10)
+.toList()
+.firstOrNull!,
+).image,
+),
+borderRadius:
+BorderRadius
+.circular(
+12.0),
+),
+),
+);
+},
+);
+},
+),
+if (listViewChatmessagesRecord
+.hasVoice() &&
+listViewChatmessagesRecord
+.voice.isNotEmpty)
+Padding(
+padding:
+EdgeInsetsDirectional
+.fromSTEB(
+0.0,
+12.0,
+0.0,
+0.0),
+child:
+FlutterFlowAudioPlayer(
+audio: Audio.network(
+listViewChatmessagesRecord
+.voice,
+metas: Metas(),
+),
+titleTextStyle:
+FlutterFlowTheme.of(
+context)
+.titleLarge
+.override(
+font: GoogleFonts
+.interTight(
+fontWeight: FlutterFlowTheme.of(
+context)
+.titleLarge
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(
+context)
+.titleLarge
+.fontStyle,
+),
+letterSpacing:
+0.0,
+fontWeight: FlutterFlowTheme.of(
+context)
+.titleLarge
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(
+context)
+.titleLarge
+.fontStyle,
+),
+playbackDurationTextStyle:
+FlutterFlowTheme.of(
+context)
+.labelMedium
+.override(
+font: GoogleFonts
+.inter(
+fontWeight: FlutterFlowTheme.of(
+context)
+.labelMedium
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(
+context)
+.labelMedium
+.fontStyle,
+),
+letterSpacing:
+0.0,
+fontWeight: FlutterFlowTheme.of(
+context)
+.labelMedium
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(
+context)
+.labelMedium
+.fontStyle,
+),
+fillColor: FlutterFlowTheme
+.of(context)
+.secondaryBackground,
+playbackButtonColor:
+FlutterFlowTheme.of(
+context)
+.primary,
+activeTrackColor:
+FlutterFlowTheme.of(
+context)
+.primary,
+inactiveTrackColor:
+FlutterFlowTheme.of(
+context)
+.alternate,
+elevation: 0.0,
+playInBackground:
+PlayInBackground
+.disabledRestoreOnForeground,
+),
+),
+Container(
+decoration: BoxDecoration(
+color:
+Color(0xFFF4F5F6),
+borderRadius:
+BorderRadius
+.circular(9.0),
+),
+child: Padding(
+padding:
+EdgeInsetsDirectional
+.fromSTEB(
+14.0,
+9.0,
+12.0,
+6.0),
+child: Column(
+mainAxisSize:
+MainAxisSize.max,
+children: [
+Text(
+valueOrDefault<
+String>(
+listViewChatmessagesRecord
+.message,
+'Er zijn heel veel events, welk genre zoek je?',
+),
+style: FlutterFlowTheme
+.of(context)
+.bodyMedium
+.override(
+font: GoogleFonts
+.inter(
+fontWeight: FlutterFlowTheme.of(
+context)
+.bodyMedium
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(
+context)
+.bodyMedium
+.fontStyle,
+),
+letterSpacing:
+0.0,
+fontWeight: FlutterFlowTheme.of(
+context)
+.bodyMedium
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(
+context)
+.bodyMedium
+.fontStyle,
+),
+),
+],
+),
+),
+),
+],
+),
+),
+],
+),
+),
+],
+),
+),
+);
+},
+);
+},
+),
+),
+Container(
+decoration: BoxDecoration(),
+child: Column(
+mainAxisSize: MainAxisSize.max,
+children: [
+if (_model.uploadedFileUrls_uploadDataHbj1.length != 0)
+Padding(
+padding: EdgeInsetsDirectional.fromSTEB(
+12.0, 12.0, 12.0, 12.0),
+child: Builder(
+builder: (context) {
+final images = _model
+.uploadedFileUrls_uploadDataHbj1
+.toList();
 
-                                    downloadUrls = (await Future.wait(
-                                      selectedMedia.map(
-                                        (m) async => await uploadData(
-                                            m.storagePath, m.bytes),
-                                      ),
-                                    ))
-                                        .where((u) => u != null)
-                                        .map((u) => u!)
-                                        .toList();
-                                  } finally {
-                                    ScaffoldMessenger.of(context)
-                                        .hideCurrentSnackBar();
-                                    _model.isDataUploading_uploadDataHbj1 =
-                                        false;
-                                  }
-                                  if (selectedUploadedFiles.length ==
-                                          selectedMedia.length &&
-                                      downloadUrls.length ==
-                                          selectedMedia.length) {
-                                    safeSetState(() {
-                                      _model.uploadedLocalFiles_uploadDataHbj1 =
-                                          selectedUploadedFiles;
-                                      _model.uploadedFileUrls_uploadDataHbj1 =
-                                          downloadUrls;
-                                    });
-                                    showUploadMessage(context, 'Success!');
-                                  } else {
-                                    safeSetState(() {});
-                                    showUploadMessage(
-                                        context, 'Failed to upload data');
-                                    return;
-                                  }
-                                }
-                              },
-                            ),
-                            FlutterFlowIconButton(
-                              borderRadius: 8.0,
-                              buttonSize: 40.0,
-                              icon: Icon(
-                                Icons.keyboard_voice_outlined,
-                                color:
-                                    FlutterFlowTheme.of(context).secondaryText,
-                                size: 24.0,
-                              ),
-                              onPressed: () async {
-                                final selectedFiles = await selectFiles(
-                                  allowedExtensions: ['mp3'],
-                                  multiFile: false,
-                                );
-                                if (selectedFiles != null) {
-                                  safeSetState(() => _model
-                                      .isDataUploading_uploadDataUue11 = true);
-                                  var selectedUploadedFiles =
-                                      <FFUploadedFile>[];
+return Row(
+mainAxisSize: MainAxisSize.max,
+children:
+List.generate(images.length, (imagesIndex) {
+final imagesItem = images[imagesIndex];
+return Padding(
+padding: EdgeInsetsDirectional.fromSTEB(
+0.0, 0.0, 12.0, 0.0),
+child: ClipRRect(
+borderRadius: BorderRadius.circular(8.0),
+child: Image.network(
+imagesItem,
+width: 120.0,
+height: 100.0,
+fit: BoxFit.cover,
+),
+),
+);
+}),
+);
+},
+),
+),
+if (_model.uploadedFileUrl_uploadDataUue11.isNotEmpty)
+Padding(
+padding: EdgeInsetsDirectional.fromSTEB(
+12.0, 0.0, 12.0, 0.0),
+child: Column(
+mainAxisSize: MainAxisSize.max,
+children: [
+FlutterFlowAudioPlayer(
+audio: Audio.network(
+_model.uploadedFileUrl_uploadDataUue11,
+metas: Metas(),
+),
+titleTextStyle: FlutterFlowTheme.of(context)
+.titleLarge
+.override(
+font: GoogleFonts.interTight(
+fontWeight: FlutterFlowTheme.of(context)
+.titleLarge
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(context)
+.titleLarge
+.fontStyle,
+),
+letterSpacing: 0.0,
+fontWeight: FlutterFlowTheme.of(context)
+.titleLarge
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(context)
+.titleLarge
+.fontStyle,
+),
+playbackDurationTextStyle: FlutterFlowTheme.of(
+context)
+.labelMedium
+.override(
+font: GoogleFonts.inter(
+fontWeight: FlutterFlowTheme.of(context)
+.labelMedium
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(context)
+.labelMedium
+.fontStyle,
+),
+letterSpacing: 0.0,
+fontWeight: FlutterFlowTheme.of(context)
+.labelMedium
+.fontWeight,
+fontStyle: FlutterFlowTheme.of(context)
+.labelMedium
+.fontStyle,
+),
+fillColor: FlutterFlowTheme.of(context)
+.secondaryBackground,
+playbackButtonColor:
+FlutterFlowTheme.of(context).primary,
+activeTrackColor:
+FlutterFlowTheme.of(context).primary,
+inactiveTrackColor:
+FlutterFlowTheme.of(context).alternate,
+elevation: 0.0,
+playInBackground: PlayInBackground
+.disabledRestoreOnForeground,
+),
+],
+),
+),
+Padding(
+padding: EdgeInsetsDirectional.fromSTEB(
+12.0, 0.0, 12.0, 12.0),
+child: Row(
+mainAxisSize: MainAxisSize.max,
+children: [
+FlutterFlowIconButton(
+borderRadius: 8.0,
+buttonSize: 40.0,
+icon: Icon(
+Icons.camera_enhance_outlined,
+color:
+FlutterFlowTheme.of(context).secondaryText,
+size: 24.0,
+),
+onPressed: () async {
+final selectedMedia = await selectMedia(
+mediaSource: MediaSource.photoGallery,
+multiImage: true,
+);
+if (selectedMedia != null &&
+selectedMedia.every((m) =>
+validateFileFormat(
+m.storagePath, context))) {
+safeSetState(() => _model
+.isDataUploading_uploadDataHbj1 = true);
+var selectedUploadedFiles =
+<FFUploadedFile>[];
 
-                                  var downloadUrls = <String>[];
-                                  try {
-                                    selectedUploadedFiles = selectedFiles
-                                        .map((m) => FFUploadedFile(
-                                              name:
-                                                  m.storagePath.split('/').last,
-                                              bytes: m.bytes,
-                                            ))
-                                        .toList();
+var downloadUrls = <String>[];
+try {
+showUploadMessage(
+context,
+'Uploading file...',
+showLoading: true,
+);
+selectedUploadedFiles = selectedMedia
+.map((m) => FFUploadedFile(
+name:
+m.storagePath.split('/').last,
+bytes: m.bytes,
+height: m.dimensions?.height,
+width: m.dimensions?.width,
+blurHash: m.blurHash,
+))
+.toList();
 
-                                    downloadUrls = (await Future.wait(
-                                      selectedFiles.map(
-                                        (f) async => await uploadData(
-                                            f.storagePath, f.bytes),
-                                      ),
-                                    ))
-                                        .where((u) => u != null)
-                                        .map((u) => u!)
-                                        .toList();
-                                  } finally {
-                                    _model.isDataUploading_uploadDataUue11 =
-                                        false;
-                                  }
-                                  if (selectedUploadedFiles.length ==
-                                          selectedFiles.length &&
-                                      downloadUrls.length ==
-                                          selectedFiles.length) {
-                                    safeSetState(() {
-                                      _model.uploadedLocalFile_uploadDataUue11 =
-                                          selectedUploadedFiles.first;
-                                      _model.uploadedFileUrl_uploadDataUue11 =
-                                          downloadUrls.first;
-                                    });
-                                  } else {
-                                    safeSetState(() {});
-                                    return;
-                                  }
-                                }
-                              },
-                            ),
-                            Expanded(
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    1.0, 0.0, 12.0, 0.0),
-                                child: Container(
-                                  width: 200.0,
-                                  child: TextFormField(
-                                    controller: _model.textController,
-                                    focusNode: _model.textFieldFocusNode,
-                                    autofocus: false,
-                                    obscureText: false,
-                                    decoration: InputDecoration(
-                                      isDense: true,
-                                      labelStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .labelMedium
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .labelMedium
-                                                      .fontStyle,
-                                            ),
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .labelMedium
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .labelMedium
-                                                    .fontStyle,
-                                          ),
-                                      hintText:
-                                          ffTranslate(context, 'Jou bericht'),
-                                      hintStyle: FlutterFlowTheme.of(context)
-                                          .labelMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
-                                              fontWeight:
-                                                  FlutterFlowTheme.of(context)
-                                                      .labelMedium
-                                                      .fontWeight,
-                                              fontStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .labelMedium
-                                                      .fontStyle,
-                                            ),
-                                            letterSpacing: 0.0,
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .labelMedium
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .labelMedium
-                                                    .fontStyle,
-                                          ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .alternate,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(16.0),
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Color(0x00000000),
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(16.0),
-                                      ),
-                                      errorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(16.0),
-                                      ),
-                                      focusedErrorBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: FlutterFlowTheme.of(context)
-                                              .error,
-                                          width: 1.0,
-                                        ),
-                                        borderRadius:
-                                            BorderRadius.circular(16.0),
-                                      ),
-                                      filled: true,
-                                      fillColor: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                    ),
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          font: GoogleFonts.inter(
-                                            fontWeight:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontWeight,
-                                            fontStyle:
-                                                FlutterFlowTheme.of(context)
-                                                    .bodyMedium
-                                                    .fontStyle,
-                                          ),
-                                          letterSpacing: 0.0,
-                                          fontWeight:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontWeight,
-                                          fontStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontStyle,
-                                        ),
-                                    cursorColor: FlutterFlowTheme.of(context)
-                                        .primaryText,
-                                    validator: _model.textControllerValidator
-                                        .asValidator(context),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                ValueListenableBuilder<TextEditingValue>(
-                                  valueListenable: _model.textController!,
-                                  builder: (context, value, child) {
-                                    return FlutterFlowIconButton(
-                                      borderRadius: 100.0,
-                                      buttonSize: 40.0,
-                                      fillColor:
-                                          FlutterFlowTheme.of(context).primary,
-                                      disabledColor:
-                                          FlutterFlowTheme.of(context)
-                                              .alternate,
-                                      disabledIconColor:
-                                          FlutterFlowTheme.of(context)
-                                              .secondaryText,
-                                      icon: Icon(
-                                        Icons.send_outlined,
-                                        color:
-                                            FlutterFlowTheme.of(context).info,
-                                        size: 24.0,
-                                      ),
-                                      onPressed: (value.text.isEmpty)
-                                          ? null
-                                          : () async {
-                                              await ChatmessagesRecord
-                                                      .createDoc(
-                                                          widget!.receiveChat!)
-                                                  .set({
-                                                ...createChatmessagesRecordData(
-                                                  message: value.text,
-                                                  timestamp:
-                                                      getCurrentTimestamp,
-                                                  uidofsender:
-                                                      currentUserReference,
-                                                  nameofsender:
-                                                      currentUserDisplayName,
-                                                  voice: _model
-                                                          .uploadedFileUrl_uploadDataUue11
-                                                          .isNotEmpty
-                                                      ? _model
-                                                          .uploadedFileUrl_uploadDataUue11
-                                                      : null,
-                                                ),
-                                                ...mapToFirestore(
-                                                  {
-                                                    'images': _model
-                                                        .uploadedFileUrls_uploadDataHbj1,
-                                                  },
-                                                ),
-                                              });
+downloadUrls = (await Future.wait(
+selectedMedia.map(
+(m) async => await uploadData(
+m.storagePath, m.bytes),
+),
+))
+.where((u) => u != null)
+.map((u) => u!)
+.toList();
+} finally {
+ScaffoldMessenger.of(context)
+.hideCurrentSnackBar();
+_model.isDataUploading_uploadDataHbj1 =
+false;
+}
+if (selectedUploadedFiles.length ==
+selectedMedia.length &&
+downloadUrls.length ==
+selectedMedia.length) {
+safeSetState(() {
+_model.uploadedLocalFiles_uploadDataHbj1 =
+selectedUploadedFiles;
+_model.uploadedFileUrls_uploadDataHbj1 =
+downloadUrls;
+});
+showUploadMessage(context, 'Success!');
+} else {
+safeSetState(() {});
+showUploadMessage(
+context, 'Failed to upload data');
+return;
+}
+}
+},
+),
+FlutterFlowIconButton(
+borderRadius: 8.0,
+buttonSize: 40.0,
+icon: Icon(
+Icons.keyboard_voice_outlined,
+color:
+FlutterFlowTheme.of(context).secondaryText,
+size: 24.0,
+),
+onPressed: () async {
+final selectedFiles = await selectFiles(
+allowedExtensions: ['mp3'],
+multiFile: false,
+);
+if (selectedFiles != null) {
+safeSetState(() => _model
+.isDataUploading_uploadDataUue11 = true);
+var selectedUploadedFiles =
+<FFUploadedFile>[];
 
-                                              await widget!.receiveChat!
-                                                  .update({
-                                                ...createChatsRecordData(
-                                                  lastmessage: value.text,
-                                                  timestamp:
-                                                      getCurrentTimestamp,
-                                                  lastvoice: _model
-                                                          .uploadedFileUrl_uploadDataUue11
-                                                          .isNotEmpty
-                                                      ? _model
-                                                          .uploadedFileUrl_uploadDataUue11
-                                                      : null,
-                                                ),
-                                                ...mapToFirestore(
-                                                  {
-                                                    'lastmessageseenby':
-                                                        FieldValue.delete(),
-                                                    'images': _model
-                                                        .uploadedFileUrls_uploadDataHbj1,
-                                                  },
-                                                ),
-                                              });
+var downloadUrls = <String>[];
+try {
+selectedUploadedFiles = selectedFiles
+.map((m) => FFUploadedFile(
+name:
+m.storagePath.split('/').last,
+bytes: m.bytes,
+))
+.toList();
 
-                                              await widget!.receiveChat!
-                                                  .update({
-                                                ...mapToFirestore(
-                                                  {
-                                                    'lastmessageseenby':
-                                                        FieldValue.arrayUnion([
-                                                      currentUserReference
-                                                    ]),
-                                                  },
-                                                ),
-                                              });
-                                              safeSetState(() {
-                                                _model.textController?.clear();
-                                                // Clear any selected attachments after sending
-                                                _model.uploadedFileUrls_uploadDataHbj1 =
-                                                    [];
-                                                _model.uploadedFileUrl_uploadDataUue11 =
-                                                    '';
-                                              });
-                                            },
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
+downloadUrls = (await Future.wait(
+selectedFiles.map(
+(f) async => await uploadData(
+f.storagePath, f.bytes),
+),
+))
+.where((u) => u != null)
+.map((u) => u!)
+.toList();
+} finally {
+_model.isDataUploading_uploadDataUue11 =
+false;
+}
+if (selectedUploadedFiles.length ==
+selectedFiles.length &&
+downloadUrls.length ==
+selectedFiles.length) {
+safeSetState(() {
+_model.uploadedLocalFile_uploadDataUue11 =
+selectedUploadedFiles.first;
+_model.uploadedFileUrl_uploadDataUue11 =
+downloadUrls.first;
+});
+} else {
+safeSetState(() {});
+return;
+}
+}
+},
+),
+Expanded(
+child: Padding(
+padding: EdgeInsetsDirectional.fromSTEB(
+1.0, 0.0, 12.0, 0.0),
+child: Container(
+width: 200.0,
+child: TextFormField(
+controller: _model.textController,
+focusNode: _model.textFieldFocusNode,
+autofocus: false,
+obscureText: false,
+decoration: InputDecoration(
+isDense: true,
+labelStyle: FlutterFlowTheme.of(context)
+.labelMedium
+.override(
+font: GoogleFonts.inter(
+fontWeight:
+FlutterFlowTheme.of(context)
+.labelMedium
+.fontWeight,
+fontStyle:
+FlutterFlowTheme.of(context)
+.labelMedium
+.fontStyle,
+),
+letterSpacing: 0.0,
+fontWeight:
+FlutterFlowTheme.of(context)
+.labelMedium
+.fontWeight,
+fontStyle:
+FlutterFlowTheme.of(context)
+.labelMedium
+.fontStyle,
+),
+hintText:
+ffTranslate(context, 'Jou bericht'),
+hintStyle: FlutterFlowTheme.of(context)
+.labelMedium
+.override(
+font: GoogleFonts.inter(
+fontWeight:
+FlutterFlowTheme.of(context)
+.labelMedium
+.fontWeight,
+fontStyle:
+FlutterFlowTheme.of(context)
+.labelMedium
+.fontStyle,
+),
+letterSpacing: 0.0,
+fontWeight:
+FlutterFlowTheme.of(context)
+.labelMedium
+.fontWeight,
+fontStyle:
+FlutterFlowTheme.of(context)
+.labelMedium
+.fontStyle,
+),
+enabledBorder: OutlineInputBorder(
+borderSide: BorderSide(
+color: FlutterFlowTheme.of(context)
+.alternate,
+width: 1.0,
+),
+borderRadius:
+BorderRadius.circular(16.0),
+),
+focusedBorder: OutlineInputBorder(
+borderSide: BorderSide(
+color: Color(0x00000000),
+width: 1.0,
+),
+borderRadius:
+BorderRadius.circular(16.0),
+),
+errorBorder: OutlineInputBorder(
+borderSide: BorderSide(
+color: FlutterFlowTheme.of(context)
+.error,
+width: 1.0,
+),
+borderRadius:
+BorderRadius.circular(16.0),
+),
+focusedErrorBorder: OutlineInputBorder(
+borderSide: BorderSide(
+color: FlutterFlowTheme.of(context)
+.error,
+width: 1.0,
+),
+borderRadius:
+BorderRadius.circular(16.0),
+),
+filled: true,
+fillColor: FlutterFlowTheme.of(context)
+.secondaryBackground,
+),
+style: FlutterFlowTheme.of(context)
+.bodyMedium
+.override(
+font: GoogleFonts.inter(
+fontWeight:
+FlutterFlowTheme.of(context)
+.bodyMedium
+.fontWeight,
+fontStyle:
+FlutterFlowTheme.of(context)
+.bodyMedium
+.fontStyle,
+),
+letterSpacing: 0.0,
+fontWeight:
+FlutterFlowTheme.of(context)
+.bodyMedium
+.fontWeight,
+fontStyle:
+FlutterFlowTheme.of(context)
+.bodyMedium
+.fontStyle,
+),
+cursorColor: FlutterFlowTheme.of(context)
+.primaryText,
+validator: _model.textControllerValidator
+.asValidator(context),
+),
+),
+),
+),
+Row(
+mainAxisSize: MainAxisSize.max,
+children: [
+ValueListenableBuilder<TextEditingValue>(
+valueListenable: _model.textController!,
+builder: (context, value, child) {
+return FlutterFlowIconButton(
+borderRadius: 100.0,
+buttonSize: 40.0,
+fillColor:
+FlutterFlowTheme.of(context).primary,
+disabledColor:
+FlutterFlowTheme.of(context)
+.alternate,
+disabledIconColor:
+FlutterFlowTheme.of(context)
+.secondaryText,
+icon: Icon(
+Icons.send_outlined,
+color:
+FlutterFlowTheme.of(context).info,
+size: 24.0,
+),
+onPressed: (value.text.isEmpty)
+? null
+: () async {
+await ChatmessagesRecord
+.createDoc(
+widget!.receiveChat!)
+.set({
+...createChatmessagesRecordData(
+message: value.text,
+timestamp:
+getCurrentTimestamp,
+uidofsender:
+currentUserReference,
+nameofsender:
+currentUserDisplayName,
+voice: _model
+.uploadedFileUrl_uploadDataUue11
+.isNotEmpty
+? _model
+.uploadedFileUrl_uploadDataUue11
+: null,
+),
+...mapToFirestore(
+{
+'images': _model
+.uploadedFileUrls_uploadDataHbj1,
+},
+),
+});
+
+await widget!.receiveChat!
+.update({
+...createChatsRecordData(
+lastmessage: value.text,
+timestamp:
+getCurrentTimestamp,
+lastvoice: _model
+.uploadedFileUrl_uploadDataUue11
+.isNotEmpty
+? _model
+.uploadedFileUrl_uploadDataUue11
+: null,
+),
+...mapToFirestore(
+{
+'lastmessageseenby':
+FieldValue.delete(),
+'images': _model
+.uploadedFileUrls_uploadDataHbj1,
+},
+),
+});
+
+await widget!.receiveChat!
+.update({
+...mapToFirestore(
+{
+'lastmessageseenby':
+FieldValue.arrayUnion([
+currentUserReference
+]),
+},
+),
+});
+safeSetState(() {
+_model.textController?.clear();
+// Clear any selected attachments after sending
+_model.uploadedFileUrls_uploadDataHbj1 =
+[];
+_model.uploadedFileUrl_uploadDataUue11 =
+'';
+});
+},
+);
+},
+),
+],
+),
+],
+),
+),
+],
+),
+),
+],
+),
+),
+);
+},
+);
+}
 }

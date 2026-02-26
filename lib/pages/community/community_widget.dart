@@ -3,6 +3,7 @@ import '/backend/backend.dart';
 import '/components/emptycommunity_widget.dart';
 import '/components/main_tab_app_bar.dart';
 import '/components/navbar/navbar_widget.dart';
+import '/components/shimmer_loaders/shimmer_loaders.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
@@ -45,6 +46,31 @@ class _CommunityWidgetState extends State<CommunityWidget> {
     super.dispose();
   }
 
+  Future<void> _performSearch() async {
+    final searchText = _model.textController?.text ?? '';
+    if (searchText.isEmpty) {
+      _model.simpleSearchResults = [];
+      safeSetState(() {});
+      return;
+    }
+    await queryCommunitiesRecordOnce()
+        .then(
+          (records) => _model.simpleSearchResults = TextSearch(
+            records
+                .map(
+                  (record) => TextSearchItem.fromTerms(record, [
+                    record.name ?? '',
+                    record.subcategory ?? '',
+                    record.category ?? '',
+                  ]),
+                )
+                .toList(),
+          ).search(searchText).map((r) => r.object).toList(),
+        )
+        .onError((_, __) => _model.simpleSearchResults = [])
+        .whenComplete(() => safeSetState(() {}));
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -55,7 +81,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-        appBar: const MainTabAppBar(),
+        appBar: const MainTabAppBar(showShopActions: true),
         body: SafeArea(
           top: true,
           child: Stack(
@@ -79,28 +105,15 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                 controller: _model.textController,
                                 focusNode: _model.textFieldFocusNode,
                                 onFieldSubmitted: (_) async {
-                                  await queryCommunitiesRecordOnce()
-                                      .then(
-                                        (records) => _model
-                                            .simpleSearchResults = TextSearch(
-                                          records
-                                              .map(
-                                                (record) =>
-                                                    TextSearchItem.fromTerms(
-                                                        record, [
-                                                  record.name!,
-                                                  record.subcategory!
-                                                ]),
-                                              )
-                                              .toList(),
-                                        )
-                                            .search(_model.textController.text)
-                                            .map((r) => r.object)
-                                            .toList(),
-                                      )
-                                      .onError((_, __) =>
-                                          _model.simpleSearchResults = [])
-                                      .whenComplete(() => safeSetState(() {}));
+                                  await _performSearch();
+                                },
+                                onChanged: (value) async {
+                                  if (value.isEmpty) {
+                                    _model.simpleSearchResults = [];
+                                    safeSetState(() {});
+                                  } else {
+                                    await _performSearch();
+                                  }
                                 },
                                 autofocus: false,
                                 obscureText: false,
@@ -184,6 +197,20 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                     Icons.search,
                                     size: 24.0,
                                   ),
+                                  suffixIcon: (_model.textController?.text.isNotEmpty ?? false)
+                                      ? IconButton(
+                                          icon: Icon(
+                                            Icons.clear,
+                                            size: 20.0,
+                                            color: FlutterFlowTheme.of(context).secondaryText,
+                                          ),
+                                          onPressed: () {
+                                            _model.textController?.clear();
+                                            _model.simpleSearchResults = [];
+                                            safeSetState(() {});
+                                          },
+                                        )
+                                      : null,
                                 ),
                                 style: FlutterFlowTheme.of(context)
                                     .bodyMedium
@@ -227,18 +254,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                               builder: (context, snapshot) {
                                 // Customize what your widget looks like when it's loading.
                                 if (!snapshot.hasData) {
-                                  return Center(
-                                    child: SizedBox(
-                                      width: 50.0,
-                                      height: 50.0,
-                                      child: FFShimmerLoadingIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                          FlutterFlowTheme.of(context).primary,
-                                        ),
-                                      ),
-                                    ),
-                                  );
+                                  return const ShimmerBar(width: 180, height: 22);
                                 }
                                 List<AppPreferenceRecord>
                                     textAppPreferenceRecordList =
@@ -319,7 +335,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                   ? FlutterFlowTheme.of(context)
                                                       .secondaryBackground
                                                   : FlutterFlowTheme.of(context)
-                                                      .primaryBackground,
+                                                      .primaryText,
                                               FlutterFlowTheme.of(context)
                                                   .primaryText,
                                             ),
@@ -372,7 +388,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                                   ? FlutterFlowTheme.of(context)
                                                       .secondaryBackground
                                                   : FlutterFlowTheme.of(context)
-                                                      .primaryBackground,
+                                                      .primaryText,
                                               FlutterFlowTheme.of(context)
                                                   .primaryText,
                                             ),
@@ -423,9 +439,9 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                             color: valueOrDefault<Color>(
                                               _model.onbutton == 'Role'
                                                   ? FlutterFlowTheme.of(context)
-                                                      .primaryBackground
+                                                      .secondaryBackground
                                                   : FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
+                                                      .primaryText,
                                               FlutterFlowTheme.of(context)
                                                   .primaryText,
                                             ),
@@ -1071,362 +1087,215 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                   ),
                 ),
               ),
-              if (_model.simpleSearchResults.isNotEmpty)
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 100.0, 0.0, 0.0),
-                  child: StreamBuilder<List<CommunitiesRecord>>(
-                    stream: queryCommunitiesRecord(
-                      queryBuilder: (communitiesRecord) =>
-                          communitiesRecord.where(
-                        'name',
-                        isEqualTo:
-                            (_model.simpleSearchResults.isNotEmpty).toString(),
-                      ),
-                    ),
-                    builder: (context, snapshot) {
-                      // Customize what your widget looks like when it's loading.
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: SizedBox(
-                            width: 50.0,
-                            height: 50.0,
-                            child: FFShimmerLoadingIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                FlutterFlowTheme.of(context).primary,
+              if (_model.simpleSearchResults.isNotEmpty ||
+                  (_model.textController?.text.isNotEmpty ?? false))
+                Container(
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                  padding: EdgeInsetsDirectional.fromSTEB(12.0, 100.0, 12.0, 80.0),
+                  child: _model.simpleSearchResults.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.search_off,
+                                size: 64,
+                                color: FlutterFlowTheme.of(context).secondaryText,
                               ),
-                            ),
-                          ),
-                        );
-                      }
-                      List<CommunitiesRecord> columnCommunitiesRecordList =
-                          snapshot.data!;
-                      if (columnCommunitiesRecordList.isEmpty) {
-                        return Center(
-                          child: Image.asset(
-                            'assets/images/ae8ac2fa217d23aadcc913989fcc34a2-removebg-preview.png',
-                          ),
-                        );
-                      }
-
-                      return Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: List.generate(
-                            columnCommunitiesRecordList.length, (columnIndex) {
-                          final columnCommunitiesRecord =
-                              columnCommunitiesRecordList[columnIndex];
-                          return Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 12.0, 0.0, 0.0),
-                            child: InkWell(
-                              splashColor: Colors.transparent,
-                              focusColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () async {
-                                context.pushNamed(
-                                  Community2Widget.routeName,
-                                  queryParameters: {
-                                    'communityref': serializeParam(
-                                      columnCommunitiesRecord.reference,
-                                      ParamType.DocumentReference,
-                                    ),
-                                  }.withoutNulls,
-                                  extra: <String, dynamic>{
-                                    kTransitionInfoKey: TransitionInfo(
-                                      hasTransition: true,
-                                      transitionType: PageTransitionType.fade,
-                                      duration: Duration(milliseconds: 0),
-                                    ),
-                                  },
-                                );
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 4.0,
-                                      color: Color(0x33000000),
-                                      offset: Offset(
-                                        0.0,
-                                        2.0,
+                              SizedBox(height: 16),
+                              Text(
+                                'No communities found',
+                                style: FlutterFlowTheme.of(context)
+                                    .bodyMedium
+                                    .override(
+                                      font: GoogleFonts.inter(
+                                        fontWeight: FontWeight.w500,
                                       ),
-                                    )
-                                  ],
-                                  borderRadius: BorderRadius.circular(12.0),
-                                ),
-                                child: Stack(
-                                  alignment: AlignmentDirectional(0.0, 0.4),
-                                  children: [
-                                    Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      children: [
-                                        Container(
-                                          width: double.infinity,
-                                          height: 105.0,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              fit: BoxFit.cover,
-                                              image: Image.network(
-                                                valueOrDefault<String>(
-                                                  columnCommunitiesRecord.image,
-                                                  'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/d75zc6g7yshz/7373193a9dbc8be8a2cd02a9cdf9f291473d5811.jpg',
-                                                ),
-                                              ).image,
-                                            ),
-                                            borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(0.0),
-                                              bottomRight: Radius.circular(0.0),
-                                              topLeft: Radius.circular(12.0),
-                                              topRight: Radius.circular(12.0),
-                                            ),
-                                          ),
-                                        ),
-                                        Container(
-                                          width: double.infinity,
-                                          height: 43.4,
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryBackground,
-                                            borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(12.0),
-                                              bottomRight:
-                                                  Radius.circular(12.0),
-                                              topLeft: Radius.circular(0.0),
-                                              topRight: Radius.circular(0.0),
-                                            ),
-                                            border: Border.all(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .alternate,
-                                            ),
-                                          ),
-                                          child: Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(
-                                                    12.0, 0.0, 12.0, 0.0),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Text(
-                                                  valueOrDefault<String>(
-                                                    columnCommunitiesRecord
-                                                        .name,
-                                                    '4 mensen bevinden zich in deze community',
-                                                  ),
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        font: GoogleFonts.inter(
-                                                          fontWeight:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontWeight,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .secondaryText,
-                                                        fontSize: 12.0,
-                                                        letterSpacing: 0.0,
-                                                        fontWeight:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontWeight,
-                                                        fontStyle:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .bodyMedium
-                                                                .fontStyle,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
+                                      color: FlutterFlowTheme.of(context).secondaryText,
+                                      letterSpacing: 0.0,
                                     ),
-                                    Align(
-                                      alignment:
-                                          AlignmentDirectional(0.0, 0.37),
-                                      child: Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            32.0, 0.0, 32.0, 0.0),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Container(
-                                              width: 130.5,
-                                              height: 27.4,
-                                              decoration: BoxDecoration(
-                                                color: Color(0xFF1F7A8C),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    valueOrDefault<String>(
-                                                      columnCommunitiesRecord
-                                                          .category,
-                                                      'Category',
-                                                    ),
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          font:
-                                                              GoogleFonts.inter(
-                                                            fontWeight:
-                                                                FontWeight.w500,
-                                                            fontStyle:
-                                                                FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .bodyMedium
-                                                                    .fontStyle,
-                                                          ),
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryBackground,
-                                                          letterSpacing: 0.0,
-                                                          fontWeight:
-                                                              FontWeight.w500,
-                                                          fontStyle:
-                                                              FlutterFlowTheme.of(
-                                                                      context)
-                                                                  .bodyMedium
-                                                                  .fontStyle,
-                                                        ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 12.0),
+                                child: Text(
+                                  'Search Results (${_model.simpleSearchResults.length})',
+                                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                        font: GoogleFonts.inter(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                        fontSize: 15.0,
+                                        letterSpacing: 0.0,
+                                      ),
+                                ),
+                              ),
+                              ...List.generate(_model.simpleSearchResults.length, (index) {
+                                final searchResult = _model.simpleSearchResults[index];
+                                return Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 12.0),
+                                  child: InkWell(
+                                    splashColor: Colors.transparent,
+                                    focusColor: Colors.transparent,
+                                    hoverColor: Colors.transparent,
+                                    highlightColor: Colors.transparent,
+                                    onTap: () async {
+                                      context.pushNamed(
+                                        Community2Widget.routeName,
+                                        queryParameters: {
+                                          'communityref': serializeParam(
+                                            searchResult.reference,
+                                            ParamType.DocumentReference,
+                                          ),
+                                        }.withoutNulls,
+                                        extra: <String, dynamic>{
+                                          kTransitionInfoKey: TransitionInfo(
+                                            hasTransition: true,
+                                            transitionType: PageTransitionType.fade,
+                                            duration: Duration(milliseconds: 0),
+                                          ),
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 4.0,
+                                            color: Color(0x33000000),
+                                            offset: Offset(0.0, 2.0),
+                                          )
+                                        ],
+                                        borderRadius: BorderRadius.circular(12.0),
+                                      ),
+                                      child: Stack(
+                                        alignment: AlignmentDirectional(0.0, 0.4),
+                                        children: [
+                                          Column(
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [
+                                              Container(
+                                                width: double.infinity,
+                                                height: 105.0,
+                                                decoration: BoxDecoration(
+                                                  image: DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: Image.network(
+                                                      valueOrDefault<String>(
+                                                        searchResult.image,
+                                                        'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/d75zc6g7yshz/7373193a9dbc8be8a2cd02a9cdf9f291473d5811.jpg',
+                                                      ),
+                                                    ).image,
                                                   ),
-                                                ],
+                                                  borderRadius: BorderRadius.only(
+                                                    bottomLeft: Radius.circular(0.0),
+                                                    bottomRight: Radius.circular(0.0),
+                                                    topLeft: Radius.circular(12.0),
+                                                    topRight: Radius.circular(12.0),
+                                                  ),
+                                                ),
                                               ),
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      12.0, 0.0, 12.0, 0.0),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Stack(
+                                              Container(
+                                                width: double.infinity,
+                                                height: 43.4,
+                                                decoration: BoxDecoration(
+                                                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                                                  borderRadius: BorderRadius.only(
+                                                    bottomLeft: Radius.circular(12.0),
+                                                    bottomRight: Radius.circular(12.0),
+                                                    topLeft: Radius.circular(0.0),
+                                                    topRight: Radius.circular(0.0),
+                                                  ),
+                                                  border: Border.all(
+                                                    color: FlutterFlowTheme.of(context).alternate,
+                                                  ),
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
+                                                  child: Row(
+                                                    mainAxisSize: MainAxisSize.max,
                                                     children: [
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    32.0,
-                                                                    0.0,
-                                                                    0.0,
-                                                                    0.0),
-                                                        child: Container(
-                                                          width: 32.0,
-                                                          height: 32.0,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .secondaryBackground,
-                                                            image:
-                                                                DecorationImage(
-                                                              fit: BoxFit.cover,
-                                                              image:
-                                                                  Image.asset(
-                                                                'assets/images/9e729cfc2fb3451f2790627112ebba6732cb7a49.jpg',
-                                                              ).image,
-                                                            ),
-                                                            shape:
-                                                                BoxShape.circle,
+                                                      Expanded(
+                                                        child: Text(
+                                                          valueOrDefault<String>(
+                                                            searchResult.name,
+                                                            'Community',
                                                           ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    18.0,
-                                                                    0.0,
-                                                                    20.0,
-                                                                    0.0),
-                                                        child: Container(
-                                                          width: 32.0,
-                                                          height: 32.0,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .secondaryBackground,
-                                                            image:
-                                                                DecorationImage(
-                                                              fit: BoxFit.cover,
-                                                              image:
-                                                                  Image.asset(
-                                                                'assets/images/a764303deed43df05ca3d05d09059507d646a98c.jpg',
-                                                              ).image,
-                                                            ),
-                                                            shape:
-                                                                BoxShape.circle,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    0.0,
-                                                                    0.0,
-                                                                    48.0,
-                                                                    0.0),
-                                                        child: Container(
-                                                          width: 32.0,
-                                                          height: 32.0,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            image:
-                                                                DecorationImage(
-                                                              fit: BoxFit.cover,
-                                                              image:
-                                                                  Image.asset(
-                                                                'assets/images/d12802e9961560961cad4e51a2d1175c20b7c2ed.jpg',
-                                                              ).image,
-                                                            ),
-                                                            shape:
-                                                                BoxShape.circle,
-                                                          ),
+                                                          style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                font: GoogleFonts.inter(
+                                                                  fontWeight: FlutterFlowTheme.of(context).bodyMedium.fontWeight,
+                                                                  fontStyle: FlutterFlowTheme.of(context).bodyMedium.fontStyle,
+                                                                ),
+                                                                color: FlutterFlowTheme.of(context).secondaryText,
+                                                                fontSize: 12.0,
+                                                                letterSpacing: 0.0,
+                                                              ),
+                                                          overflow: TextOverflow.ellipsis,
                                                         ),
                                                       ),
                                                     ],
                                                   ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Align(
+                                            alignment: AlignmentDirectional(0.0, 0.37),
+                                            child: Padding(
+                                              padding: EdgeInsetsDirectional.fromSTEB(32.0, 0.0, 32.0, 0.0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                children: [
+                                                  Container(
+                                                    width: 130.5,
+                                                    height: 27.4,
+                                                    decoration: BoxDecoration(
+                                                      color: Color(0xFF1F7A8C),
+                                                      borderRadius: BorderRadius.circular(8.0),
+                                                    ),
+                                                    child: Row(
+                                                      mainAxisSize: MainAxisSize.max,
+                                                      mainAxisAlignment: MainAxisAlignment.center,
+                                                      children: [
+                                                        Flexible(
+                                                          child: Text(
+                                                            valueOrDefault<String>(
+                                                              searchResult.category,
+                                                              'Category',
+                                                            ),
+                                                            style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                                  font: GoogleFonts.inter(
+                                                                    fontWeight: FontWeight.w500,
+                                                                  ),
+                                                                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                                                                  letterSpacing: 0.0,
+                                                                ),
+                                                            overflow: TextOverflow.ellipsis,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
                                                 ],
                                               ),
                                             ),
-                                          ],
-                                        ),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                        }),
-                      );
-                    },
-                  ),
+                                  ),
+                                );
+                              }),
+                            ],
+                          ),
+                        ),
                 ),
               Align(
                 alignment: AlignmentDirectional(0.0, 1.0),

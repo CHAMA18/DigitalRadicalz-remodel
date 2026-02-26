@@ -65,6 +65,34 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
     super.dispose();
   }
 
+  void _parseAndSetPhoneNumber(String phone) {
+    if (phone.isEmpty) return;
+    
+    // Try to find a matching country code
+    CountryCode? matchedCountry;
+    String remainingNumber = phone;
+    
+    // Sort by dial code length (longest first) to match more specific codes first
+    final sortedCountries = List<CountryCode>.from(countryCodes)
+      ..sort((a, b) => b.dialCode.length.compareTo(a.dialCode.length));
+    
+    for (final country in sortedCountries) {
+      if (phone.startsWith(country.dialCode)) {
+        matchedCountry = country;
+        remainingNumber = phone.substring(country.dialCode.length).trim();
+        break;
+      }
+    }
+    
+    if (matchedCountry != null) {
+      _model.selectedCountryCode = matchedCountry;
+      _model.phonnumberTextController!.text = remainingNumber;
+    } else {
+      // No country code found, just set the phone number as is
+      _model.phonnumberTextController!.text = phone;
+    }
+  }
+
   void _seedInitialValuesIfReady() {
     if (_didSeedInitialValues || currentUserDocument == null) {
       return;
@@ -87,8 +115,10 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
     if (_model.townnameTextController!.text.trim().isEmpty) {
       _model.townnameTextController!.text = user.town;
     }
-    if (_model.phonnumberTextController!.text.trim().isEmpty) {
-      _model.phonnumberTextController!.text = user.phoneNumber;
+    if (_model.phonnumberTextController!.text.trim().isEmpty && user.phoneNumber.isNotEmpty) {
+      // Parse existing phone number to extract country code
+      final phone = user.phoneNumber;
+      _parseAndSetPhoneNumber(phone);
     }
     if (user.birthday != null && _model.birthdayTextController!.text.isEmpty) {
       _model.datePicked = user.birthday;
@@ -144,6 +174,177 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
       _model.birthdayTextController?.text =
           dateTimeFormat('MM/dd/yyyy', _model.datePicked);
     });
+  }
+
+  void _showCountryPicker(BuildContext context) {
+    final theme = FlutterFlowTheme.of(context);
+    final searchController = TextEditingController();
+    List<CountryCode> filteredCountries = List.from(countryCodes);
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => StatefulBuilder(
+        builder: (ctx, setModalState) {
+          return Container(
+            height: MediaQuery.of(context).size.height * 0.7,
+            decoration: BoxDecoration(
+              color: theme.secondaryBackground,
+              borderRadius: const BorderRadius.vertical(
+                top: Radius.circular(20.0),
+              ),
+            ),
+            child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 12.0),
+                  width: 40.0,
+                  height: 4.0,
+                  decoration: BoxDecoration(
+                    color: theme.alternate,
+                    borderRadius: BorderRadius.circular(2.0),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Text(
+                    'Select Country',
+                    style: theme.titleMedium.override(
+                      font: GoogleFonts.interTight(fontWeight: FontWeight.w700),
+                      letterSpacing: 0.0,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TextField(
+                    controller: searchController,
+                    decoration: InputDecoration(
+                      hintText: 'Search country...',
+                      hintStyle: theme.labelMedium.override(
+                        font: GoogleFonts.inter(fontWeight: FontWeight.w500),
+                        color: theme.secondaryText,
+                        letterSpacing: 0.0,
+                      ),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: theme.secondaryText,
+                        size: 20.0,
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16.0,
+                        vertical: 12.0,
+                      ),
+                      filled: true,
+                      fillColor: theme.primaryBackground,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    style: theme.bodyMedium,
+                    onChanged: (value) {
+                      setModalState(() {
+                        filteredCountries = countryCodes
+                            .where((c) =>
+                                c.name.toLowerCase().contains(value.toLowerCase()) ||
+                                c.dialCode.contains(value) ||
+                                c.code.toLowerCase().contains(value.toLowerCase()))
+                            .toList();
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(height: 12.0),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: filteredCountries.length,
+                    itemBuilder: (ctx, index) {
+                      final country = filteredCountries[index];
+                      final isSelected = _model.selectedCountryCode?.code == country.code;
+                      return InkWell(
+                        onTap: () {
+                          safeSetState(() {
+                            _model.selectedCountryCode = country;
+                          });
+                          Navigator.pop(ctx);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 14.0,
+                          ),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? theme.primary.withValues(alpha: 0.1)
+                                : Colors.transparent,
+                            border: Border(
+                              bottom: BorderSide(
+                                color: theme.alternate.withValues(alpha: 0.5),
+                                width: 0.5,
+                              ),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              Text(
+                                country.flag,
+                                style: const TextStyle(fontSize: 24.0),
+                              ),
+                              const SizedBox(width: 12.0),
+                              Expanded(
+                                child: Text(
+                                  country.name,
+                                  style: theme.bodyMedium.override(
+                                    font: GoogleFonts.inter(
+                                      fontWeight: isSelected
+                                          ? FontWeight.w600
+                                          : FontWeight.w500,
+                                    ),
+                                    letterSpacing: 0.0,
+                                    fontWeight: isSelected
+                                        ? FontWeight.w600
+                                        : FontWeight.w500,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Text(
+                                country.dialCode,
+                                style: theme.bodyMedium.override(
+                                  font: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  color: isSelected
+                                      ? theme.primary
+                                      : theme.secondaryText,
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              if (isSelected) ...[
+                                const SizedBox(width: 8.0),
+                                Icon(
+                                  Icons.check_circle,
+                                  color: theme.primary,
+                                  size: 20.0,
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Future<void> _pickAndUploadProfileImage() async {
@@ -253,6 +454,42 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
     }
   }
 
+  Future<void> _sendPasswordResetEmail() async {
+    final email = currentUserEmail;
+    if (email.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(ffTranslate(context, 'No email address found for this account.')),
+          backgroundColor: FlutterFlowTheme.of(context).error,
+        ),
+      );
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            ffTranslate(context, 'Password reset email sent to $email'),
+            style: TextStyle(color: FlutterFlowTheme.of(context).primaryText),
+          ),
+          backgroundColor: FlutterFlowTheme.of(context).secondary,
+        ),
+      );
+    } catch (e) {
+      debugPrint('[EditProfile] Password reset error: $e');
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(ffTranslate(context, 'Failed to send password reset email. Please try again.')),
+          backgroundColor: FlutterFlowTheme.of(context).error,
+        ),
+      );
+    }
+  }
+
   Future<void> _saveProfileChanges() async {
     if (currentUserReference == null) {
       return;
@@ -260,7 +497,6 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
 
     final displayName = _model.usernameTextController.text.trim();
     final password = _model.passwordchangeTextController.text.trim();
-    final email = _model.emailchangeTextController.text.trim();
 
     if (password.isNotEmpty && password.length < 6) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -278,18 +514,20 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
 
     if (!mounted) return;
 
-    if (email.isNotEmpty && email != currentUserEmail) {
-      await authManager.updateEmail(email: email, context: context);
-    }
+    // Combine country code with phone number
+    final phoneNumber = _model.phonnumberTextController.text.trim();
+    final countryCode = _model.selectedCountryCode?.dialCode ?? '+1';
+    final fullPhoneNumber = phoneNumber.isNotEmpty 
+        ? '$countryCode $phoneNumber'
+        : '';
 
     await currentUserReference!.update(
       createUsersRecordData(
-        email: email,
         addressname: _model.streetchangeTextController.text.trim(),
         addressnumber: _model.numberstreetTextController.text.trim(),
         town: _model.townnameTextController.text.trim(),
         birthday: _model.datePicked,
-        phoneNumber: _model.phonnumberTextController.text.trim(),
+        phoneNumber: fullPhoneNumber,
         displayName: displayName,
       ),
     );
@@ -458,8 +696,17 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _seedInitialValuesIfReady();
+    return AuthUserStreamWidget(
+      builder: (context) {
+        // Seed initial values when user data is available
+        _seedInitialValuesIfReady();
 
+        return _buildContent(context);
+      },
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
@@ -467,14 +714,7 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
           topLeft: Radius.circular(18.0),
           topRight: Radius.circular(18.0),
         ),
-        gradient: LinearGradient(
-          begin: const AlignmentDirectional(0.0, -1.0),
-          end: const AlignmentDirectional(0.0, 1.0),
-          colors: [
-            FlutterFlowTheme.of(context).primary.withValues(alpha: 0.08),
-            FlutterFlowTheme.of(context).secondaryBackground,
-          ],
-        ),
+        color: FlutterFlowTheme.of(context).secondaryBackground,
       ),
       child: SafeArea(
         top: false,
@@ -685,36 +925,54 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                                   .passwordchangeTextControllerValidator
                                   .asValidator(context),
                             ),
-                            const SizedBox(height: 14.0),
-                            _label(context, 'Email'),
-                            TextFormField(
-                              controller: _model.emailchangeTextController,
-                              focusNode: _model.emailchangeFocusNode,
-                              keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.next,
-                              decoration: _inputDecoration(
-                                context,
-                                hintText: ffTranslate(context, 'name@example.com'),
-                                prefixIcon: Icons.email_outlined,
-                              ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
+                            const SizedBox(height: 12.0),
+                            InkWell(
+                              onTap: _sendPasswordResetEmail,
+                              borderRadius: BorderRadius.circular(12.0),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 12.0,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context).primary.withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  border: Border.all(
+                                    color: FlutterFlowTheme.of(context).primary.withValues(alpha: 0.3),
+                                    width: 1.0,
                                   ),
-                              validator: _model
-                                  .emailchangeTextControllerValidator
-                                  .asValidator(context),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Icon(
+                                      Icons.lock_reset_rounded,
+                                      color: FlutterFlowTheme.of(context).primary,
+                                      size: 20.0,
+                                    ),
+                                    const SizedBox(width: 8.0),
+                                    Text(
+                                      ffTranslate(context, 'Reset Password'),
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            font: GoogleFonts.inter(
+                                              fontWeight: FontWeight.w600,
+                                              fontStyle: FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                            ),
+                                            color: FlutterFlowTheme.of(context).primary,
+                                            letterSpacing: 0.0,
+                                            fontWeight: FontWeight.w600,
+                                            fontStyle: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .fontStyle,
+                                          ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             ),
                             const SizedBox(height: 16.0),
                             Text('Contact',
@@ -876,34 +1134,95 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                             ),
                             const SizedBox(height: 14.0),
                             _label(context, 'Phone number'),
-                            TextFormField(
-                              controller: _model.phonnumberTextController,
-                              focusNode: _model.phonnumberFocusNode,
-                              keyboardType: TextInputType.phone,
-                              textInputAction: TextInputAction.done,
-                              decoration: _inputDecoration(
-                                context,
-                                hintText: ffTranslate(context, '+1 555 123 4567'),
-                                prefixIcon: Icons.phone_outlined,
-                              ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
+                            Row(
+                              children: [
+                                InkWell(
+                                  onTap: () => _showCountryPicker(context),
+                                  borderRadius: BorderRadius.circular(12.0),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 12.0,
+                                      vertical: 14.0,
                                     ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
+                                    decoration: BoxDecoration(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      borderRadius: BorderRadius.circular(12.0),
+                                      border: Border.all(
+                                        color: FlutterFlowTheme.of(context).alternate,
+                                        width: 1.0,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          _model.selectedCountryCode?.flag ?? '🇺🇸',
+                                          style: const TextStyle(fontSize: 20.0),
+                                        ),
+                                        const SizedBox(width: 6.0),
+                                        Text(
+                                          _model.selectedCountryCode?.dialCode ?? '+1',
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .override(
+                                                font: GoogleFonts.inter(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontStyle: FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .fontStyle,
+                                                ),
+                                                letterSpacing: 0.0,
+                                                fontWeight: FontWeight.w600,
+                                                fontStyle: FlutterFlowTheme.of(context)
+                                                    .bodyMedium
+                                                    .fontStyle,
+                                              ),
+                                        ),
+                                        const SizedBox(width: 4.0),
+                                        Icon(
+                                          Icons.keyboard_arrow_down_rounded,
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryText,
+                                          size: 20.0,
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                              validator: _model
-                                  .phonnumberTextControllerValidator
-                                  .asValidator(context),
+                                ),
+                                const SizedBox(width: 10.0),
+                                Expanded(
+                                  child: TextFormField(
+                                    controller: _model.phonnumberTextController,
+                                    focusNode: _model.phonnumberFocusNode,
+                                    keyboardType: TextInputType.phone,
+                                    textInputAction: TextInputAction.done,
+                                    decoration: _inputDecoration(
+                                      context,
+                                      hintText: ffTranslate(context, '555 123 4567'),
+                                      prefixIcon: Icons.phone_outlined,
+                                    ),
+                                    style: FlutterFlowTheme.of(context)
+                                        .bodyMedium
+                                        .override(
+                                          font: GoogleFonts.inter(
+                                            fontWeight: FontWeight.w500,
+                                            fontStyle: FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .fontStyle,
+                                          ),
+                                          letterSpacing: 0.0,
+                                          fontWeight: FontWeight.w500,
+                                          fontStyle: FlutterFlowTheme.of(context)
+                                              .bodyMedium
+                                              .fontStyle,
+                                        ),
+                                    validator: _model
+                                        .phonnumberTextControllerValidator
+                                        .asValidator(context),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),

@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/components/shimmer_loaders/shimmer_loaders.dart';
 import 'dart:ui';
 import '/index.dart';
 import 'package:barcode_widget/barcode_widget.dart';
@@ -133,22 +134,16 @@ class _MyTicketWidgetState extends State<MyTicketWidget> {
                           'userId',
                           isEqualTo: currentUserReference,
                         )
+                        .where(
+                          'status',
+                          whereIn: ['registered', 'free', 'paid', 'confirmed', 'active'],
+                        )
                         .orderBy('purchaseDate', descending: true),
                   ),
                   builder: (context, snapshot) {
                     // Loading
                     if (!snapshot.hasData) {
-                      return Center(
-                        child: SizedBox(
-                          width: 50.0,
-                          height: 50.0,
-                          child: FFShimmerLoadingIndicator(
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              FlutterFlowTheme.of(context).primary,
-                            ),
-                          ),
-                        ),
-                      );
+                      return const TicketsPageShimmer();
                     }
                     final allTickets = snapshot.data!;
 

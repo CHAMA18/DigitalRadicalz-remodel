@@ -21,6 +21,7 @@ environment:
   sdk: ">=3.0.0 <4.0.0"
 
 dependencies:
+  flutter_slidable: ^4.0.0
   flutter_app_badger: ^1.0.0
   skeletonizer: any
   flutter_local_notifications: any

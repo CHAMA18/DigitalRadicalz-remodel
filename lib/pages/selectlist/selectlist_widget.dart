@@ -64,7 +64,7 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Select a user/Group', style: theme.headlineSmall),
+              Text('Start A Chat', style: theme.headlineSmall),
               Text('Invite your friends or groups to chat with you!',
                   style: theme.labelMedium),
             ],
@@ -133,58 +133,70 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                   Text('Join Group', style: theme.labelMedium),
                   SizedBox(height: 12),
                   // Create Group Chat row
-                  Container(
-                    decoration: BoxDecoration(
-                      color: theme.secondaryBackground,
-                      borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: theme.alternate),
-                    ),
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                                radius: 22,
-                                backgroundColor: Colors.white,
-                                backgroundImage: NetworkImage(
-                                    'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/gbh03g8a6d5k/placeholder-profile-icon-8qmjk1094ijhbem9-removebg-preview.png')),
-                            SizedBox(width: 12),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Create Group Chat',
-                                    style: theme.bodyMedium.override(
-                                        fontFamily: 'Inter',
-                                        fontWeight: FontWeight.w600)),
-                                Text('This is the first test of the group',
-                                    style: theme.bodyMedium.override(
-                                        color: theme.secondaryText,
-                                        fontSize: 12)),
-                              ],
-                            ),
-                          ],
-                        ),
-                        // Plus button: navigate to CreateGroup page
-                        FlutterFlowIconButton(
-                          borderRadius: 8,
-                          buttonSize: 40,
-                          icon: Icon(Icons.add, color: theme.secondaryText),
-                          onPressed: () {
-                            context.pushNamed(
-                              CreateGroupPage.routeName,
-                              extra: <String, dynamic>{
-                                kTransitionInfoKey: TransitionInfo(
-                                  hasTransition: true,
-                                  transitionType: PageTransitionType.fade,
-                                  duration: Duration(milliseconds: 0),
+                  InkWell(
+                    onTap: () {
+                      context.pushNamed(
+                        CreateGroupPage.routeName,
+                        extra: <String, dynamic>{
+                          kTransitionInfoKey: TransitionInfo(
+                            hasTransition: true,
+                            transitionType: PageTransitionType.fade,
+                            duration: Duration(milliseconds: 0),
+                          ),
+                        },
+                      );
+                    },
+                    borderRadius: BorderRadius.circular(12),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: theme.secondaryBackground,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: theme.alternate),
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 4,
+                            color: Color(0x1A000000),
+                            offset: Offset(0, 2),
+                          )
+                        ],
+                      ),
+                      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: theme.primary.withValues(alpha: 0.1),
+                                  shape: BoxShape.circle,
                                 ),
-                              },
-                            );
-                          },
-                        ),
-                      ],
+                                child: Icon(
+                                  Icons.group_add_rounded,
+                                  color: theme.primary,
+                                  size: 24,
+                                ),
+                              ),
+                              SizedBox(width: 16),
+                              Text(
+                                'Create Group Chat',
+                                style: theme.titleSmall.override(
+                                  fontFamily: 'Inter',
+                                  color: theme.primaryText,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            color: theme.secondaryText,
+                            size: 16,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
 
@@ -474,7 +486,8 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                                   chatRef = newDoc;
                                 }
                                 // Navigate to full chat screen
-                                context.pushNamed(
+                                FFAppState().chatTab = 'Berichten';
+                                context.pushReplacementNamed(
                                   Chat2Widget.routeName,
                                   queryParameters: {
                                     'receiveChat': serializeParam(
@@ -509,16 +522,21 @@ class _SelectlistWidgetState extends State<SelectlistWidget> {
                                   horizontal: 12, vertical: 10),
                               child: Row(
                                 children: [
-                                  CircleAvatar(
-                                    radius: 22,
-                                    backgroundColor: Colors.white,
-                                    backgroundImage: NetworkImage(
-                                      valueOrDefault<String>(
-                                        user.photoUrl,
-                                        'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/gbh03g8a6d5k/placeholder-profile-icon-8qmjk1094ijhbem9-removebg-preview.png',
-                                      ),
-                                    ),
-                                  ),
+                                  user.photoUrl.isNotEmpty
+                                      ? CircleAvatar(
+                                          radius: 22,
+                                          backgroundImage:
+                                              NetworkImage(user.photoUrl),
+                                        )
+                                      : CircleAvatar(
+                                          radius: 22,
+                                          backgroundColor: theme.alternate,
+                                          child: Icon(
+                                            Icons.person,
+                                            color: theme.secondaryText,
+                                            size: 24,
+                                          ),
+                                        ),
                                   SizedBox(width: 12),
                                   Expanded(
                                     child: Column(

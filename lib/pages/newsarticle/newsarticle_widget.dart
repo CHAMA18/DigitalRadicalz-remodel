@@ -1,4 +1,5 @@
 import '/backend/backend.dart';
+import '/components/shimmer_loaders/shimmer_loaders.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -62,14 +63,34 @@ class _NewsarticleWidgetState extends State<NewsarticleWidget> {
           builder: (context, snapshot) {
             // Customize what your widget looks like when it's loading.
             if (!snapshot.hasData) {
-              return Center(
-                child: SizedBox(
-                  width: 50.0,
-                  height: 50.0,
-                  child: FFShimmerLoadingIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(
-                      FlutterFlowTheme.of(context).primary,
-                    ),
+              return SafeArea(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const ShimmerBox(width: double.infinity, height: 360),
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const ShimmerBar(width: 100, height: 14),
+                            const SizedBox(height: 16),
+                            const ShimmerBar(width: double.infinity, height: 24),
+                            const SizedBox(height: 8),
+                            const ShimmerBar(width: 200, height: 24),
+                            const SizedBox(height: 24),
+                            const ShimmerBar(width: double.infinity, height: 14),
+                            const SizedBox(height: 8),
+                            const ShimmerBar(width: double.infinity, height: 14),
+                            const SizedBox(height: 8),
+                            const ShimmerBar(width: double.infinity, height: 14),
+                            const SizedBox(height: 8),
+                            const ShimmerBar(width: 180, height: 14),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               );

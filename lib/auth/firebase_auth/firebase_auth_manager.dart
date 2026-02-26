@@ -64,13 +64,14 @@ class FirebaseAuthManager extends AuthManager
   }
 
   @override
-  Future deleteUser(BuildContext context) async {
+  Future<bool> deleteUser(BuildContext context) async {
     try {
       if (!loggedIn) {
         print('Error: delete user attempted with no logged in user!');
-        return;
+        return false;
       }
       await currentUser?.delete();
+      return true;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'requires-recent-login') {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -79,6 +80,7 @@ class FirebaseAuthManager extends AuthManager
               content: Text('Too long since most recent sign in. Sign in again before deleting your account.')),
         );
       }
+      return false;
     }
   }
 

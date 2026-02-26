@@ -58,6 +58,40 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     ).then((_) => safeSetState(() {}));
   }
 
+  Future<void> _deleteAccount() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (alertDialogContext) {
+        return AlertDialog(
+          title: Text(ffTranslate(context, 'Delete Account')),
+          content: Text(ffTranslate(context, 'Are you sure you want to delete your account? This action cannot be undone.')),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(alertDialogContext, false),
+              child: Text(ffTranslate(context, 'Cancel')),
+            ),
+            TextButton(
+              onPressed: () => Navigator.pop(alertDialogContext, true),
+              child: Text(
+                ffTranslate(context, 'Delete'),
+                style: TextStyle(color: FlutterFlowTheme.of(context).error),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true) {
+      if (!mounted) return;
+      final success = await authManager.deleteUser(context);
+      if (success) {
+        if (!mounted) return;
+        await _logout();
+      }
+    }
+  }
+
   Future<void> _logout() async {
     GoRouter.of(context).prepareAuthEvent();
     await authManager.signOut();
@@ -74,23 +108,53 @@ class _ProfileWidgetState extends State<ProfileWidget> {
         children: [
           SimpleDialogOption(
             onPressed: () => Navigator.pop(dialogContext, 'system'),
-            child: Text(ffTranslate(context, 'System default')),
+            child: Row(
+              children: [
+                const Text('🌐', style: TextStyle(fontSize: 20)),
+                const SizedBox(width: 12),
+                Text(ffTranslate(context, 'System default')),
+              ],
+            ),
           ),
           SimpleDialogOption(
             onPressed: () => Navigator.pop(dialogContext, 'en'),
-            child: Text(ffTranslate(context, 'English')),
+            child: Row(
+              children: [
+                const Text('🇬🇧', style: TextStyle(fontSize: 20)),
+                const SizedBox(width: 12),
+                Text(ffTranslate(context, 'English')),
+              ],
+            ),
           ),
           SimpleDialogOption(
             onPressed: () => Navigator.pop(dialogContext, 'es'),
-            child: Text(ffTranslate(context, 'Spanish')),
+            child: Row(
+              children: [
+                const Text('🇪🇸', style: TextStyle(fontSize: 20)),
+                const SizedBox(width: 12),
+                Text(ffTranslate(context, 'Spanish')),
+              ],
+            ),
           ),
           SimpleDialogOption(
             onPressed: () => Navigator.pop(dialogContext, 'de'),
-            child: Text(ffTranslate(context, 'German')),
+            child: Row(
+              children: [
+                const Text('🇩🇪', style: TextStyle(fontSize: 20)),
+                const SizedBox(width: 12),
+                Text(ffTranslate(context, 'German')),
+              ],
+            ),
           ),
           SimpleDialogOption(
             onPressed: () => Navigator.pop(dialogContext, 'fr'),
-            child: Text(ffTranslate(context, 'French')),
+            child: Row(
+              children: [
+                const Text('🇫🇷', style: TextStyle(fontSize: 20)),
+                const SizedBox(width: 12),
+                Text(ffTranslate(context, 'French')),
+              ],
+            ),
           ),
         ],
       ),
@@ -208,7 +272,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
               Switch.adaptive(
                 value: value,
                 onChanged: onChanged,
-                activeThumbColor: theme.secondaryBackground,
+                activeColor: theme.secondaryBackground,
                 activeTrackColor: theme.primary,
                 inactiveTrackColor: theme.alternate,
                 inactiveThumbColor: theme.secondaryBackground,
@@ -295,14 +359,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(18.0),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          theme.primary.withValues(alpha: 0.18),
-                          theme.secondary.withValues(alpha: 0.14),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
+                      color: theme.primary.withValues(alpha: 0.18),
                       borderRadius: BorderRadius.circular(22.0),
                       border: Border.all(
                         color: theme.primary.withValues(alpha: 0.16),
@@ -361,27 +418,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                   color: theme.secondaryText,
                                 ),
                               ),
-                              const SizedBox(height: 10.0),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10.0,
-                                  vertical: 6.0,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: theme.secondaryBackground
-                                      .withValues(alpha: 0.9),
-                                  borderRadius: BorderRadius.circular(999.0),
-                                ),
-                                child: Text(
-                                  ffTranslate(
-                                      context, 'DigitalRadicalz Member'),
-                                  style: theme.labelSmall.override(
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w700,
-                                    color: theme.primary,
-                                  ),
-                                ),
-                              ),
+
                             ],
                           ),
                         ),
@@ -441,15 +478,14 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                     context: context,
                     icon: Icons.favorite_border_rounded,
                     title: ffTranslate(context, 'Interests'),
-                    onTap: () =>
-                        _openSheet(const InterestWidget(), heightFactor: 0.97),
+                    onTap: () => context.push(InterestWidget.routePath),
                   ),
                   Divider(height: 1.0, color: theme.alternate),
                   _menuTile(
                     context: context,
                     icon: Icons.settings_outlined,
                     title: ffTranslate(context, 'Settings'),
-                    onTap: () => _openSheet(const Settings3Widget()),
+                    onTap: () => context.push(Settings3Widget.routePath),
                   ),
                   Divider(height: 1.0, color: theme.alternate),
                   _toggleTile(
@@ -530,6 +566,25 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                   accentColor: theme.error,
                   showChevron: false,
                   onTap: _logout,
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              Container(
+                decoration: BoxDecoration(
+                  color: theme.error.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(16.0),
+                  border: Border.all(
+                    color: theme.error.withValues(alpha: 0.20),
+                    width: 1.0,
+                  ),
+                ),
+                child: _menuTile(
+                  context: context,
+                  icon: Icons.delete_forever_rounded,
+                  title: ffTranslate(context, 'Delete Account'),
+                  accentColor: theme.error,
+                  showChevron: false,
+                  onTap: _deleteAccount,
                 ),
               ),
             ],

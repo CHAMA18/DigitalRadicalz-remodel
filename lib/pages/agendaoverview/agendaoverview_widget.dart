@@ -2,6 +2,7 @@ import '/backend/backend.dart';
 import '/components/agenda_widget.dart';
 import '/components/main_tab_app_bar.dart';
 import '/components/navbar/navbar_widget.dart';
+import '/components/shimmer_loaders/shimmer_loaders.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import 'dart:ui';
@@ -57,7 +58,7 @@ class _AgendaoverviewWidgetState extends State<AgendaoverviewWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-        appBar: const MainTabAppBar(),
+        appBar: const MainTabAppBar(showShopActions: true),
         body: SafeArea(
           top: true,
           child: Stack(
@@ -81,18 +82,7 @@ class _AgendaoverviewWidgetState extends State<AgendaoverviewWidget> {
                               builder: (context, snapshot) {
                                 // Customize what your widget looks like when it's loading.
                                 if (!snapshot.hasData) {
-                                  return Center(
-                                    child: SizedBox(
-                                      width: 50.0,
-                                      height: 50.0,
-                                      child: FFShimmerLoadingIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                          FlutterFlowTheme.of(context).primary,
-                                        ),
-                                      ),
-                                    ),
-                                  );
+                                  return const EventsPageShimmer();
                                 }
                                 List<EventsRecord> containerEventsRecordList =
                                     snapshot.data!;

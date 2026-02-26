@@ -1,6 +1,7 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/components/emptyuser/emptyuser_widget.dart';
+import '/components/shimmer_loaders/shimmer_loaders.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -16,6 +17,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'chat_model.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import '/components/group_chat_options.dart';
 export 'chat_model.dart';
 
 /// Badge widget for showing unread count on tab buttons
@@ -85,6 +88,28 @@ class _GroupUnreadBadge extends StatelessWidget {
   }
 }
 
+/// Helper function to get the best available display name for a user.
+/// Falls back to email username if displayName is empty.
+String _getUserDisplayName(UsersRecord user) {
+  // First try displayName
+  if (user.displayName.isNotEmpty) {
+    return user.displayName;
+  }
+  
+  // Then try email (extract username part before @)
+  if (user.email.isNotEmpty) {
+    final emailParts = user.email.split('@');
+    if (emailParts.isNotEmpty && emailParts.first.isNotEmpty) {
+      // Capitalize first letter for better display
+      final username = emailParts.first;
+      return username[0].toUpperCase() + username.substring(1);
+    }
+  }
+  
+  // Last resort fallback
+  return 'Unknown User';
+}
+
 class ChatWidget extends StatefulWidget {
   const ChatWidget({super.key});
 
@@ -149,7 +174,8 @@ class _ChatWidgetState extends State<ChatWidget> {
     if (userRef == null) return 0;
 
     final hasUnreadLastMessage =
-        !groupRecord.lastmessageseenby.contains(userRef);
+        groupRecord.lastmessage.isNotEmpty &&
+            !groupRecord.lastmessageseenby.contains(userRef);
     if (!hasUnreadLastMessage) return 0;
 
     final lastSeenAt = _lastSeenAtForGroup(groupRecord);
@@ -310,7 +336,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                     ),
                   ),
                   Text(
-                    'Back',
+                    ffTranslate(context, 'Back'),
                     style: FlutterFlowTheme.of(context).headlineMedium.override(
                           font: GoogleFonts.interTight(
                             fontWeight: FontWeight.w500,
@@ -331,7 +357,7 @@ class _ChatWidgetState extends State<ChatWidget> {
               ),
             ),
             Text(
-              'Chat',
+              ffTranslate(context, 'Chat'),
               style: FlutterFlowTheme.of(context).bodyMedium.override(
                     font: GoogleFonts.inter(
                       fontWeight: FontWeight.w500,
@@ -533,12 +559,14 @@ class _ChatWidgetState extends State<ChatWidget> {
                       ),
                     ),
                     builder: (context, directChatSnapshot) {
-// Count unread direct messages
+// Count unread direct messages (only count chats with exactly 2 participants)
                       int unreadDirectCount = 0;
                       if (directChatSnapshot.hasData) {
                         for (final chat in directChatSnapshot.data!) {
-                          if (!chat.lastmessageseenby
-                              .contains(currentUserReference)) {
+                          // Only count chats with exactly 2 participants (direct messages)
+                          if (chat.userid.length == 2 &&
+                              !chat.lastmessageseenby
+                                  .contains(currentUserReference)) {
                             unreadDirectCount++;
                           }
                         }
@@ -573,8 +601,10 @@ class _ChatWidgetState extends State<ChatWidget> {
                                 _getTotalUnreadMessagesForGroups(visibleGroups),
                             builder: (context, unreadSnapshot) {
                               final fallbackCount = visibleGroups
-                                  .where((g) => !g.lastmessageseenby
-                                      .contains(currentUserReference))
+                                  .where((g) =>
+                                      g.lastmessage.isNotEmpty &&
+                                      !g.lastmessageseenby
+                                          .contains(currentUserReference))
                                   .length;
                               final unreadGroupCount =
                                   unreadSnapshot.data ?? fallbackCount;
@@ -614,7 +644,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Text(
-                                                'Berichten',
+                                                ffTranslate(context, 'Berichten'),
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .titleSmall
@@ -748,7 +778,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               Text(
-                                                'Groeps chat',
+                                                ffTranslate(context, 'Groeps chat'),
                                                 style: FlutterFlowTheme.of(
                                                         context)
                                                     .titleSmall
@@ -801,7 +831,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        FFAppState().chatTab,
+                        ffTranslate(context, FFAppState().chatTab),
                         style: FlutterFlowTheme.of(context).bodyMedium.override(
                               font: GoogleFonts.inter(
                                 fontWeight: FontWeight.bold,
@@ -977,19 +1007,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                 builder: (context, snapshot) {
 // Customize what your widget looks like when it's loading.
                                   if (!snapshot.hasData) {
-                                    return Center(
-                                      child: SizedBox(
-                                        width: 50.0,
-                                        height: 50.0,
-                                        child: FFShimmerLoadingIndicator(
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(
-                                            FlutterFlowTheme.of(context)
-                                                .primary,
-                                          ),
-                                        ),
-                                      ),
-                                    );
+                                    return const ChatListItemShimmer();
                                   }
 
                                   final columnUsersRecord = snapshot.data!;
@@ -1027,7 +1045,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                                       ),
                                             ),
                                             content: Text(
-                                              'Are you sure you want to delete this chat with ${columnUsersRecord.displayName}? This action cannot be undone.',
+                                              'Are you sure you want to delete this chat with ${_getUserDisplayName(columnUsersRecord)}? This action cannot be undone.',
                                               style:
                                                   FlutterFlowTheme.of(context)
                                                       .bodyMedium
@@ -1086,7 +1104,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                             .showSnackBar(
                                           SnackBar(
                                             content: Text(
-                                              'Chat with ${columnUsersRecord.displayName} deleted',
+                                              'Chat with ${_getUserDisplayName(columnUsersRecord)} deleted',
                                               style: TextStyle(
                                                   color: Colors.white),
                                             ),
@@ -1127,7 +1145,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                               ParamType.DocumentReference,
                                             ),
                                             'username': serializeParam(
-                                              columnUsersRecord.displayName,
+                                              _getUserDisplayName(columnUsersRecord),
                                               ParamType.String,
                                             ),
                                             'profile': serializeParam(
@@ -1192,12 +1210,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                                                               .start,
                                                       children: [
                                                         Text(
-                                                          valueOrDefault<
-                                                              String>(
-                                                            columnUsersRecord
-                                                                .displayName,
-                                                            'Unknown User',
-                                                          ),
+                                                          _getUserDisplayName(columnUsersRecord),
                                                           style: FlutterFlowTheme
                                                                   .of(context)
                                                               .bodyMedium
@@ -1481,53 +1494,65 @@ class _ChatWidgetState extends State<ChatWidget> {
                           itemCount: visibleGroups.length,
                           itemBuilder: (context, index) {
                             final g = visibleGroups[index];
-                            final bool hasUnread = !g.lastmessageseenby
-                                .contains(currentUserReference);
+                            final bool hasUnread = g.lastmessage.isNotEmpty &&
+                                !g.lastmessageseenby
+                                    .contains(currentUserReference);
                             final bool isGroupAdmin =
                                 _isCurrentUserGroupAdmin(g);
                             return Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   12.0, 12.0, 12.0, 0.0),
-                              child: Dismissible(
+                              child: Slidable(
                                 key: Key('group_${g.reference.id}'),
-                                direction: isGroupAdmin
-                                    ? DismissDirection.endToStart
-                                    : DismissDirection.none,
-                                background: Container(
-                                  alignment: Alignment.centerRight,
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 20.0),
-                                  decoration: BoxDecoration(
-                                    color: FlutterFlowTheme.of(context).error,
-                                    borderRadius: BorderRadius.circular(12.0),
-                                  ),
-                                  child: Icon(
-                                    Icons.delete_outline_rounded,
-                                    color: FlutterFlowTheme.of(context).info,
-                                    size: 24.0,
-                                  ),
-                                ),
-                                confirmDismiss: (direction) async {
-                                  if (!isGroupAdmin) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(
-                                          'Only admins can delete this group.',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
+                                endActionPane: ActionPane(
+                                  motion: const ScrollMotion(),
+                                  extentRatio: 0.5,
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: (context) async {
+                                        await showModalBottomSheet(
+                                          context: context,
+                                          backgroundColor: Colors.transparent,
+                                          isScrollControlled: true,
+                                          builder: (context) => Padding(
+                                            padding: MediaQuery.viewInsetsOf(context),
+                                            child: GroupChatOptions(
+                                              groupRecord: g,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      backgroundColor: FlutterFlowTheme.of(context).alternate,
+                                      foregroundColor: FlutterFlowTheme.of(context).primaryText,
+                                      icon: Icons.more_horiz,
+                                      label: 'More',
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(12.0),
+                                        bottomLeft: Radius.circular(12.0),
+                                      ),
+                                    ),
+                                    if (isGroupAdmin)
+                                      SlidableAction(
+                                        onPressed: (context) async {
+                                          final confirmed =
+                                              await _confirmDeleteGroup(context, g);
+                                          if (confirmed) {
+                                            await _deleteGroupRecord(context, g);
+                                          }
+                                        },
                                         backgroundColor:
                                             FlutterFlowTheme.of(context).error,
-                                        duration: Duration(seconds: 2),
+                                        foregroundColor:
+                                            FlutterFlowTheme.of(context).info,
+                                        icon: Icons.delete_outline_rounded,
+                                        label: 'Delete',
+                                        borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(12.0),
+                                          bottomRight: Radius.circular(12.0),
+                                        ),
                                       ),
-                                    );
-                                    return false;
-                                  }
-
-                                  final confirmed =
-                                      await _confirmDeleteGroup(context, g);
-                                  if (!confirmed) return false;
-                                  return await _deleteGroupRecord(context, g);
-                                },
+                                  ],
+                                ),
                                 child: InkWell(
                                   splashColor: Colors.transparent,
                                   focusColor: Colors.transparent,
@@ -1535,9 +1560,9 @@ class _ChatWidgetState extends State<ChatWidget> {
                                   highlightColor: Colors.transparent,
                                   onTap: () async {
                                     context.pushNamed(
-                                      GrouchatsWidget.routeName,
+                                      GroupchatWidget.routeName,
                                       queryParameters: {
-                                        'receivedgroupchats': serializeParam(
+                                        'chatref': serializeParam(
                                           g.reference,
                                           ParamType.DocumentReference,
                                         ),

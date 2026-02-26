@@ -330,6 +330,10 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               isList: false,
               collectionNamePath: ['Groups'],
             ),
+            showBackButton: params.getParam(
+              'showBackButton',
+              ParamType.bool,
+            ) ?? true,
           ),
         ),
         FFRoute(
@@ -340,7 +344,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               'chatref',
               ParamType.DocumentReference,
               isList: false,
-              collectionNamePath: ['Chatscollection'],
+              collectionNamePath: ['Groups'],
             ),
           ),
         ),
@@ -379,10 +383,45 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: CmsContentWidget.routeName,
           path: CmsContentWidget.routePath,
           builder: (context, params) => const CmsContentWidget(),
-        )
+        ),
+        FFRoute(
+          name: InterestWidget.routeName,
+          path: InterestWidget.routePath,
+          builder: (context, params) => const InterestWidget(),
+        ),
+        FFRoute(
+          name: Settings3Widget.routeName,
+          path: Settings3Widget.routePath,
+          builder: (context, params) => const Settings3Widget(),
+        ),
+        FFRoute(
+          name: ConnectTicketAccountWidget.routeName,
+          path: ConnectTicketAccountWidget.routePath,
+          builder: (context, params) => const ConnectTicketAccountWidget(),
+        ),
+        FFRoute(
+          name: CommentsPageWidget.routeName,
+          path: CommentsPageWidget.routePath,
+          builder: (context, params) => CommentsPageWidget(
+            postid: params.getParam(
+              'postid',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['Post'],
+            ),
+            userid: params.getParam(
+              'userid',
+              ParamType.DocumentReference,
+              isList: false,
+              collectionNamePath: ['users'],
+            ),
+          ),
+        ),
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: [routeObserver],
     );
+
+
 
 extension NavParamExtensions on Map<String, String?> {
   Map<String, String> get withoutNulls => Map.fromEntries(

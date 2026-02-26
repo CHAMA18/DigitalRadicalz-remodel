@@ -4,6 +4,8 @@ import '/components/main_tab_app_bar.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/ff_localization.dart';
+import '/components/shimmer_loaders/shimmer_loaders.dart';
 import 'dart:ui';
 import '/index.dart';
 import 'package:flutter/material.dart';
@@ -113,7 +115,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                                       .primaryText,
                                         ),
                                         SizedBox(height: 8.0),
-                                        Text('Scanner',
+                                        Text(ffTranslate(context, 'Scanner'),
                                           style: FlutterFlowTheme.of(context)
                                               .labelMedium
                                               .override(
@@ -186,7 +188,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                                   .primaryText,
                                         ),
                                         SizedBox(height: 8.0),
-                                        Text('T-shirt',
+                                        Text(ffTranslate(context, 'T-shirt'),
                                           style: FlutterFlowTheme.of(context)
                                               .labelMedium
                                               .override(
@@ -258,7 +260,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                                       .primaryText,
                                         ),
                                         SizedBox(height: 8.0),
-                                        Text('Assessoires',
+                                        Text(ffTranslate(context, 'Accessoires'),
                                           style: FlutterFlowTheme.of(context)
                                               .labelMedium
                                               .override(
@@ -329,7 +331,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                                   .primaryText,
                                         ),
                                         SizedBox(height: 8.0),
-                                        Text('Stickers',
+                                        Text(ffTranslate(context, 'Stickers'),
                                           style: FlutterFlowTheme.of(context)
                                               .labelMedium
                                               .override(
@@ -367,7 +369,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                           mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('15 van de 231 producten',
+                            Text(ffTranslate(context, '{count} van de {total} producten', replacements: {'count': '15', 'total': '231'}),
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -391,7 +393,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                         .fontStyle,
                                   ),
                             ),
-                            Text('Best verkocht',
+                            Text(ffTranslate(context, 'Best verkocht'),
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
                                   .override(
@@ -437,7 +439,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text('Alles',
+                                  Text(ffTranslate(context, 'Alles'),
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -497,7 +499,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text('T-shirt',
+                                  Text(ffTranslate(context, 'T-shirt'),
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -557,7 +559,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text('Mokken',
+                                  Text(ffTranslate(context, 'Mokken'),
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -617,7 +619,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  Text('Sticker',
+                                  Text(ffTranslate(context, 'Sticker'),
                                     style: FlutterFlowTheme.of(context)
                                         .bodyMedium
                                         .override(
@@ -679,6 +681,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                     context: context,
                                     delegate: ProductSearchDelegate(
                                       selectedCategory: _model.ongenre,
+                                      searchLabel: ffTranslate(context, 'Search products'),
                                     ),
                                   );
                                 },
@@ -697,6 +700,8 @@ class _ShopWidgetState extends State<ShopWidget> {
                                     context: context,
                                     delegate: ProductFilterDelegate(
                                       selectedCategory: _model.ongenre,
+                                      filterByNameLabel: ffTranslate(context, 'Filter by name'),
+                                      filterByPriceLabel: ffTranslate(context, 'Filter by price (e.g., 20 or 20-50)'),
                                       mode: ProductFilterMode.price,
                                     ),
                                   );
@@ -751,7 +756,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                             color: FlutterFlowTheme.of(context)
                                                 .secondaryText),
                                         SizedBox(height: 8),
-                                        Text('Kon producten niet laden',
+                                        Text(ffTranslate(context, 'Kon producten niet laden'),
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium),
                                       ],
@@ -778,7 +783,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                 return Center(
                                   child: Padding(
                                     padding: EdgeInsets.all(16.0),
-                                    child: Text('Geen producten gevonden',
+                                    child: Text(ffTranslate(context, 'Geen producten gevonden'),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium),
                                   ),
@@ -985,7 +990,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                             color: FlutterFlowTheme.of(context)
                                                 .secondaryText),
                                         SizedBox(height: 8),
-                                        Text('Kon producten niet laden',
+                                        Text(ffTranslate(context, 'Kon producten niet laden'),
                                             style: FlutterFlowTheme.of(context)
                                                 .bodyMedium),
                                       ],
@@ -1012,7 +1017,7 @@ class _ShopWidgetState extends State<ShopWidget> {
                                 return Center(
                                   child: Padding(
                                     padding: EdgeInsets.all(16.0),
-                                    child: Text('Geen producten gevonden',
+                                    child: Text(ffTranslate(context, 'Geen producten gevonden'),
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium),
                                   ),
@@ -1220,17 +1225,21 @@ class _ShopWidgetState extends State<ShopWidget> {
 
 class ProductSearchDelegate extends SearchDelegate<ProductRecord?> {
   final String selectedCategory;
+  final String searchLabel;
 
-  ProductSearchDelegate({required this.selectedCategory});
+  ProductSearchDelegate({required this.selectedCategory, required this.searchLabel});
 
   @override
-  String? get searchFieldLabel => 'Search products';
+  String? get searchFieldLabel => searchLabel;
 
   @override
   Widget buildSuggestions(BuildContext context) {
     return _SearchResultsList(
       queryText: query,
       selectedCategory: selectedCategory,
+      errorText: ffTranslate(context, 'Kon producten niet laden'),
+      emptyHintText: ffTranslate(context, 'Type to search products'),
+      noResultsText: ffTranslate(context, 'No results for "{query}"', replacements: {'query': query}),
     );
   }
 
@@ -1239,6 +1248,9 @@ class ProductSearchDelegate extends SearchDelegate<ProductRecord?> {
     return _SearchResultsList(
       queryText: query,
       selectedCategory: selectedCategory,
+      errorText: ffTranslate(context, 'Kon producten niet laden'),
+      emptyHintText: ffTranslate(context, 'Type to search products'),
+      noResultsText: ffTranslate(context, 'No results for "{query}"', replacements: {'query': query}),
     );
   }
 
@@ -1271,10 +1283,16 @@ class ProductSearchDelegate extends SearchDelegate<ProductRecord?> {
 class _SearchResultsList extends StatelessWidget {
   final String queryText;
   final String selectedCategory;
+  final String errorText;
+  final String emptyHintText;
+  final String noResultsText;
 
   const _SearchResultsList({
     required this.queryText,
     required this.selectedCategory,
+    required this.errorText,
+    required this.emptyHintText,
+    required this.noResultsText,
   });
 
   @override
@@ -1320,7 +1338,7 @@ class _SearchResultsList extends StatelessWidget {
                       size: 48,
                       color: FlutterFlowTheme.of(context).secondaryText),
                   SizedBox(height: 8),
-                  Text('Kon producten niet laden',
+                  Text(errorText,
                       style: FlutterFlowTheme.of(context).bodyMedium),
                 ],
               ),
@@ -1350,8 +1368,8 @@ class _SearchResultsList extends StatelessWidget {
           return Center(
             child: Text(
               q.isEmpty
-                  ? 'Type to search products'
-                  : 'No results for "$queryText"',
+                  ? emptyHintText
+                  : noResultsText,
               style: FlutterFlowTheme.of(context).labelMedium,
             ),
           );
@@ -1420,25 +1438,29 @@ enum ProductFilterMode { name, price }
 
 class ProductFilterDelegate extends SearchDelegate<ProductRecord?> {
   final String selectedCategory;
+  final String filterByNameLabel;
+  final String filterByPriceLabel;
   ProductFilterMode mode;
 
   ProductFilterDelegate({
     required this.selectedCategory,
+    required this.filterByNameLabel,
+    required this.filterByPriceLabel,
     this.mode = ProductFilterMode.name,
   });
 
   @override
   String? get searchFieldLabel => mode == ProductFilterMode.name
-      ? 'Filter by name'
-      : 'Filter by price (e.g., 20 or 20-50)';
+      ? filterByNameLabel
+      : filterByPriceLabel;
 
   @override
   List<Widget>? buildActions(BuildContext context) {
     return [
       IconButton(
         tooltip: mode == ProductFilterMode.name
-            ? 'Switch to price filter'
-            : 'Switch to name filter',
+            ? ffTranslate(context, 'Switch to price filter')
+            : ffTranslate(context, 'Switch to name filter'),
         icon: Icon(
           mode == ProductFilterMode.name
               ? Icons.attach_money
@@ -1479,6 +1501,10 @@ class ProductFilterDelegate extends SearchDelegate<ProductRecord?> {
       queryText: query,
       selectedCategory: selectedCategory,
       mode: mode,
+      errorText: ffTranslate(context, 'Kon producten niet laden'),
+      typeNameHintText: ffTranslate(context, 'Type a product name'),
+      typePriceHintText: ffTranslate(context, 'Type a price or range, e.g. 25 or 20-50'),
+      noMatchText: ffTranslate(context, 'No products match your filter'),
     );
   }
 
@@ -1488,6 +1514,10 @@ class ProductFilterDelegate extends SearchDelegate<ProductRecord?> {
       queryText: query,
       selectedCategory: selectedCategory,
       mode: mode,
+      errorText: ffTranslate(context, 'Kon producten niet laden'),
+      typeNameHintText: ffTranslate(context, 'Type a product name'),
+      typePriceHintText: ffTranslate(context, 'Type a price or range, e.g. 25 or 20-50'),
+      noMatchText: ffTranslate(context, 'No products match your filter'),
     );
   }
 }
@@ -1496,11 +1526,19 @@ class _FilteredResultsList extends StatelessWidget {
   final String queryText;
   final String selectedCategory;
   final ProductFilterMode mode;
+  final String errorText;
+  final String typeNameHintText;
+  final String typePriceHintText;
+  final String noMatchText;
 
   const _FilteredResultsList({
     required this.queryText,
     required this.selectedCategory,
     required this.mode,
+    required this.errorText,
+    required this.typeNameHintText,
+    required this.typePriceHintText,
+    required this.noMatchText,
   });
 
   (double?, double?, String) _parsePriceRange(String input) {
@@ -1597,7 +1635,7 @@ class _FilteredResultsList extends StatelessWidget {
                       size: 48,
                       color: FlutterFlowTheme.of(context).secondaryText),
                   SizedBox(height: 8),
-                  Text('Kon producten niet laden',
+                  Text(errorText,
                       style: FlutterFlowTheme.of(context).bodyMedium),
                 ],
               ),
@@ -1650,9 +1688,9 @@ class _FilteredResultsList extends StatelessWidget {
               child: Text(
                 q.isEmpty
                     ? (mode == ProductFilterMode.name
-                        ? 'Type a product name'
-                        : 'Type a price or range, e.g. 25 or 20-50')
-                    : 'No products match your filter',
+                        ? typeNameHintText
+                        : typePriceHintText)
+                    : noMatchText,
                 style: FlutterFlowTheme.of(context).labelMedium,
                 textAlign: TextAlign.center,
               ),

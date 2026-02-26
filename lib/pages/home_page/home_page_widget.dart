@@ -1,6 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
-import '/components/commentsection/commentsection_widget.dart';
 import '/components/main_tab_app_bar.dart';
 import '/components/navbar/navbar_widget.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
@@ -10,6 +9,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/timestamp_formatter.dart';
 import '/components/like_toggle_icon.dart';
 import '/components/post_like_overlay.dart';
+import '/components/shimmer_loaders/shimmer_loaders.dart';
 import '/firestore/services/firestore_service.dart';
 import 'dart:ui';
 import '/index.dart';
@@ -252,15 +252,18 @@ class _HomePageWidgetState extends State<HomePageWidget>
         if (!snapshot.hasData) {
           return Scaffold(
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            body: Center(
-              child: SizedBox(
-                width: 50.0,
-                height: 50.0,
-                child: FFShimmerLoadingIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    FlutterFlowTheme.of(context).primary,
+            appBar: const MainTabAppBar(showShopActions: true),
+            body: SafeArea(
+              child: Stack(
+                children: [
+                  const HomePageShimmer(),
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: NavbarWidget(),
                   ),
-                ),
+                ],
               ),
             ),
           );
@@ -279,7 +282,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            appBar: const MainTabAppBar(),
+            appBar: const MainTabAppBar(showShopActions: true),
             body: SafeArea(
               top: true,
               child: Stack(
@@ -368,10 +371,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                       );
                                     },
                                     child: Text(
-                                      valueOrDefault<String>(
-                                        rowAppPreferenceRecord?.seeAll,
-                                        'See All',
-                                      ),
+                                      'See All',
                                       style: FlutterFlowTheme.of(context)
                                           .bodyMedium
                                           .override(
@@ -858,50 +858,19 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                             size: 24.0,
                                                           ),
                                                           onPressed: () async {
-                                                            await showModalBottomSheet(
-                                                              isScrollControlled:
-                                                                  true,
-                                                              backgroundColor:
-                                                                  Colors
-                                                                      .transparent,
-                                                              enableDrag: false,
-                                                              context: context,
-                                                              builder:
-                                                                  (context) {
-                                                                return GestureDetector(
-                                                                  onTap: () {
-                                                                    FocusScope.of(
-                                                                            context)
-                                                                        .unfocus();
-                                                                    FocusManager
-                                                                        .instance
-                                                                        .primaryFocus
-                                                                        ?.unfocus();
-                                                                  },
-                                                                  child:
-                                                                      Padding(
-                                                                    padding: MediaQuery
-                                                                        .viewInsetsOf(
-                                                                            context),
-                                                                    child:
-                                                                        Container(
-                                                                      height:
-                                                                          MediaQuery.sizeOf(context).height *
-                                                                              0.5,
-                                                                      child:
-                                                                          CommentsectionWidget(
-                                                                        postid:
-                                                                            columnPostRecord.reference,
-                                                                        userid:
-                                                                            currentUserReference!,
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                );
-                                                              },
-                                                            ).then((value) =>
-                                                                safeSetState(
-                                                                    () {}));
+                                                            context.pushNamed(
+                                                              CommentsPageWidget.routeName,
+                                                              queryParameters: {
+                                                                'postid': serializeParam(
+                                                                  columnPostRecord.reference,
+                                                                  ParamType.DocumentReference,
+                                                                ),
+                                                                'userid': serializeParam(
+                                                                  currentUserReference,
+                                                                  ParamType.DocumentReference,
+                                                                ),
+                                                              }.withoutNulls,
+                                                            );
                                                           },
                                                         ),
                                                         FutureBuilder<int>(
@@ -953,6 +922,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                   Colors
                                                                       .transparent,
                                                               onTap: () async {
+                                                                // Update comment count in Firestore
                                                                 await columnPostRecord
                                                                     .reference
                                                                     .update(
@@ -961,6 +931,22 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                       textCount
                                                                           .toDouble(),
                                                                 ));
+                                                                // Open comments section if there are comments
+                                                                if (textCount > 0) {
+                                                                  context.pushNamed(
+                                                                    CommentsPageWidget.routeName,
+                                                                    queryParameters: {
+                                                                      'postid': serializeParam(
+                                                                        columnPostRecord.reference,
+                                                                        ParamType.DocumentReference,
+                                                                      ),
+                                                                      'userid': serializeParam(
+                                                                        currentUserReference,
+                                                                        ParamType.DocumentReference,
+                                                                      ),
+                                                                    }.withoutNulls,
+                                                                  );
+                                                                }
                                                               },
                                                               child: Text('${valueOrDefault<String>(
                                                                   formatNumber(
@@ -1012,7 +998,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                       padding:
                                                           EdgeInsetsDirectional
                                                               .fromSTEB(
-                                                                  4.0,
+                                                                  16.0,
                                                                   0.0,
                                                                   0.0,
                                                                   0.0),
@@ -1505,49 +1491,19 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                           size: 24.0,
                                                         ),
                                                         onPressed: () async {
-                                                          await showModalBottomSheet(
-                                                            isScrollControlled:
-                                                                true,
-                                                            backgroundColor:
-                                                                Colors
-                                                                    .transparent,
-                                                            enableDrag: false,
-                                                            context: context,
-                                                            builder: (context) {
-                                                              return GestureDetector(
-                                                                onTap: () {
-                                                                  FocusScope.of(
-                                                                          context)
-                                                                      .unfocus();
-                                                                  FocusManager
-                                                                      .instance
-                                                                      .primaryFocus
-                                                                      ?.unfocus();
-                                                                },
-                                                                child: Padding(
-                                                                  padding: MediaQuery
-                                                                      .viewInsetsOf(
-                                                                          context),
-                                                                  child:
-                                                                      Container(
-                                                                    height:
-                                                                        MediaQuery.sizeOf(context).height *
-                                                                            0.5,
-                                                                    child:
-                                                                        CommentsectionWidget(
-                                                                      postid: columnPostRecord
-                                                                          .reference,
-                                                                      userid:
-                                                                          currentUserReference!,
-                                                                      count: 0,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                          ).then((value) =>
-                                                              safeSetState(
-                                                                  () {}));
+                                                          context.pushNamed(
+                                                            CommentsPageWidget.routeName,
+                                                            queryParameters: {
+                                                              'postid': serializeParam(
+                                                                columnPostRecord.reference,
+                                                                ParamType.DocumentReference,
+                                                              ),
+                                                              'userid': serializeParam(
+                                                                currentUserReference,
+                                                                ParamType.DocumentReference,
+                                                              ),
+                                                            }.withoutNulls,
+                                                          );
                                                         },
                                                       ),
                                                       FutureBuilder<int>(
@@ -1599,6 +1555,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                 Colors
                                                                     .transparent,
                                                             onTap: () async {
+                                                              // Update comment count in Firestore
                                                               await columnPostRecord
                                                                   .reference
                                                                   .update(
@@ -1607,6 +1564,22 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                                     textCount
                                                                         .toDouble(),
                                                               ));
+                                                              // Open comments section if there are comments
+                                                              if (textCount > 0) {
+                                                                context.pushNamed(
+                                                                  CommentsPageWidget.routeName,
+                                                                  queryParameters: {
+                                                                    'postid': serializeParam(
+                                                                      columnPostRecord.reference,
+                                                                      ParamType.DocumentReference,
+                                                                    ),
+                                                                    'userid': serializeParam(
+                                                                      currentUserReference,
+                                                                      ParamType.DocumentReference,
+                                                                    ),
+                                                                  }.withoutNulls,
+                                                                );
+                                                              }
                                                             },
                                                             child: Text('${valueOrDefault<String>(
                                                                 formatNumber(
@@ -1658,7 +1631,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                   Padding(
                                                     padding:
                                                         EdgeInsetsDirectional
-                                                            .fromSTEB(4.0, 0.0,
+                                                            .fromSTEB(16.0, 0.0,
                                                                 0.0, 0.0),
                                                     child: Row(
                                                       mainAxisSize:

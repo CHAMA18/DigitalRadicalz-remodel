@@ -83,6 +83,8 @@ class UnreadMessageBadge extends StatelessWidget {
   Stream<int> _getUnreadCountStream() {
     try {
       // Stream for unread direct messages
+      // Only count chats with exactly 2 participants (true 1-on-1 direct messages)
+      // to match the filtering in the chat display list
       final directMessagesStream = queryChatsRecord(
         queryBuilder: (chatsRecord) => chatsRecord.where(
           'userid',
@@ -94,7 +96,9 @@ class UnreadMessageBadge extends StatelessWidget {
       }).map((chats) {
         int count = 0;
         for (final chat in chats) {
-          if (!chat.lastmessageseenby.contains(currentUserReference)) {
+          // Only count chats with exactly 2 participants (direct messages)
+          if (chat.userid.length == 2 &&
+              !chat.lastmessageseenby.contains(currentUserReference)) {
             count++;
           }
         }
@@ -113,9 +117,10 @@ class UnreadMessageBadge extends StatelessWidget {
       }).map((groups) {
         int count = 0;
         for (final group in groups) {
-          // Skip placeholder groups
+          // Skip placeholder groups by name and last message (matching chat widget filter)
           final name = group.groupName.trim().toLowerCase().replaceAll('!', '');
-          if (name == 'say hello') continue;
+          final last = group.lastmessage.trim().toLowerCase().replaceAll('!', '');
+          if (name == 'say hello' || last == 'say hello') continue;
           
           if (!group.lastmessageseenby.contains(currentUserReference)) {
             count++;

@@ -1,8 +1,8 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
-import '/components/commentsection/commentsection_widget.dart';
 import '/components/createpost_widget.dart';
 import '/components/emptyagendat_widget.dart';
+import '/components/shimmer_loaders/shimmer_loaders.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -123,17 +123,7 @@ class _Community2WidgetState extends State<Community2Widget>
         if (!snapshot.hasData) {
           return Scaffold(
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            body: Center(
-              child: SizedBox(
-                width: 50.0,
-                height: 50.0,
-                child: FFShimmerLoadingIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    FlutterFlowTheme.of(context).primary,
-                  ),
-                ),
-              ),
-            ),
+            body: SafeArea(child: const CommunityPageShimmer()),
           );
         }
 
@@ -1852,46 +1842,19 @@ class _Community2WidgetState extends State<Community2Widget>
                                                 size: 24.0,
                                               ),
                                               onPressed: () async {
-                                                await showModalBottomSheet(
-                                                  isScrollControlled: true,
-                                                  backgroundColor:
-                                                      Colors.transparent,
-                                                  enableDrag: false,
-                                                  context: context,
-                                                  builder: (context) {
-                                                    return GestureDetector(
-                                                      onTap: () {
-                                                        FocusScope.of(context)
-                                                            .unfocus();
-                                                        FocusManager.instance
-                                                            .primaryFocus
-                                                            ?.unfocus();
-                                                      },
-                                                      child: Padding(
-                                                        padding: MediaQuery
-                                                            .viewInsetsOf(
-                                                                context),
-                                                        child: Container(
-                                                          height:
-                                                              MediaQuery.sizeOf(
-                                                                          context)
-                                                                      .height *
-                                                                  0.5,
-                                                          child:
-                                                              CommentsectionWidget(
-                                                            postid:
-                                                                columnPostRecord
-                                                                    .reference,
-                                                            userid:
-                                                                currentUserReference!,
-                                                            count: 0,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
-                                                ).then((value) =>
-                                                    safeSetState(() {}));
+                                                context.pushNamed(
+                                                  CommentsPageWidget.routeName,
+                                                  queryParameters: {
+                                                    'postid': serializeParam(
+                                                      columnPostRecord.reference,
+                                                      ParamType.DocumentReference,
+                                                    ),
+                                                    'userid': serializeParam(
+                                                      currentUserReference,
+                                                      ParamType.DocumentReference,
+                                                    ),
+                                                  }.withoutNulls,
+                                                );
                                               },
                                             ),
                                             FutureBuilder<int>(

@@ -5,6 +5,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/timestamp_formatter.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/components/shimmer_loaders/shimmer_loaders.dart';
 import 'dart:ui';
 import '/index.dart';
 import 'package:flutter/material.dart';
@@ -50,7 +51,7 @@ class _MediaWidgetState extends State<MediaWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-        appBar: const MainTabAppBar(),
+        appBar: const MainTabAppBar(showShopActions: true),
         body: SafeArea(
           top: true,
           child: Stack(
@@ -136,15 +137,12 @@ class _MediaWidgetState extends State<MediaWidget> {
                           builder: (context, snapshot) {
                             // Customize what your widget looks like when it's loading.
                             if (!snapshot.hasData) {
-                              return Center(
-                                child: SizedBox(
-                                  width: 50.0,
-                                  height: 50.0,
-                                  child: FFShimmerLoadingIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      FlutterFlowTheme.of(context).primary,
-                                    ),
-                                  ),
+                              return SizedBox(
+                                height: 200,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 3,
+                                  itemBuilder: (_, __) => const NewsCardShimmer(height: 200),
                                 ),
                               );
                             }

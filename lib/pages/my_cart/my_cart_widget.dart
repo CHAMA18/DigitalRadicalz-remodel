@@ -1,6 +1,7 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/components/checkout/checkout_widget.dart';
+import '/components/shimmer_loaders/shimmer_loaders.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -178,6 +179,8 @@ letterSpacing: 0.0,
 ),
 Align(
 alignment: AlignmentDirectional(0.0, 1.0),
+child: Padding(
+padding: EdgeInsets.only(bottom: 24.0),
 child: Container(
 width: 364.0,
 height: 67.0,
@@ -204,6 +207,7 @@ fontWeight: FontWeight.w600,
 ),
 ),
 ),
+),
 ],
 );
 }
@@ -226,6 +230,8 @@ FlutterFlowTheme.of(context).primary,
 ),
 Align(
 alignment: AlignmentDirectional(0.0, 1.0),
+child: Padding(
+padding: EdgeInsets.only(bottom: 24.0),
 child: Container(
 width: 364.0,
 height: 67.0,
@@ -256,6 +262,7 @@ fontStyle: FlutterFlowTheme.of(context)
 ),
 ),
 ],
+),
 ),
 ),
 ),
@@ -331,6 +338,8 @@ letterSpacing: 0.0,
 ),
 Align(
 alignment: AlignmentDirectional(0.0, 1.0),
+child: Padding(
+padding: EdgeInsets.only(bottom: 24.0),
 child: Container(
 width: 364.0,
 height: 67.0,
@@ -354,6 +363,7 @@ fontWeight: FontWeight.w600,
 ),
 ),
 ],
+),
 ),
 ),
 ),
@@ -711,6 +721,8 @@ letterSpacing: 0.0,
 ),
 Align(
 alignment: AlignmentDirectional(0.0, 1.0),
+child: Padding(
+padding: EdgeInsets.only(bottom: 24.0),
 child: Column(
 mainAxisSize: MainAxisSize.min,
 children: [
@@ -872,6 +884,7 @@ FlutterFlowTheme.of(context)
 ),
 ),
 ],
+),
 ),
 ),
 ],

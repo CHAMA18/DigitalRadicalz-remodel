@@ -1,6 +1,8 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
 import '/components/emptychat/emptychat_widget.dart';
+import '/components/shimmer_loaders/shimmer_loaders.dart';
+import '/components/shared_media/shared_media_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -9,6 +11,7 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'groupchat_model.dart';
@@ -48,6 +51,25 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
     
     // Listen for text changes to update send button state
     _model.textController!.addListener(_onTextChanged);
+    
+    // Mark as seen immediately
+    _markAsSeen();
+  }
+  
+  Future<void> _markAsSeen() async {
+    try {
+      if (currentUserReference != null && widget.chatref != null) {
+        await widget.chatref!.update({
+          ...mapToFirestore(
+            {
+              'lastmessageseenby': FieldValue.arrayUnion([currentUserReference]),
+            },
+          ),
+        });
+      }
+    } catch (e) {
+      debugPrint('Failed to mark group chat as seen in initState: $e');
+    }
   }
   
   void _onTextChanged() {
@@ -75,6 +97,19 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
         // Handle error state (e.g., permission denied)
         if (snapshot.hasError) {
           debugPrint('Error loading group: ${snapshot.error}');
+          debugPrint('Chat Reference: ${widget.chatref?.path}');
+          
+          String title = 'Unable to load group';
+          String message = 'You may not have permission to view this group chat.';
+          
+          if (widget.chatref?.path.contains('Chatscollection') == true) {
+            title = 'Invalid Group Chat';
+            message = 'This appears to be a direct chat, not a group chat. Please use the direct chat interface.';
+          } else if (snapshot.error.toString().contains('null') || snapshot.error.toString().contains('not-found')) {
+            title = 'Group Not Found';
+            message = 'This group chat may have been deleted or does not exist.';
+          }
+
           return Scaffold(
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
             appBar: AppBar(
@@ -110,13 +145,13 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                       size: 64.0,
                     ),
                     SizedBox(height: 16.0),
-                    Text('Unable to load group',
+                    Text(title,
                       style: FlutterFlowTheme.of(context).headlineSmall.override(
                         letterSpacing: 0.0,
                       ),
                     ),
                     SizedBox(height: 8.0),
-                    Text('You may not have permission to view this group chat.',
+                    Text(message,
                       textAlign: TextAlign.center,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                         color: FlutterFlowTheme.of(context).secondaryText,
@@ -149,21 +184,30 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
         if (!snapshot.hasData) {
           return Scaffold(
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-            body: Center(
-              child: SizedBox(
-                width: 50.0,
-                height: 50.0,
-                child: FFShimmerLoadingIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    FlutterFlowTheme.of(context).primary,
-                  ),
-                ),
-              ),
+            appBar: AppBar(
+              backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+              elevation: 0,
+              leading: const ShimmerCircle(size: 32),
+              title: const ShimmerBar(width: 120, height: 18),
             ),
+            body: const ChatPageShimmer(),
           );
         }
 
         final groupsRecord = snapshot.data!;
+
+        // Mark as read if needed
+        if (currentUserReference != null &&
+            !groupsRecord.lastmessageseenby.contains(currentUserReference)) {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            if (context.mounted) {
+              groupsRecord.reference.update({
+                'lastmessageseenby':
+                    FieldValue.arrayUnion([currentUserReference]),
+              });
+            }
+          });
+        }
 
         return GestureDetector(
           onTap: () {
@@ -208,40 +252,76 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                     ),
                   ),
                   Expanded(
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            groupsRecord.groupName,
-                            style: FlutterFlowTheme.of(context).titleMedium.override(
-                                  font: GoogleFonts.interTight(
+                    child: InkWell(
+                      onTap: () async {
+                        await showModalBottomSheet(
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          enableDrag: true,
+                          context: context,
+                          builder: (context) {
+                            return GestureDetector(
+                              onTap: () {
+                                FocusScope.of(context).unfocus();
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
+                              child: Padding(
+                                padding: MediaQuery.viewInsetsOf(context),
+                                child: _GroupMembersDialog(
+                                  groupRef: widget.chatref!,
+                                  groupsRecord: groupsRecord,
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              groupsRecord.groupName,
+                              style: FlutterFlowTheme.of(context).titleMedium.override(
+                                    font: GoogleFonts.interTight(
+                                      fontWeight: FontWeight.w600,
+                                      fontStyle: FlutterFlowTheme.of(context).titleMedium.fontStyle,
+                                    ),
+                                    letterSpacing: 0.0,
                                     fontWeight: FontWeight.w600,
                                     fontStyle: FlutterFlowTheme.of(context).titleMedium.fontStyle,
                                   ),
-                                  letterSpacing: 0.0,
-                                  fontWeight: FontWeight.w600,
-                                  fontStyle: FlutterFlowTheme.of(context).titleMedium.fontStyle,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text('${groupsRecord.userid.length} members',
+                                  style: FlutterFlowTheme.of(context).bodySmall.override(
+                                        font: GoogleFonts.inter(
+                                          fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                                          fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                        ),
+                                        color: FlutterFlowTheme.of(context).secondaryText,
+                                        fontSize: 12.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
+                                        fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                      ),
                                 ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          Text('${groupsRecord.userid.length} members',
-                            style: FlutterFlowTheme.of(context).bodySmall.override(
-                                  font: GoogleFonts.inter(
-                                    fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
-                                  ),
+                                SizedBox(width: 4.0),
+                                Icon(
+                                  Icons.chevron_right,
                                   color: FlutterFlowTheme.of(context).secondaryText,
-                                  fontSize: 12.0,
-                                  letterSpacing: 0.0,
-                                  fontWeight: FlutterFlowTheme.of(context).bodySmall.fontWeight,
-                                  fontStyle: FlutterFlowTheme.of(context).bodySmall.fontStyle,
+                                  size: 14.0,
                                 ),
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -311,6 +391,50 @@ class _GroupchatWidgetState extends State<GroupchatWidget> {
                       },
                     );
                   },
+                ),
+                PopupMenuButton<String>(
+                  icon: Icon(
+                    Icons.more_vert,
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    size: 24.0,
+                  ),
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  onSelected: (value) async {
+                    switch (value) {
+                      case 'shared_media':
+                        await Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => SharedMediaWidget(
+                              chatRef: widget.chatref!,
+                              chatTitle: groupsRecord.groupName,
+                            ),
+                          ),
+                        );
+                        break;
+                    }
+                  },
+                  itemBuilder: (context) => [
+                    PopupMenuItem<String>(
+                      value: 'shared_media',
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.photo_library_outlined,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            size: 20.0,
+                          ),
+                          const SizedBox(width: 12.0),
+                          Text(
+                            ffTranslate(context, 'Shared Media'),
+                            style: FlutterFlowTheme.of(context).bodyMedium,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ],
               centerTitle: true,
@@ -1667,6 +1791,242 @@ class _AddGroupMembersDialogState extends State<_AddGroupMembersDialog> {
               ],
             ),
           ),
+        );
+      },
+    );
+  }
+}
+
+/// Dialog for viewing all group members
+class _GroupMembersDialog extends StatelessWidget {
+  const _GroupMembersDialog({
+    required this.groupRef,
+    required this.groupsRecord,
+  });
+
+  final DocumentReference groupRef;
+  final GroupsRecord groupsRecord;
+
+  bool _isUserAdmin(DocumentReference? userRef) {
+    if (userRef == null) return false;
+    if (groupsRecord.adminId == userRef) return true;
+    if (groupsRecord.adminIds.contains(userRef)) return true;
+    return false;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.7,
+      decoration: BoxDecoration(
+        color: FlutterFlowTheme.of(context).secondaryBackground,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(16.0),
+          topRight: Radius.circular(16.0),
+        ),
+      ),
+      child: Column(
+        children: [
+          // Header
+          Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                FlutterFlowIconButton(
+                  borderRadius: 8.0,
+                  buttonSize: 40.0,
+                  icon: Icon(Icons.close, color: FlutterFlowTheme.of(context).primaryText, size: 24.0),
+                  onPressed: () => Navigator.pop(context),
+                ),
+                Text('Group Members',
+                  style: FlutterFlowTheme.of(context).headlineSmall.override(
+                    font: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                    letterSpacing: 0.0,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(width: 40.0),
+              ],
+            ),
+          ),
+          Divider(height: 1.0, color: FlutterFlowTheme.of(context).alternate),
+          // Member count
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.group,
+                  color: FlutterFlowTheme.of(context).primary,
+                  size: 20.0,
+                ),
+                SizedBox(width: 8.0),
+                Text('${groupsRecord.userid.length} members',
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                    font: GoogleFonts.inter(fontWeight: FontWeight.w500),
+                    color: FlutterFlowTheme.of(context).primaryText,
+                    letterSpacing: 0.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Divider(height: 1.0, color: FlutterFlowTheme.of(context).alternate),
+          // Members list
+          Expanded(
+            child: _buildMembersList(context),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMembersList(BuildContext context) {
+    if (groupsRecord.userid.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: EdgeInsets.all(24.0),
+          child: Text('No members in this group',
+            style: FlutterFlowTheme.of(context).bodyMedium.override(
+              font: GoogleFonts.inter(),
+              color: FlutterFlowTheme.of(context).secondaryText,
+              letterSpacing: 0.0,
+            ),
+          ),
+        ),
+      );
+    }
+
+    return FutureBuilder<List<DocumentSnapshot>>(
+      future: Future.wait(groupsRecord.userid.map((ref) => ref.get()).toList()),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return Center(
+            child: Padding(
+              padding: EdgeInsets.all(24.0),
+              child: FFShimmerLoadingIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(FlutterFlowTheme.of(context).primary),
+              ),
+            ),
+          );
+        }
+
+        final memberDocs = snapshot.data!;
+
+        return ListView.separated(
+          padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+          itemCount: memberDocs.length,
+          separatorBuilder: (_, __) => Divider(height: 1.0, color: FlutterFlowTheme.of(context).alternate),
+          itemBuilder: (context, index) {
+            final doc = memberDocs[index];
+            final data = doc.data() as Map<String, dynamic>?;
+            if (data == null) return SizedBox.shrink();
+
+            final memberRef = doc.reference;
+            final displayName = data['display_name'] as String? ?? '';
+            final email = data['email'] as String? ?? '';
+            final photoUrl = data['photo_url'] as String? ?? '';
+            final isAdmin = _isUserAdmin(memberRef);
+            final isCreator = groupsRecord.adminId == memberRef;
+            
+            // Get a proper display name
+            String finalDisplayName = displayName;
+            if (finalDisplayName.isEmpty && email.isNotEmpty) {
+              final emailName = email.split('@').first;
+              finalDisplayName = emailName.isNotEmpty 
+                  ? emailName[0].toUpperCase() + emailName.substring(1) 
+                  : 'User';
+            } else if (finalDisplayName.isEmpty) {
+              finalDisplayName = 'User';
+            }
+
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 12.0),
+              child: Row(
+                children: [
+                  Container(
+                    width: 50.0,
+                    height: 50.0,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).alternate,
+                      image: photoUrl.isNotEmpty
+                          ? DecorationImage(
+                              fit: BoxFit.cover,
+                              image: Image.network(photoUrl).image,
+                            )
+                          : null,
+                      shape: BoxShape.circle,
+                    ),
+                    child: photoUrl.isEmpty
+                        ? Icon(Icons.person, color: FlutterFlowTheme.of(context).secondaryText, size: 28.0)
+                        : null,
+                  ),
+                  SizedBox(width: 12.0),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                finalDisplayName,
+                                style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                  font: GoogleFonts.inter(fontWeight: FontWeight.w500),
+                                  letterSpacing: 0.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if (isAdmin) ...[
+                              SizedBox(width: 8.0),
+                              Container(
+                                padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 2.0),
+                                decoration: BoxDecoration(
+                                  color: isCreator 
+                                    ? FlutterFlowTheme.of(context).primary.withValues(alpha: 0.2)
+                                    : FlutterFlowTheme.of(context).secondary.withValues(alpha: 0.2),
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                                child: Text(
+                                  isCreator ? 'Creator' : 'Admin',
+                                  style: FlutterFlowTheme.of(context).labelSmall.override(
+                                    font: GoogleFonts.inter(fontWeight: FontWeight.w600),
+                                    color: isCreator 
+                                      ? FlutterFlowTheme.of(context).primary 
+                                      : FlutterFlowTheme.of(context).secondary,
+                                    fontSize: 10.0,
+                                    letterSpacing: 0.0,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                        if (email.isNotEmpty)
+                          Padding(
+                            padding: EdgeInsets.only(top: 2.0),
+                            child: Text(
+                              email,
+                              style: FlutterFlowTheme.of(context).bodySmall.override(
+                                font: GoogleFonts.inter(),
+                                color: FlutterFlowTheme.of(context).secondaryText,
+                                letterSpacing: 0.0,
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
         );
       },
     );
