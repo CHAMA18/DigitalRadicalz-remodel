@@ -37,9 +37,6 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
     _model.usernameTextController ??= TextEditingController();
     _model.usernameFocusNode ??= FocusNode();
 
-    _model.passwordchangeTextController ??= TextEditingController();
-    _model.passwordchangeFocusNode ??= FocusNode();
-
     _model.emailchangeTextController ??= TextEditingController();
     _model.emailchangeFocusNode ??= FocusNode();
 
@@ -454,63 +451,12 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
     }
   }
 
-  Future<void> _sendPasswordResetEmail() async {
-    final email = currentUserEmail;
-    if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(ffTranslate(context, 'No email address found for this account.')),
-          backgroundColor: FlutterFlowTheme.of(context).error,
-        ),
-      );
-      return;
-    }
-
-    try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            ffTranslate(context, 'Password reset email sent to $email'),
-            style: TextStyle(color: FlutterFlowTheme.of(context).primaryText),
-          ),
-          backgroundColor: FlutterFlowTheme.of(context).secondary,
-        ),
-      );
-    } catch (e) {
-      debugPrint('[EditProfile] Password reset error: $e');
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(ffTranslate(context, 'Failed to send password reset email. Please try again.')),
-          backgroundColor: FlutterFlowTheme.of(context).error,
-        ),
-      );
-    }
-  }
-
   Future<void> _saveProfileChanges() async {
     if (currentUserReference == null) {
       return;
     }
 
     final displayName = _model.usernameTextController.text.trim();
-    final password = _model.passwordchangeTextController.text.trim();
-
-    if (password.isNotEmpty && password.length < 6) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Password must be at least 6 characters.'),
-          backgroundColor: FlutterFlowTheme.of(context).error,
-        ),
-      );
-      return;
-    }
-
-    if (password.isNotEmpty) {
-      await authManager.updatePassword(newPassword: password, context: context);
-    }
 
     if (!mounted) return;
 
@@ -864,117 +810,6 @@ class _EditprofilesWidgetState extends State<EditprofilesWidget> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Account',
-                              style: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    font: GoogleFonts.interTight(
-                                      fontWeight: FontWeight.w700,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w700,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .titleSmall
-                                        .fontStyle,
-                                  ),
-                            ),
-                            const SizedBox(height: 12.0),
-                            _label(context, 'Password'),
-                            TextFormField(
-                              controller: _model.passwordchangeTextController,
-                              focusNode: _model.passwordchangeFocusNode,
-                              obscureText: !_model.passwordchangeVisibility,
-                              textInputAction: TextInputAction.next,
-                              decoration: _inputDecoration(
-                                context,
-                                hintText: ffTranslate(context, '••••••••••••'),
-                                prefixIcon: Icons.lock_outline_rounded,
-                                suffixIcon: InkWell(
-                                  onTap: () => safeSetState(
-                                    () => _model.passwordchangeVisibility =
-                                        !_model.passwordchangeVisibility,
-                                  ),
-                                  focusNode: FocusNode(skipTraversal: true),
-                                  child: Icon(
-                                    _model.passwordchangeVisibility
-                                        ? Icons.visibility_outlined
-                                        : Icons.visibility_off_outlined,
-                                    size: 22.0,
-                                  ),
-                                ),
-                              ),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    letterSpacing: 0.0,
-                                    fontWeight: FontWeight.w500,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
-                                  ),
-                              validator: _model
-                                  .passwordchangeTextControllerValidator
-                                  .asValidator(context),
-                            ),
-                            const SizedBox(height: 12.0),
-                            InkWell(
-                              onTap: _sendPasswordResetEmail,
-                              borderRadius: BorderRadius.circular(12.0),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0,
-                                  vertical: 12.0,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context).primary.withValues(alpha: 0.1),
-                                  borderRadius: BorderRadius.circular(12.0),
-                                  border: Border.all(
-                                    color: FlutterFlowTheme.of(context).primary.withValues(alpha: 0.3),
-                                    width: 1.0,
-                                  ),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.lock_reset_rounded,
-                                      color: FlutterFlowTheme.of(context).primary,
-                                      size: 20.0,
-                                    ),
-                                    const SizedBox(width: 8.0),
-                                    Text(
-                                      ffTranslate(context, 'Reset Password'),
-                                      style: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .override(
-                                            font: GoogleFonts.inter(
-                                              fontWeight: FontWeight.w600,
-                                              fontStyle: FlutterFlowTheme.of(context)
-                                                  .bodyMedium
-                                                  .fontStyle,
-                                            ),
-                                            color: FlutterFlowTheme.of(context).primary,
-                                            letterSpacing: 0.0,
-                                            fontWeight: FontWeight.w600,
-                                            fontStyle: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .fontStyle,
-                                          ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 16.0),
                             Text('Contact',
                               style: FlutterFlowTheme.of(context)
                                   .titleSmall

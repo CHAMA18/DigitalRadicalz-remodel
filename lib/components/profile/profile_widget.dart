@@ -166,11 +166,13 @@ class _ProfileWidgetState extends State<ProfileWidget> {
     final appState = FFAppState();
     if (selected == 'system') {
       appState.update(() {
+        appState.hasExplicitLanguageSelection = true;
         appState.useSystemLocale = true;
       });
       useSystemLanguage(context);
     } else {
       appState.update(() {
+        appState.hasExplicitLanguageSelection = true;
         appState.useSystemLocale = false;
         appState.appLocaleCode = selected;
       });

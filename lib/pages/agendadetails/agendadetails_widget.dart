@@ -120,13 +120,16 @@ class _AgendadetailsWidgetState extends State<AgendadetailsWidget>
         if (!snapshot.hasData) {
           return Scaffold(
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-            body: Center(
-              child: SizedBox(
-                width: 50.0,
-                height: 50.0,
-                child: FFShimmerLoadingIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    FlutterFlowTheme.of(context).primary,
+            body: SafeArea(
+              top: false,
+              child: Center(
+                child: SizedBox(
+                  width: 50.0,
+                  height: 50.0,
+                  child: FFShimmerLoadingIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      FlutterFlowTheme.of(context).primary,
+                    ),
                   ),
                 ),
               ),
@@ -144,39 +147,42 @@ class _AgendadetailsWidgetState extends State<AgendadetailsWidget>
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
-            body: widget.ticketref != null
-                ? StreamBuilder<TicketTypesRecord>(
-                    stream: TicketTypesRecord.getDocument(widget.ticketref!),
-                    builder: (context, snapshot) {
-                      // Customize what your widget looks like when it's loading.
-                      if (!snapshot.hasData) {
-                        return Center(
-                          child: SizedBox(
-                            width: 50.0,
-                            height: 50.0,
-                            child: FFShimmerLoadingIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                FlutterFlowTheme.of(context).primary,
+            body: SafeArea(
+              top: false,
+              child: widget.ticketref != null
+                  ? StreamBuilder<TicketTypesRecord>(
+                      stream: TicketTypesRecord.getDocument(widget.ticketref!),
+                      builder: (context, snapshot) {
+                        // Customize what your widget looks like when it's loading.
+                        if (!snapshot.hasData) {
+                          return Center(
+                            child: SizedBox(
+                              width: 50.0,
+                              height: 50.0,
+                              child: FFShimmerLoadingIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                  FlutterFlowTheme.of(context).primary,
+                                ),
                               ),
                             ),
-                          ),
+                          );
+                        }
+
+                        final stackTicketTypesRecord = snapshot.data!;
+
+                        return _buildEventContent(
+                          context,
+                          agendadetailsEventsRecord,
+                          stackTicketTypesRecord,
                         );
-                      }
-
-                      final stackTicketTypesRecord = snapshot.data!;
-
-                      return _buildEventContent(
-                        context,
-                        agendadetailsEventsRecord,
-                        stackTicketTypesRecord,
-                      );
-                    },
-                  )
-                : _buildEventContent(
-                    context,
-                    agendadetailsEventsRecord,
-                    null, // No ticket data for free events without ticket types
-                  ),
+                      },
+                    )
+                  : _buildEventContent(
+                      context,
+                      agendadetailsEventsRecord,
+                      null, // No ticket data for free events without ticket types
+                    ),
+            ),
           ),
         );
       },

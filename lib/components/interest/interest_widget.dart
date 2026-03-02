@@ -73,13 +73,15 @@ class _InterestWidgetState extends State<InterestWidget> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 0.0),
-        child: StreamBuilder<List<CommunitiesRecord>>(
-          stream: queryCommunitiesRecord(
-            singleRecord: true,
-          ),
-          builder: (context, snapshot) {
+      body: SafeArea(
+        top: false,
+        child: Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 0.0),
+          child: StreamBuilder<List<CommunitiesRecord>>(
+            stream: queryCommunitiesRecord(
+              singleRecord: true,
+            ),
+            builder: (context, snapshot) {
             // Customize what your widget looks like when it's loading.
             if (!snapshot.hasData) {
               return Center(
@@ -105,27 +107,25 @@ class _InterestWidgetState extends State<InterestWidget> {
                     ? columnCommunitiesRecordList.first
                     : null;
 
-            return Builder(
-                      builder: (context) {
-                        final interests = FFAppState().Interestslists.toList();
+              return Builder(
+                builder: (context) {
+                  final interests = FFAppState().Interestslists.toList();
 
-                        return GridView.builder(
-                          padding: EdgeInsets.zero,
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 2.0,
-                            mainAxisSpacing: 2.1,
-                            childAspectRatio: 0.8,
-                          ),
-                          scrollDirection: Axis.vertical,
-                          itemCount: interests.length,
-                          itemBuilder: (context, interestsIndex) {
-                            final interestsItem = interests[interestsIndex];
-                            return StreamBuilder<CommunitiesRecord>(
-                              stream:
-                                  CommunitiesRecord.getDocument(interestsItem),
-                              builder: (context, snapshot) {
+                  return GridView.builder(
+                    padding: EdgeInsets.zero,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 2.0,
+                      mainAxisSpacing: 2.1,
+                      childAspectRatio: 0.8,
+                    ),
+                    scrollDirection: Axis.vertical,
+                    itemCount: interests.length,
+                    itemBuilder: (context, interestsIndex) {
+                      final interestsItem = interests[interestsIndex];
+                      return StreamBuilder<CommunitiesRecord>(
+                        stream: CommunitiesRecord.getDocument(interestsItem),
+                        builder: (context, snapshot) {
                                 // Customize what your widget looks like when it's loading.
                                 if (!snapshot.hasData) {
                                   return Center(
@@ -215,12 +215,13 @@ class _InterestWidgetState extends State<InterestWidget> {
                                   ),
                                 );
                               },
-                            );
-                          },
-                        );
-                      },
-                    );
-          },
+                      );
+                    },
+                  );
+                },
+              );
+            },
+          ),
         ),
       ),
     );

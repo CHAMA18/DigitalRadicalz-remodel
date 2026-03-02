@@ -48,8 +48,10 @@ class _TicketCompletionWidgetState extends State<TicketCompletionWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: Color(0xFF1F2024),
-        body: Stack(
-          children: [
+        body: SafeArea(
+          top: false,
+          child: Stack(
+            children: [
             Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -244,7 +246,8 @@ class _TicketCompletionWidgetState extends State<TicketCompletionWidget> {
                 ),
               ),
             ),
-          ],
+            ],
+          ),
         ),
       ),
     );

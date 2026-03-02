@@ -60,6 +60,7 @@ class CmsNews {
   final DateTime? publishedAt;
   final int viewCount;
   final int likeCount;
+  final int commentCount;
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final List<String> tags;
@@ -81,6 +82,7 @@ class CmsNews {
     this.publishedAt,
     this.viewCount = 0,
     this.likeCount = 0,
+    this.commentCount = 0,
     this.createdAt,
     this.updatedAt,
     this.tags = const [],
@@ -90,20 +92,65 @@ class CmsNews {
   factory CmsNews.fromJson(Map<String, dynamic> json) {
     return CmsNews(
       id: (json['id'] ?? json['_id'] ?? json['newsId'] ?? '').toString(),
-      title: json['title'] ?? json['name'] ?? '',
-      content: json['content'] ?? json['body'] ?? json['description'] ?? '',
-      excerpt: json['excerpt'] ?? json['summary'] ?? json['short_description'],
-      featuredImage: json['featured_image'] ?? json['featuredImage'] ?? json['image'] ?? json['thumbnail'],
-      category: json['category'] ?? json['category_name'],
+      title: _firstNonEmptyString([
+            json['title'],
+            json['name'],
+            json['headline'],
+            json['news_title'],
+            json['article_title'],
+          ]) ??
+          '',
+      content: _firstNonEmptyString([
+            json['content'],
+            json['body'],
+            json['description'],
+            json['article_content'],
+            json['long_description'],
+          ]) ??
+          '',
+      excerpt: _firstNonEmptyString([
+        json['excerpt'],
+        json['summary'],
+        json['short_description'],
+        json['subtitle'],
+        json['sub_title'],
+      ]),
+      featuredImage: _extractImageUrl(
+        json['featured_image'] ??
+            json['featuredImage'] ??
+            json['image'] ??
+            json['thumbnail'] ??
+            json['featured_media'],
+      ),
+      category: _firstNonEmptyString([
+        json['category'],
+        json['category_name'],
+        json['news_category'],
+        json['type_name'],
+      ]),
       authorId: json['author_id']?.toString() ?? json['authorId']?.toString(),
-      authorName: json['author_name'] ?? json['author']?['name'] ?? json['authorName'],
+      authorName: _firstNonEmptyString([
+        json['author_name'],
+        json['author']?['name'],
+        json['authorName'],
+        json['created_by_name'],
+      ]),
       type: json['type'] ?? json['content_type'] ?? 'article',
       videoUrl: json['video_url'] ?? json['videoUrl'] ?? json['video'],
       videoDuration: json['video_duration'] ?? json['videoDuration'] ?? json['duration'],
-      videoThumbnail: json['video_thumbnail'] ?? json['videoThumbnail'],
+      videoThumbnail: _extractImageUrl(
+        json['video_thumbnail'] ?? json['videoThumbnail'] ?? json['thumbnail'],
+      ),
       publishedAt: _parseDate(json['published_at'] ?? json['publishedAt'] ?? json['date']),
       viewCount: _parseInt(json['view_count'] ?? json['viewCount'] ?? json['views']) ?? 0,
       likeCount: _parseInt(json['like_count'] ?? json['likeCount'] ?? json['likes']) ?? 0,
+      commentCount: _parseInt(
+            json['comment_count'] ??
+                json['commentCount'] ??
+                json['comments'] ??
+                json['comments_count'],
+          ) ??
+          0,
       createdAt: _parseDate(json['created_at'] ?? json['createdAt']),
       updatedAt: _parseDate(json['updated_at'] ?? json['updatedAt']),
       tags: _parseStringList(json['tags']),
@@ -127,6 +174,7 @@ class CmsNews {
     'publishedAt': publishedAt?.toIso8601String(),
     'viewCount': viewCount,
     'likeCount': likeCount,
+    'commentCount': commentCount,
     'createdAt': createdAt?.toIso8601String(),
     'updatedAt': updatedAt?.toIso8601String(),
     'tags': tags,
@@ -672,4 +720,62 @@ List<String> _parseStringList(dynamic value) {
     return value.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).toList();
   }
   return [];
+}
+
+String? _firstNonEmptyString(List<dynamic> values) {
+  for (final value in values) {
+    final normalized = _asNonEmptyString(value);
+    if (normalized != null) {
+      return normalized;
+    }
+  }
+  return null;
+}
+
+String? _asNonEmptyString(dynamic value) {
+  if (value == null) return null;
+  if (value is String) {
+    final trimmed = value.trim();
+    return trimmed.isEmpty ? null : trimmed;
+  }
+  if (value is num || value is bool) {
+    return value.toString();
+  }
+  if (value is Map) {
+    return _firstNonEmptyString([
+      value['name'],
+      value['title'],
+      value['label'],
+      value['value'],
+    ]);
+  }
+  return null;
+}
+
+String? _extractImageUrl(dynamic value) {
+  if (value == null) return null;
+  if (value is String) {
+    final trimmed = value.trim();
+    return trimmed.isEmpty ? null : trimmed;
+  }
+  if (value is List) {
+    for (final item in value) {
+      final candidate = _extractImageUrl(item);
+      if (candidate != null) {
+        return candidate;
+      }
+    }
+    return null;
+  }
+  if (value is Map) {
+    return _firstNonEmptyString([
+      value['url'],
+      value['src'],
+      value['image'],
+      value['secure_url'],
+      value['path'],
+      value['downloadURL'],
+    ]);
+  }
+  return null;
 }

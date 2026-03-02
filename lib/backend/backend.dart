@@ -1038,16 +1038,21 @@ Future<int> queryCollectionCount(
   Query collection, {
   Query Function(Query)? queryBuilder,
   int limit = -1,
-}) {
+}) async {
   final builder = queryBuilder ?? (q) => q;
   var query = builder(collection);
   if (limit > 0) {
     query = query.limit(limit);
   }
 
-  return query.count().get().catchError((err) {
-    print('Error querying $collection: $err');
-  }).then((value) => value.count!);
+  try {
+    final snapshot = await query.count().get();
+    return snapshot.count ?? 0;
+  } catch (err) {
+    // Keep failures non-fatal in UI consumers (e.g. permissions on public pages).
+    print('Error querying count for $collection');
+    return 0;
+  }
 }
 
 Stream<List<T>> queryCollection<T>(
@@ -1062,8 +1067,8 @@ Stream<List<T>> queryCollection<T>(
   if (limit > 0 || singleRecord) {
     query = query.limit(singleRecord ? 1 : limit);
   }
-  return query.snapshots().handleError((err) {
-    print('Error querying $collection: $err');
+  return query.snapshots().handleError((_) {
+    print('Error querying stream for $collection');
   }).map((s) => s.docs
       .map(
         (d) => safeGet(
@@ -1089,15 +1094,18 @@ Future<List<T>> queryCollectionOnce<T>(
     query = query.limit(singleRecord ? 1 : limit);
   }
   return query.get().then((s) => s.docs
-      .map(
-        (d) => safeGet(
-          () => recordBuilder(d),
-          (e) => print('Error serializing doc ${d.reference.path}:\n$e'),
-        ),
-      )
-      .where((d) => d != null)
-      .map((d) => d!)
-      .toList());
+          .map(
+            (d) => safeGet(
+              () => recordBuilder(d),
+              (e) => print('Error serializing doc ${d.reference.path}:\n$e'),
+            ),
+          )
+          .where((d) => d != null)
+          .map((d) => d!)
+          .toList()).catchError((_) {
+        print('Error querying once for $collection');
+        return <T>[];
+      });
 }
 
 Filter filterIn(String field, List? list) => (list?.isEmpty ?? true)

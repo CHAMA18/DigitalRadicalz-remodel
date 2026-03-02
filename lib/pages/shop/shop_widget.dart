@@ -28,6 +28,29 @@ class _ShopWidgetState extends State<ShopWidget> {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
+  bool _matchesSelectedCategory(ProductRecord product, String category) {
+    switch (category) {
+      case 'Alles':
+        return true;
+      case 'Stickers':
+        return product.category == 'Stickers' || product.category == 'Sticker';
+      case 'Assessoires':
+        return product.category == 'Assessoires' ||
+            product.category == 'Accessoires';
+      case 'Scanners':
+      case 'Scanner':
+        return product.category == 'Scanners';
+      default:
+        return product.category == category;
+    }
+  }
+
+  int _visibleProductCount(List<ProductRecord> products) {
+    return products
+        .where((product) => _matchesSelectedCategory(product, _model.ongenre))
+        .length;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -369,29 +392,51 @@ class _ShopWidgetState extends State<ShopWidget> {
                           mainAxisSize: MainAxisSize.max,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(ffTranslate(context, '{count} van de {total} producten', replacements: {'count': '15', 'total': '231'}),
-                              style: FlutterFlowTheme.of(context)
-                                  .bodyMedium
-                                  .override(
-                                    font: GoogleFonts.inter(
-                                      fontWeight: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontWeight,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium
-                                          .fontStyle,
-                                    ),
-                                    color: FlutterFlowTheme.of(context)
-                                        .secondaryText,
-                                    fontSize: 12.0,
-                                    letterSpacing: 0.0,
-                                    fontWeight: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontWeight,
-                                    fontStyle: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .fontStyle,
+                            StreamBuilder<List<ProductRecord>>(
+                              stream: queryProductRecord(),
+                              builder: (context, snapshot) {
+                                final allProducts = snapshot.data ?? const <ProductRecord>[];
+                                final visibleCount =
+                                    _visibleProductCount(allProducts);
+                                final totalCount = allProducts.length;
+
+                                return Text(
+                                  ffTranslate(
+                                    context,
+                                    '{count} van de {total} producten',
+                                    replacements: {
+                                      'count': visibleCount.toString(),
+                                      'total': totalCount.toString(),
+                                    },
                                   ),
+                                  style: FlutterFlowTheme.of(context)
+                                      .bodyMedium
+                                      .override(
+                                        font: GoogleFonts.inter(
+                                          fontWeight:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontWeight,
+                                          fontStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium
+                                                  .fontStyle,
+                                        ),
+                                        color: FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                        fontSize: 12.0,
+                                        letterSpacing: 0.0,
+                                        fontWeight:
+                                            FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .fontWeight,
+                                        fontStyle:
+                                            FlutterFlowTheme.of(context)
+                                                .bodyMedium
+                                                .fontStyle,
+                                      ),
+                                );
+                              },
                             ),
                             Text(ffTranslate(context, 'Best verkocht'),
                               style: FlutterFlowTheme.of(context)

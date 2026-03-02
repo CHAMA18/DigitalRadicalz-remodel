@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 class MediaModel extends FlutterFlowModel<MediaWidget> {
   ///  Local state fields for this page.
 
-  String onnewscategory = 'Course';
+  String onnewscategory = '';
 
   ///  State fields for stateful widgets in this page.
 

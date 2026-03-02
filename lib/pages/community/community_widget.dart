@@ -464,14 +464,7 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 12.0, 0.0, 0.0),
                               child: StreamBuilder<List<CommunitiesRecord>>(
-                                stream: queryCommunitiesRecord(
-                                  queryBuilder: (communitiesRecord) =>
-                                      communitiesRecord.where(
-                                    'subcategory',
-                                    isEqualTo: _model.onbutton,
-                                  ),
-                                  limit: 5,
-                                ),
+                                stream: queryCommunitiesRecord(),
                                 builder: (context, snapshot) {
                                   // Customize what your widget looks like when it's loading.
                                   if (!snapshot.hasData) {
@@ -491,16 +484,32 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                   }
                                   List<CommunitiesRecord>
                                       rowCommunitiesRecordList = snapshot.data!;
+                                  final selectedFilter =
+                                      _model.onbutton.trim().toLowerCase();
+                                  final filteredCommunities =
+                                      rowCommunitiesRecordList.where((community) {
+                                    final normalizedSubcategory =
+                                        community.subcategory.trim().toLowerCase();
+                                    final normalizedCategory =
+                                        community.category.trim().toLowerCase();
+                                    return normalizedSubcategory ==
+                                            selectedFilter ||
+                                        normalizedCategory == selectedFilter;
+                                  }).toList();
+                                  final recommendedCommunities =
+                                      filteredCommunities.isNotEmpty
+                                          ? filteredCommunities
+                                          : rowCommunitiesRecordList;
 
                                   return SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
                                       mainAxisSize: MainAxisSize.max,
                                       children: List.generate(
-                                          rowCommunitiesRecordList.length,
+                                          recommendedCommunities.length,
                                           (rowIndex) {
                                         final rowCommunitiesRecord =
-                                            rowCommunitiesRecordList[rowIndex];
+                                            recommendedCommunities[rowIndex];
                                         return Padding(
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
@@ -673,413 +682,458 @@ class _CommunityWidgetState extends State<CommunityWidget> {
                                 },
                               ),
                             ),
-                            StreamBuilder<List<CommunitiesRecord>>(
-                              stream: queryCommunitiesRecord(
-                                queryBuilder: (communitiesRecord) =>
-                                    communitiesRecord.where(
-                                  'joinedby',
-                                  arrayContains: currentUserReference,
+                            if (!loggedIn)
+                              Center(
+                                child: EmptycommunityWidget(),
+                              )
+                            else
+                              StreamBuilder<List<CommunityMembershipsRecord>>(
+                                stream: queryCommunityMembershipsRecord(
+                                  queryBuilder: (communityMembershipsRecord) =>
+                                      communityMembershipsRecord.where(
+                                    'userId',
+                                    isEqualTo: currentUserReference,
+                                  ),
                                 ),
-                              ),
-                              builder: (context, snapshot) {
-                                // Customize what your widget looks like when it's loading.
-                                if (!snapshot.hasData) {
-                                  return Center(
-                                    child: SizedBox(
-                                      width: 50.0,
-                                      height: 50.0,
-                                      child: FFShimmerLoadingIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                          FlutterFlowTheme.of(context).primary,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                }
-                                List<CommunitiesRecord>
-                                    columnCommunitiesRecordList =
-                                    snapshot.data!;
-                                if (columnCommunitiesRecordList.isEmpty) {
-                                  return Center(
-                                    child: EmptycommunityWidget(),
-                                  );
-                                }
-
-                                return Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: List.generate(
-                                      columnCommunitiesRecordList.length,
-                                      (columnIndex) {
-                                    final columnCommunitiesRecord =
-                                        columnCommunitiesRecordList[
-                                            columnIndex];
-                                    return Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 12.0, 0.0, 0.0),
-                                      child: InkWell(
-                                        splashColor: Colors.transparent,
-                                        focusColor: Colors.transparent,
-                                        hoverColor: Colors.transparent,
-                                        highlightColor: Colors.transparent,
-                                        onTap: () async {
-                                          context.pushNamed(
-                                            Community2Widget.routeName,
-                                            queryParameters: {
-                                              'communityref': serializeParam(
-                                                columnCommunitiesRecord
-                                                    .reference,
-                                                ParamType.DocumentReference,
-                                              ),
-                                            }.withoutNulls,
-                                            extra: <String, dynamic>{
-                                              kTransitionInfoKey:
-                                                  TransitionInfo(
-                                                hasTransition: true,
-                                                transitionType:
-                                                    PageTransitionType.fade,
-                                                duration:
-                                                    Duration(milliseconds: 0),
-                                              ),
-                                            },
-                                          );
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: FlutterFlowTheme.of(context)
-                                                .secondaryBackground,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                blurRadius: 4.0,
-                                                color: Color(0x33000000),
-                                                offset: Offset(
-                                                  0.0,
-                                                  2.0,
-                                                ),
-                                              )
-                                            ],
-                                            borderRadius:
-                                                BorderRadius.circular(12.0),
-                                          ),
-                                          child: Stack(
-                                            alignment:
-                                                AlignmentDirectional(0.0, 0.4),
-                                            children: [
-                                              Column(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Container(
-                                                    width: double.infinity,
-                                                    height: 105.0,
-                                                    decoration: BoxDecoration(
-                                                      image: DecorationImage(
-                                                        fit: BoxFit.cover,
-                                                        image: Image.network(
-                                                          valueOrDefault<
-                                                              String>(
-                                                            columnCommunitiesRecord
-                                                                .image,
-                                                            'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/d75zc6g7yshz/7373193a9dbc8be8a2cd02a9cdf9f291473d5811.jpg',
-                                                          ),
-                                                        ).image,
-                                                      ),
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        bottomLeft:
-                                                            Radius.circular(
-                                                                0.0),
-                                                        bottomRight:
-                                                            Radius.circular(
-                                                                0.0),
-                                                        topLeft:
-                                                            Radius.circular(
-                                                                12.0),
-                                                        topRight:
-                                                            Radius.circular(
-                                                                12.0),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    width: double.infinity,
-                                                    height: 43.4,
-                                                    decoration: BoxDecoration(
-                                                      color: FlutterFlowTheme
-                                                              .of(context)
-                                                          .secondaryBackground,
-                                                      borderRadius:
-                                                          BorderRadius.only(
-                                                        bottomLeft:
-                                                            Radius.circular(
-                                                                12.0),
-                                                        bottomRight:
-                                                            Radius.circular(
-                                                                12.0),
-                                                        topLeft:
-                                                            Radius.circular(
-                                                                0.0),
-                                                        topRight:
-                                                            Radius.circular(
-                                                                0.0),
-                                                      ),
-                                                      border: Border.all(
-                                                        color:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .alternate,
-                                                      ),
-                                                    ),
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  12.0,
-                                                                  0.0,
-                                                                  12.0,
-                                                                  0.0),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        children: [
-                                                          Text(
-                                                            valueOrDefault<
-                                                                String>(
-                                                              columnCommunitiesRecord
-                                                                  .name,
-                                                              '4 mensen bevinden zich in deze community',
-                                                            ),
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  font:
-                                                                      GoogleFonts
-                                                                          .inter(
-                                                                    fontWeight: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontWeight,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
-                                                                  ),
-                                                                  color: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .secondaryText,
-                                                                  fontSize:
-                                                                      12.0,
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                  fontWeight: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontWeight,
-                                                                  fontStyle: FlutterFlowTheme.of(
-                                                                          context)
-                                                                      .bodyMedium
-                                                                      .fontStyle,
-                                                                ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              Align(
-                                                alignment: AlignmentDirectional(
-                                                    0.0, 0.37),
-                                                child: Padding(
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          32.0, 0.0, 32.0, 0.0),
-                                                  child: Row(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    children: [
-                                                      Container(
-                                                        width: 130.5,
-                                                        height: 27.4,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color:
-                                                              Color(0xFF1F7A8C),
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      8.0),
-                                                        ),
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Text(
-                                                              valueOrDefault<
-                                                                  String>(
-                                                                columnCommunitiesRecord
-                                                                    .category,
-                                                                'Category',
-                                                              ),
-                                                              style: FlutterFlowTheme
-                                                                      .of(context)
-                                                                  .bodyMedium
-                                                                  .override(
-                                                                    font: GoogleFonts
-                                                                        .inter(
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500,
-                                                                      fontStyle: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .bodyMedium
-                                                                          .fontStyle,
-                                                                    ),
-                                                                    color: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .secondaryBackground,
-                                                                    letterSpacing:
-                                                                        0.0,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500,
-                                                                    fontStyle: FlutterFlowTheme.of(
-                                                                            context)
-                                                                        .bodyMedium
-                                                                        .fontStyle,
-                                                                  ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    12.0,
-                                                                    0.0,
-                                                                    12.0,
-                                                                    0.0),
-                                                        child: Row(
-                                                          mainAxisSize:
-                                                              MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Stack(
-                                                              children: [
-                                                                Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          32.0,
-                                                                          0.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                                  child:
-                                                                      Container(
-                                                                    width: 32.0,
-                                                                    height:
-                                                                        32.0,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .secondaryBackground,
-                                                                      image:
-                                                                          DecorationImage(
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                        image: Image
-                                                                            .asset(
-                                                                          'assets/images/9e729cfc2fb3451f2790627112ebba6732cb7a49.jpg',
-                                                                        ).image,
-                                                                      ),
-                                                                      shape: BoxShape
-                                                                          .circle,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          18.0,
-                                                                          0.0,
-                                                                          20.0,
-                                                                          0.0),
-                                                                  child:
-                                                                      Container(
-                                                                    width: 32.0,
-                                                                    height:
-                                                                        32.0,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: FlutterFlowTheme.of(
-                                                                              context)
-                                                                          .secondaryBackground,
-                                                                      image:
-                                                                          DecorationImage(
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                        image: Image
-                                                                            .asset(
-                                                                          'assets/images/a764303deed43df05ca3d05d09059507d646a98c.jpg',
-                                                                        ).image,
-                                                                      ),
-                                                                      shape: BoxShape
-                                                                          .circle,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                                Padding(
-                                                                  padding: EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          0.0,
-                                                                          0.0,
-                                                                          48.0,
-                                                                          0.0),
-                                                                  child:
-                                                                      Container(
-                                                                    width: 32.0,
-                                                                    height:
-                                                                        32.0,
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      image:
-                                                                          DecorationImage(
-                                                                        fit: BoxFit
-                                                                            .cover,
-                                                                        image: Image
-                                                                            .asset(
-                                                                          'assets/images/d12802e9961560961cad4e51a2d1175c20b7c2ed.jpg',
-                                                                        ).image,
-                                                                      ),
-                                                                      shape: BoxShape
-                                                                          .circle,
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                                builder: (context, snapshot) {
+                                  // Customize what your widget looks like when it's loading.
+                                  if (!snapshot.hasData) {
+                                    return Center(
+                                      child: SizedBox(
+                                        width: 50.0,
+                                        height: 50.0,
+                                        child: FFShimmerLoadingIndicator(
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                            FlutterFlowTheme.of(context).primary,
                                           ),
                                         ),
                                       ),
                                     );
-                                  }),
-                                );
-                              },
-                            ),
+                                  }
+                                  final membershipCommunityRefs = snapshot.data!
+                                      .where((membership) =>
+                                          membership.communityId != null)
+                                      .map((membership) => membership.communityId!)
+                                      .toSet();
+
+                                  return StreamBuilder<List<CommunitiesRecord>>(
+                                    stream: queryCommunitiesRecord(),
+                                    builder: (context, communitiesSnapshot) {
+                                      if (!communitiesSnapshot.hasData) {
+                                        return Center(
+                                          child: SizedBox(
+                                            width: 50.0,
+                                            height: 50.0,
+                                            child: FFShimmerLoadingIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                FlutterFlowTheme.of(context)
+                                                    .primary,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                      final currentUserRef = currentUserReference;
+                                      final allCommunities =
+                                          communitiesSnapshot.data!;
+                                      final myCommunities = allCommunities
+                                          .where((community) {
+                                            final joinedByCurrentUser =
+                                                currentUserRef != null &&
+                                                    community.joinedby
+                                                        .contains(currentUserRef);
+                                            final inMembershipCollection =
+                                                membershipCommunityRefs.contains(
+                                                    community.reference);
+                                            final createdByCurrentUser =
+                                                currentUserRef != null &&
+                                                    community.createdbyid ==
+                                                        currentUserRef;
+                                            return joinedByCurrentUser ||
+                                                inMembershipCollection ||
+                                                createdByCurrentUser;
+                                          })
+                                          .toList();
+
+                                      if (myCommunities.isEmpty) {
+                                        return Center(
+                                          child: EmptycommunityWidget(),
+                                        );
+                                      }
+
+                                      return Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        children: List.generate(myCommunities.length,
+                                            (columnIndex) {
+                                          final columnCommunitiesRecord =
+                                              myCommunities[columnIndex];
+                                          return Padding(
+                                            padding: EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 12.0, 0.0, 0.0),
+                                            child: InkWell(
+                                              splashColor: Colors.transparent,
+                                              focusColor: Colors.transparent,
+                                              hoverColor: Colors.transparent,
+                                              highlightColor: Colors.transparent,
+                                              onTap: () async {
+                                                context.pushNamed(
+                                                  Community2Widget.routeName,
+                                                  queryParameters: {
+                                                    'communityref': serializeParam(
+                                                      columnCommunitiesRecord
+                                                          .reference,
+                                                      ParamType.DocumentReference,
+                                                    ),
+                                                  }.withoutNulls,
+                                                  extra: <String, dynamic>{
+                                                    kTransitionInfoKey:
+                                                        TransitionInfo(
+                                                      hasTransition: true,
+                                                      transitionType:
+                                                          PageTransitionType.fade,
+                                                      duration: Duration(
+                                                          milliseconds: 0),
+                                                    ),
+                                                  },
+                                                );
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      FlutterFlowTheme.of(context)
+                                                          .secondaryBackground,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      blurRadius: 4.0,
+                                                      color: Color(0x33000000),
+                                                      offset: Offset(
+                                                        0.0,
+                                                        2.0,
+                                                      ),
+                                                    )
+                                                  ],
+                                                  borderRadius:
+                                                      BorderRadius.circular(12.0),
+                                                ),
+                                                child: Stack(
+                                                  alignment:
+                                                      AlignmentDirectional(0.0, 0.4),
+                                                  children: [
+                                                    Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      children: [
+                                                        Container(
+                                                          width: double.infinity,
+                                                          height: 105.0,
+                                                          decoration: BoxDecoration(
+                                                            image: DecorationImage(
+                                                              fit: BoxFit.cover,
+                                                              image: Image.network(
+                                                                valueOrDefault<
+                                                                    String>(
+                                                                  columnCommunitiesRecord
+                                                                      .image,
+                                                                  'https://storage.googleapis.com/flutterflow-io-6f20.appspot.com/projects/bright-wave-ioj9xl/assets/d75zc6g7yshz/7373193a9dbc8be8a2cd02a9cdf9f291473d5811.jpg',
+                                                                ),
+                                                              ).image,
+                                                            ),
+                                                            borderRadius:
+                                                                BorderRadius.only(
+                                                              bottomLeft:
+                                                                  Radius.circular(
+                                                                      0.0),
+                                                              bottomRight:
+                                                                  Radius.circular(
+                                                                      0.0),
+                                                              topLeft:
+                                                                  Radius.circular(
+                                                                      12.0),
+                                                              topRight:
+                                                                  Radius.circular(
+                                                                      12.0),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          width: double.infinity,
+                                                          height: 43.4,
+                                                          decoration: BoxDecoration(
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .secondaryBackground,
+                                                            borderRadius:
+                                                                BorderRadius.only(
+                                                              bottomLeft:
+                                                                  Radius.circular(
+                                                                      12.0),
+                                                              bottomRight:
+                                                                  Radius.circular(
+                                                                      12.0),
+                                                              topLeft:
+                                                                  Radius.circular(
+                                                                      0.0),
+                                                              topRight:
+                                                                  Radius.circular(
+                                                                      0.0),
+                                                            ),
+                                                            border: Border.all(
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .alternate,
+                                                            ),
+                                                          ),
+                                                          child: Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        12.0,
+                                                                        0.0,
+                                                                        12.0,
+                                                                        0.0),
+                                                            child: Row(
+                                                              mainAxisSize:
+                                                                  MainAxisSize.max,
+                                                              children: [
+                                                                Text(
+                                                                  valueOrDefault<
+                                                                      String>(
+                                                                    columnCommunitiesRecord
+                                                                        .name,
+                                                                    '4 mensen bevinden zich in deze community',
+                                                                  ),
+                                                                  style: FlutterFlowTheme.of(
+                                                                          context)
+                                                                      .bodyMedium
+                                                                      .override(
+                                                                        font: GoogleFonts
+                                                                            .inter(
+                                                                          fontWeight: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontWeight,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                        ),
+                                                                        color: FlutterFlowTheme.of(
+                                                                                context)
+                                                                            .secondaryText,
+                                                                        fontSize:
+                                                                            12.0,
+                                                                        letterSpacing:
+                                                                            0.0,
+                                                                        fontWeight: FlutterFlowTheme.of(
+                                                                                context)
+                                                                            .bodyMedium
+                                                                            .fontWeight,
+                                                                        fontStyle: FlutterFlowTheme.of(
+                                                                                context)
+                                                                            .bodyMedium
+                                                                            .fontStyle,
+                                                                      ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    Align(
+                                                      alignment:
+                                                          AlignmentDirectional(
+                                                              0.0, 0.37),
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(32.0, 0.0,
+                                                                    32.0, 0.0),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          children: [
+                                                            Container(
+                                                              width: 130.5,
+                                                              height: 27.4,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: Color(
+                                                                    0xFF1F7A8C),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.0),
+                                                              ),
+                                                              child: Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .max,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    valueOrDefault<
+                                                                        String>(
+                                                                      columnCommunitiesRecord
+                                                                          .category,
+                                                                      'Category',
+                                                                    ),
+                                                                    style: FlutterFlowTheme.of(
+                                                                            context)
+                                                                        .bodyMedium
+                                                                        .override(
+                                                                          font: GoogleFonts.inter(
+                                                                            fontWeight:
+                                                                                FontWeight.w500,
+                                                                            fontStyle: FlutterFlowTheme.of(context)
+                                                                                .bodyMedium
+                                                                                .fontStyle,
+                                                                          ),
+                                                                          color: FlutterFlowTheme.of(context)
+                                                                              .secondaryBackground,
+                                                                          letterSpacing:
+                                                                              0.0,
+                                                                          fontWeight:
+                                                                              FontWeight.w500,
+                                                                          fontStyle: FlutterFlowTheme.of(context)
+                                                                              .bodyMedium
+                                                                              .fontStyle,
+                                                                        ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          12.0,
+                                                                          0.0,
+                                                                          12.0,
+                                                                          0.0),
+                                                              child: Row(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .max,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .spaceBetween,
+                                                                children: [
+                                                                  Stack(
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding: EdgeInsetsDirectional
+                                                                            .fromSTEB(
+                                                                                32.0,
+                                                                                0.0,
+                                                                                0.0,
+                                                                                0.0),
+                                                                        child:
+                                                                            Container(
+                                                                          width:
+                                                                              32.0,
+                                                                          height:
+                                                                              32.0,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color: FlutterFlowTheme.of(context)
+                                                                                .secondaryBackground,
+                                                                            image:
+                                                                                DecorationImage(
+                                                                              fit:
+                                                                                  BoxFit.cover,
+                                                                              image:
+                                                                                  Image.asset(
+                                                                                'assets/images/9e729cfc2fb3451f2790627112ebba6732cb7a49.jpg',
+                                                                              ).image,
+                                                                            ),
+                                                                            shape:
+                                                                                BoxShape.circle,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding: EdgeInsetsDirectional
+                                                                            .fromSTEB(
+                                                                                18.0,
+                                                                                0.0,
+                                                                                20.0,
+                                                                                0.0),
+                                                                        child:
+                                                                            Container(
+                                                                          width:
+                                                                              32.0,
+                                                                          height:
+                                                                              32.0,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color: FlutterFlowTheme.of(context)
+                                                                                .secondaryBackground,
+                                                                            image:
+                                                                                DecorationImage(
+                                                                              fit:
+                                                                                  BoxFit.cover,
+                                                                              image:
+                                                                                  Image.asset(
+                                                                                'assets/images/a764303deed43df05ca3d05d09059507d646a98c.jpg',
+                                                                              ).image,
+                                                                            ),
+                                                                            shape:
+                                                                                BoxShape.circle,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Padding(
+                                                                        padding: EdgeInsetsDirectional
+                                                                            .fromSTEB(
+                                                                                0.0,
+                                                                                0.0,
+                                                                                48.0,
+                                                                                0.0),
+                                                                        child:
+                                                                            Container(
+                                                                          width:
+                                                                              32.0,
+                                                                          height:
+                                                                              32.0,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            image:
+                                                                                DecorationImage(
+                                                                              fit:
+                                                                                  BoxFit.cover,
+                                                                              image:
+                                                                                  Image.asset(
+                                                                                'assets/images/d12802e9961560961cad4e51a2d1175c20b7c2ed.jpg',
+                                                                              ).image,
+                                                                            ),
+                                                                            shape:
+                                                                                BoxShape.circle,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
                           ],
                         ),
                       ),

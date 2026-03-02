@@ -50,12 +50,14 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
       child: Scaffold(
         key: scaffoldKey,
         backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-        body: Container(
-          height: double.infinity,
+        body: SafeArea(
+          top: false,
           child: Container(
-            width: double.infinity,
-            height: 500.0,
-            child: Stack(
+            height: double.infinity,
+            child: Container(
+              width: double.infinity,
+              height: 500.0,
+              child: Stack(
               children: [
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 40.0),
@@ -1264,6 +1266,7 @@ class _IntroScreenWidgetState extends State<IntroScreenWidget> {
                   ),
                 ),
               ],
+              ),
             ),
           ),
         ),

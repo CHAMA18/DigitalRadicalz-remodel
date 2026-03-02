@@ -55,6 +55,16 @@ class FFAppState extends ChangeNotifier {
     _safeInit(() {
       _appLocaleCode = prefs.getString('ff_appLocaleCode') ?? _appLocaleCode;
     });
+    _safeInit(() {
+      _hasExplicitLanguageSelection =
+          prefs.getBool('ff_hasExplicitLanguageSelection') ??
+              _hasExplicitLanguageSelection;
+    });
+
+    if (!_hasExplicitLanguageSelection) {
+      _useSystemLocale = false;
+      _appLocaleCode = 'en';
+    }
   }
 
   void update(VoidCallback callback) {
@@ -122,7 +132,7 @@ class FFAppState extends ChangeNotifier {
   }
 
   // Internationalization settings
-  bool _useSystemLocale = true;
+  bool _useSystemLocale = false;
   bool get useSystemLocale => _useSystemLocale;
   set useSystemLocale(bool value) {
     _useSystemLocale = value;
@@ -134,6 +144,13 @@ class FFAppState extends ChangeNotifier {
   set appLocaleCode(String value) {
     _appLocaleCode = value;
     prefs.setString('ff_appLocaleCode', value);
+  }
+
+  bool _hasExplicitLanguageSelection = false;
+  bool get hasExplicitLanguageSelection => _hasExplicitLanguageSelection;
+  set hasExplicitLanguageSelection(bool value) {
+    _hasExplicitLanguageSelection = value;
+    prefs.setBool('ff_hasExplicitLanguageSelection', value);
   }
 
   List<DocumentReference> _Interestslists = [];

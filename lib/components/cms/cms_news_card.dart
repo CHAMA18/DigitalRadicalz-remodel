@@ -33,137 +33,172 @@ class CmsNewsCard extends StatelessWidget {
   }
 
   Widget _buildFullCard(BuildContext context) {
+    final category = _normalizedCategory();
+    final title = _normalizedTitle();
+    final excerpt = _normalizedExcerpt();
+    final body = _normalizedBody(excerpt);
+    final publishedDate = news.publishedAt ?? news.createdAt;
+    final likes = news.likeCount < 0 ? 0 : news.likeCount;
+    final comments = news.commentCount < 0 ? 0 : news.commentCount;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: width ?? 295.0,
-        height: height ?? double.infinity,
+        width: width ?? double.infinity,
+        height: height ?? 510.0,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12.0),
+          color: FlutterFlowTheme.of(context).secondaryBackground,
+          borderRadius: BorderRadius.circular(16.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: Colors.black.withValues(alpha: 0.08),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
           ],
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(12.0),
-          child: Stack(
-            fit: StackFit.expand,
+          borderRadius: BorderRadius.circular(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Background image
-              if (news.featuredImage != null && news.featuredImage!.isNotEmpty)
-                CachedNetworkImage(
-                  imageUrl: news.featuredImage!,
-                  fit: BoxFit.cover,
-                  placeholder: (context, url) => Container(
-                    color: FlutterFlowTheme.of(context).alternate,
-                    child: Center(
-                      child: FFShimmerLoadingIndicator(
-                        strokeWidth: 2,
-                        color: FlutterFlowTheme.of(context).primary,
-                      ),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => Container(
-                    color: FlutterFlowTheme.of(context).alternate,
-                    child: Icon(
-                      Icons.image_not_supported,
-                      color: FlutterFlowTheme.of(context).secondaryText,
-                    ),
-                  ),
-                )
-              else
-                Container(
-                  color: FlutterFlowTheme.of(context).alternate,
-                  child: Icon(
-                    Icons.article,
-                    size: 48,
-                    color: FlutterFlowTheme.of(context).secondaryText,
-                  ),
-                ),
-              // Gradient overlay
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black.withValues(alpha: 0.7),
-                    ],
-                  ),
-                ),
+              SizedBox(
+                width: double.infinity,
+                height: 260.0,
+                child: _buildNewsImage(context, showFallbackLabel: true),
               ),
-              // Content
-              Positioned(
-                left: 12,
-                right: 12,
-                bottom: 12,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (showCategory && news.category != null && news.category!.isNotEmpty)
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        margin: const EdgeInsets.only(bottom: 8),
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).primary,
-                          borderRadius: BorderRadius.circular(4),
+              Expanded(
+                child: Container(
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20.0, 16.0, 20.0, 16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (showCategory)
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 14.0, vertical: 6.0),
+                            decoration: BoxDecoration(
+                              color: FlutterFlowTheme.of(context)
+                                  .primaryBackground,
+                              borderRadius: BorderRadius.circular(20.0),
+                            ),
+                            child: Text(
+                              category,
+                              style: FlutterFlowTheme.of(context)
+                                  .bodySmall
+                                  .override(
+                                    font: GoogleFonts.inter(),
+                                    color:
+                                        FlutterFlowTheme.of(context).secondaryText,
+                                    fontSize: 13.0,
+                                  ),
+                            ),
+                          ),
+                        const SizedBox(height: 12.0),
+                        Text(
+                          title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: FlutterFlowTheme.of(context).titleLarge.override(
+                                font: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w700),
+                                fontSize: 22.0,
+                              ),
                         ),
-                        child: Text(
-                          news.category!,
-                          style: FlutterFlowTheme.of(context).bodySmall.override(
-                            font: GoogleFonts.inter(),
-                            color: Colors.white,
-                            fontSize: 10,
+                        const SizedBox(height: 8.0),
+                        Text(
+                          excerpt,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: FlutterFlowTheme.of(context).bodyLarge.override(
+                                font: GoogleFonts.inter(),
+                                color: FlutterFlowTheme.of(context).primaryText,
+                                fontSize: 18.0,
+                              ),
+                        ),
+                        const SizedBox(height: 14.0),
+                        Expanded(
+                          child: Text(
+                            body,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: FlutterFlowTheme.of(context)
+                                .bodyMedium
+                                .override(
+                                  font: GoogleFonts.inter(),
+                                  color:
+                                      FlutterFlowTheme.of(context).secondaryText,
+                                  fontSize: 14.0,
+                                ),
                           ),
                         ),
-                      ),
-                    Text(
-                      news.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: FlutterFlowTheme.of(context).titleMedium.override(
-                        font: GoogleFonts.inter(fontWeight: FontWeight.w600),
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    if (news.publishedAt != null)
-                      Text(
-                        _formatDate(news.publishedAt!),
-                        style: FlutterFlowTheme.of(context).bodySmall.override(
-                          font: GoogleFonts.inter(),
-                          color: Colors.white.withValues(alpha: 0.8),
-                          fontSize: 12,
+                        const SizedBox(height: 16.0),
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.calendar_today_outlined,
+                              size: 20.0,
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                            ),
+                            const SizedBox(width: 6.0),
+                            Text(
+                              publishedDate != null
+                                  ? _formatDate(publishedDate)
+                                  : 'No date',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    font: GoogleFonts.inter(),
+                                    color:
+                                        FlutterFlowTheme.of(context).secondaryText,
+                                    fontSize: 15.0,
+                                  ),
+                            ),
+                            const SizedBox(width: 22.0),
+                            Icon(
+                              Icons.favorite_border,
+                              size: 20.0,
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                            ),
+                            const SizedBox(width: 6.0),
+                            Text(
+                              '$likes',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    font: GoogleFonts.inter(),
+                                    color:
+                                        FlutterFlowTheme.of(context).secondaryText,
+                                    fontSize: 15.0,
+                                  ),
+                            ),
+                            const SizedBox(width: 22.0),
+                            Icon(
+                              Icons.chat_bubble_outline,
+                              size: 20.0,
+                              color: FlutterFlowTheme.of(context).secondaryText,
+                            ),
+                            const SizedBox(width: 6.0),
+                            Text(
+                              '$comments',
+                              style: FlutterFlowTheme.of(context)
+                                  .bodyMedium
+                                  .override(
+                                    font: GoogleFonts.inter(),
+                                    color:
+                                        FlutterFlowTheme.of(context).secondaryText,
+                                    fontSize: 15.0,
+                                  ),
+                            ),
+                          ],
                         ),
-                      ),
-                  ],
-                ),
-              ),
-              // Video indicator
-              if (news.type == 'video')
-                Positioned(
-                  top: 12,
-                  right: 12,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withValues(alpha: 0.6),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.play_arrow,
-                      color: Colors.white,
-                      size: 20,
+                      ],
                     ),
                   ),
                 ),
+              ),
             ],
           ),
         ),
@@ -172,6 +207,11 @@ class CmsNewsCard extends StatelessWidget {
   }
 
   Widget _buildCompactCard(BuildContext context) {
+    final category = _normalizedCategory();
+    final title = _normalizedTitle();
+    final excerpt = _normalizedExcerpt();
+    final publishedDate = news.publishedAt ?? news.createdAt;
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -188,30 +228,7 @@ class CmsNewsCard extends StatelessWidget {
               child: SizedBox(
                 width: 80,
                 height: 80,
-                child: news.featuredImage != null && news.featuredImage!.isNotEmpty
-                    ? CachedNetworkImage(
-                        imageUrl: news.featuredImage!,
-                        fit: BoxFit.cover,
-                        placeholder: (context, url) => Container(
-                          color: FlutterFlowTheme.of(context).alternate,
-                        ),
-                        errorWidget: (context, url, error) => Container(
-                          color: FlutterFlowTheme.of(context).alternate,
-                          child: Icon(
-                            Icons.image_not_supported,
-                            color: FlutterFlowTheme.of(context).secondaryText,
-                            size: 24,
-                          ),
-                        ),
-                      )
-                    : Container(
-                        color: FlutterFlowTheme.of(context).alternate,
-                        child: Icon(
-                          Icons.article,
-                          color: FlutterFlowTheme.of(context).secondaryText,
-                          size: 24,
-                        ),
-                      ),
+                child: _buildNewsImage(context),
               ),
             ),
             const SizedBox(width: 12),
@@ -221,7 +238,7 @@ class CmsNewsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    news.title,
+                    title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                     style: FlutterFlowTheme.of(context).bodyMedium.override(
@@ -230,11 +247,22 @@ class CmsNewsCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
+                  Text(
+                    excerpt,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: FlutterFlowTheme.of(context).bodySmall.override(
+                          font: GoogleFonts.inter(),
+                          color: FlutterFlowTheme.of(context).secondaryText,
+                          fontSize: 12,
+                        ),
+                  ),
+                  const SizedBox(height: 4),
                   Row(
                     children: [
-                      if (news.category != null && news.category!.isNotEmpty) ...[
+                      if (showCategory) ...[
                         Text(
-                          news.category!,
+                          category,
                           style: FlutterFlowTheme.of(context).bodySmall.override(
                             font: GoogleFonts.inter(),
                             color: FlutterFlowTheme.of(context).primary,
@@ -250,9 +278,9 @@ class CmsNewsCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 8),
                       ],
-                      if (news.publishedAt != null)
+                      if (publishedDate != null)
                         Text(
-                          _formatDate(news.publishedAt!),
+                          _formatDate(publishedDate),
                           style: FlutterFlowTheme.of(context).bodySmall.override(
                             font: GoogleFonts.inter(),
                             color: FlutterFlowTheme.of(context).secondaryText,
@@ -277,19 +305,123 @@ class CmsNewsCard extends StatelessWidget {
     );
   }
 
-  String _formatDate(DateTime date) {
-    final now = DateTime.now();
-    final diff = now.difference(date);
-    
-    if (diff.inDays == 0) {
-      if (diff.inHours == 0) {
-        return '${diff.inMinutes}m ago';
-      }
-      return '${diff.inHours}h ago';
-    } else if (diff.inDays < 7) {
-      return '${diff.inDays}d ago';
-    } else {
-      return DateFormat('MMM d, y').format(date);
+  Widget _buildNewsImage(
+    BuildContext context, {
+    bool showFallbackLabel = false,
+  }) {
+    final imageUrl = news.featuredImage?.trim();
+    if (imageUrl != null && imageUrl.isNotEmpty) {
+      return CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: BoxFit.cover,
+        placeholder: (context, url) => Container(
+          color: FlutterFlowTheme.of(context).alternate,
+          child: Center(
+            child: FFShimmerLoadingIndicator(
+              strokeWidth: 2,
+              color: FlutterFlowTheme.of(context).primary,
+            ),
+          ),
+        ),
+        errorWidget: (context, url, error) =>
+            _buildImageFallback(context, showFallbackLabel),
+      );
     }
+    return _buildImageFallback(context, showFallbackLabel);
+  }
+
+  Widget _buildImageFallback(BuildContext context, bool showLabel) {
+    return Container(
+      color: FlutterFlowTheme.of(context).alternate,
+      child: Center(
+        child: showLabel
+            ? Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.image_outlined,
+                    size: 52,
+                    color: FlutterFlowTheme.of(context).secondaryText,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Image unavailable',
+                    style: FlutterFlowTheme.of(context).bodyMedium.override(
+                          font: GoogleFonts.inter(),
+                          color: FlutterFlowTheme.of(context).secondaryText,
+                        ),
+                  ),
+                ],
+              )
+            : Icon(
+                Icons.image_not_supported,
+                color: FlutterFlowTheme.of(context).secondaryText,
+                size: 24,
+              ),
+      ),
+    );
+  }
+
+  String _normalizedCategory() {
+    final category = _cleanText(news.category);
+    return category.isEmpty ? 'General' : category;
+  }
+
+  String _normalizedTitle() {
+    final title = _cleanText(news.title);
+    return title.isEmpty ? 'Untitled article' : title;
+  }
+
+  String _normalizedExcerpt() {
+    final excerpt = _cleanText(news.excerpt);
+    if (excerpt.isNotEmpty) {
+      return excerpt;
+    }
+    final content = _cleanText(news.content);
+    if (content.isEmpty) {
+      return 'No summary available';
+    }
+    return _truncateToWords(content, 12);
+  }
+
+  String _normalizedBody(String excerpt) {
+    final content = _cleanText(news.content);
+    if (content.isEmpty) {
+      return 'No content available.';
+    }
+    var normalized = content;
+    if (normalized.toLowerCase().startsWith(excerpt.toLowerCase())) {
+      normalized = normalized.substring(excerpt.length).trimLeft();
+    }
+    if (normalized.isEmpty) {
+      return content;
+    }
+    return normalized;
+  }
+
+  String _cleanText(String? value) {
+    if (value == null) {
+      return '';
+    }
+    var text = value
+        .replaceAll(RegExp(r'<[^>]*>'), ' ')
+        .replaceAll('&nbsp;', ' ')
+        .replaceAll('&amp;', '&')
+        .replaceAll('&quot;', '"')
+        .replaceAll('&#39;', '\'');
+    text = text.replaceAll(RegExp(r'\s+'), ' ').trim();
+    return text;
+  }
+
+  String _truncateToWords(String input, int maxWords) {
+    final words = input.split(' ');
+    if (words.length <= maxWords) {
+      return input;
+    }
+    return '${words.take(maxWords).join(' ')}...';
+  }
+
+  String _formatDate(DateTime date) {
+    return DateFormat('d MMM y').format(date);
   }
 }

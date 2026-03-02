@@ -171,28 +171,31 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
             ],
           ),
         ),
-        body: Stack(
-          children: [
-            TabBarView(
-              controller: _tabController,
-              children: [
-                _buildNewsTab(context),
-                _buildEventsTab(context),
-                _buildProductsTab(context),
-                _buildMediaTab(context),
-                _buildCoursesTab(context),
-              ],
-            ),
-            // Bottom navigation
-            Align(
-              alignment: AlignmentDirectional.bottomCenter,
-              child: wrapWithModel(
-                model: _model.navbarModel,
-                updateCallback: () => safeSetState(() {}),
-                child: const NavbarWidget(),
+        body: SafeArea(
+          top: false,
+          child: Stack(
+            children: [
+              TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildNewsTab(context),
+                  _buildEventsTab(context),
+                  _buildProductsTab(context),
+                  _buildMediaTab(context),
+                  _buildCoursesTab(context),
+                ],
               ),
-            ),
-          ],
+              // Bottom navigation
+              Align(
+                alignment: AlignmentDirectional.bottomCenter,
+                child: wrapWithModel(
+                  model: _model.navbarModel,
+                  updateCallback: () => safeSetState(() {}),
+                  child: const NavbarWidget(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -213,6 +216,44 @@ class _CmsContentWidgetState extends State<CmsContentWidget>
 
         if (provider.news.isEmpty) {
           return _buildEmptyState(context, 'No news available', Icons.article);
+        }
+
+        final screenWidth = MediaQuery.sizeOf(context).width;
+        final useGridLayout = screenWidth >= 900.0;
+        final horizontalPadding = screenWidth >= 1400.0 ? 24.0 : 16.0;
+
+        if (useGridLayout) {
+          final crossAxisCount = screenWidth >= 1500.0 ? 3 : 2;
+          const cardHeight = 510.0;
+          final totalHorizontalSpacing = (crossAxisCount - 1) * 16.0;
+          final contentWidth = screenWidth - (horizontalPadding * 2);
+          final cardWidth =
+              (contentWidth - totalHorizontalSpacing) / crossAxisCount;
+          final childAspectRatio = cardWidth / cardHeight;
+
+          return RefreshIndicator(
+            onRefresh: () => provider.fetchNews(refresh: true),
+            child: GridView.builder(
+              padding:
+                  EdgeInsets.fromLTRB(horizontalPadding, 16.0, horizontalPadding, 100.0),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                crossAxisSpacing: 16.0,
+                mainAxisSpacing: 16.0,
+                childAspectRatio: childAspectRatio,
+              ),
+              itemCount: provider.news.length,
+              itemBuilder: (context, index) {
+                final news = provider.news[index];
+                return CmsNewsCard(
+                  news: news,
+                  height: cardHeight,
+                  isCompact: false,
+                  onTap: () => _showNewsDetail(context, news),
+                );
+              },
+            ),
+          );
         }
 
         return RefreshIndicator(

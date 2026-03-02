@@ -439,243 +439,135 @@ class _MediaWidgetState extends State<MediaWidget> {
                       Padding(
                         padding: EdgeInsetsDirectional.fromSTEB(
                             12.0, 24.0, 12.0, 0.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            FFButtonWidget(
-                              onPressed: () async {
-                                _model.onnewscategory = 'Course';
+                        child: StreamBuilder<List<CourseRecord>>(
+                          stream: queryCourseRecord(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const CategoryChipsShimmer();
+                            }
+
+                            final allCourses = snapshot.data!;
+                            final normalizedSeen = <String>{};
+                            final courseTags = <String>[];
+                            for (final course in allCourses) {
+                              final tag = course.coursetype.trim();
+                              if (tag.isEmpty) {
+                                continue;
+                              }
+                              final normalizedTag = tag.toLowerCase();
+                              if (normalizedSeen.add(normalizedTag)) {
+                                courseTags.add(tag);
+                              }
+                            }
+
+                            if (courseTags.isEmpty) {
+                              return const SizedBox.shrink();
+                            }
+
+                            final selectedTag =
+                                _model.onnewscategory.trim().toLowerCase();
+                            final selectedExists = courseTags.any(
+                              (tag) => tag.toLowerCase() == selectedTag,
+                            );
+                            if (!selectedExists) {
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                if (!mounted) {
+                                  return;
+                                }
+                                _model.onnewscategory = courseTags.first;
                                 safeSetState(() {});
-                              },
-                              text: ffTranslate(context, 'Course'),
-                              options: FFButtonOptions(
-                                height: 40.0,
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    16.0, 0.0, 16.0, 0.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: valueOrDefault<Color>(
-                                  _model.onnewscategory == 'Course'
-                                      ? FlutterFlowTheme.of(context).primary
-                                      : FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                  FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                ),
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      font: GoogleFonts.interTight(
-                                        fontWeight: FontWeight.w500,
-                                        fontStyle: FlutterFlowTheme.of(context)
+                              });
+                            }
+
+                            return SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children:
+                                    List.generate(courseTags.length, (tagIndex) {
+                                  final tag = courseTags[tagIndex];
+                                  final isSelected = tag.toLowerCase() ==
+                                      _model.onnewscategory.trim().toLowerCase();
+                                  return Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0,
+                                        0.0,
+                                        tagIndex == courseTags.length - 1
+                                            ? 0.0
+                                            : 12.0,
+                                        0.0),
+                                    child: FFButtonWidget(
+                                      onPressed: () async {
+                                        _model.onnewscategory = tag;
+                                        safeSetState(() {});
+                                      },
+                                      text: tag,
+                                      options: FFButtonOptions(
+                                        height: 40.0,
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            16.0, 0.0, 16.0, 0.0),
+                                        iconPadding:
+                                            EdgeInsetsDirectional.fromSTEB(
+                                                0.0, 0.0, 0.0, 0.0),
+                                        color: valueOrDefault<Color>(
+                                          isSelected
+                                              ? FlutterFlowTheme.of(context)
+                                                  .primary
+                                              : FlutterFlowTheme.of(context)
+                                                  .primaryBackground,
+                                          FlutterFlowTheme.of(context)
+                                              .primaryBackground,
+                                        ),
+                                        textStyle: FlutterFlowTheme.of(context)
                                             .titleSmall
-                                            .fontStyle,
+                                            .override(
+                                              font: GoogleFonts.interTight(
+                                                fontWeight: FontWeight.w500,
+                                                fontStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .titleSmall
+                                                        .fontStyle,
+                                              ),
+                                              color: valueOrDefault<Color>(
+                                                isSelected
+                                                    ? FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondaryBackground
+                                                    : FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondaryText,
+                                                FlutterFlowTheme.of(context)
+                                                    .secondaryText,
+                                              ),
+                                              fontSize: 14.0,
+                                              letterSpacing: 0.0,
+                                              fontWeight: FontWeight.w500,
+                                              fontStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .titleSmall
+                                                      .fontStyle,
+                                            ),
+                                        elevation: 0.0,
+                                        borderSide: BorderSide(
+                                          color: valueOrDefault<Color>(
+                                            isSelected
+                                                ? FlutterFlowTheme.of(context)
+                                                    .primary
+                                                : FlutterFlowTheme.of(context)
+                                                    .alternate,
+                                            FlutterFlowTheme.of(context)
+                                                .alternate,
+                                          ),
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(16.0),
                                       ),
-                                      color: valueOrDefault<Color>(
-                                        _model.onnewscategory == 'Course'
-                                            ? FlutterFlowTheme.of(context)
-                                                .secondaryBackground
-                                            : FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                      ),
-                                      fontSize: 14.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontStyle,
                                     ),
-                                elevation: 0.0,
-                                borderSide: BorderSide(
-                                  color: valueOrDefault<Color>(
-                                    _model.onnewscategory == 'Course'
-                                        ? FlutterFlowTheme.of(context).primary
-                                        : FlutterFlowTheme.of(context)
-                                            .alternate,
-                                    FlutterFlowTheme.of(context).alternate,
-                                  ),
-                                ),
-                                borderRadius: BorderRadius.circular(16.0),
+                                  );
+                                }),
                               ),
-                            ),
-                            FFButtonWidget(
-                              onPressed: () async {
-                                _model.onnewscategory = 'Workshop';
-                                safeSetState(() {});
-                              },
-                              text: ffTranslate(context, 'Workshop'),
-                              options: FFButtonOptions(
-                                height: 40.0,
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    16.0, 0.0, 16.0, 0.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: valueOrDefault<Color>(
-                                  _model.onnewscategory == 'Workshop'
-                                      ? FlutterFlowTheme.of(context).primary
-                                      : FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                  FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                ),
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      font: GoogleFonts.interTight(
-                                        fontWeight: FontWeight.w500,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .fontStyle,
-                                      ),
-                                      color: valueOrDefault<Color>(
-                                        _model.onnewscategory == 'Workshop'
-                                            ? FlutterFlowTheme.of(context)
-                                                .secondaryBackground
-                                            : FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                      ),
-                                      fontSize: 14.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontStyle,
-                                    ),
-                                elevation: 0.0,
-                                borderSide: BorderSide(
-                                  color: valueOrDefault<Color>(
-                                    _model.onnewscategory == 'Workshop'
-                                        ? FlutterFlowTheme.of(context).primary
-                                        : FlutterFlowTheme.of(context)
-                                            .alternate,
-                                    FlutterFlowTheme.of(context).alternate,
-                                  ),
-                                ),
-                                borderRadius: BorderRadius.circular(16.0),
-                              ),
-                            ),
-                            FFButtonWidget(
-                              onPressed: () async {
-                                _model.onnewscategory = 'Training';
-                                safeSetState(() {});
-                              },
-                              text: ffTranslate(context, 'Training'),
-                              options: FFButtonOptions(
-                                height: 40.0,
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    16.0, 0.0, 16.0, 0.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: valueOrDefault<Color>(
-                                  _model.onnewscategory == 'Training'
-                                      ? FlutterFlowTheme.of(context).primary
-                                      : FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                  FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                ),
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      font: GoogleFonts.interTight(
-                                        fontWeight: FontWeight.w500,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .fontStyle,
-                                      ),
-                                      color: valueOrDefault<Color>(
-                                        _model.onnewscategory == 'Training'
-                                            ? FlutterFlowTheme.of(context)
-                                                .secondaryBackground
-                                            : FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                      ),
-                                      fontSize: 14.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontStyle,
-                                    ),
-                                elevation: 0.0,
-                                borderSide: BorderSide(
-                                  color: valueOrDefault<Color>(
-                                    _model.onnewscategory == 'Training'
-                                        ? FlutterFlowTheme.of(context).primary
-                                        : FlutterFlowTheme.of(context)
-                                            .alternate,
-                                    FlutterFlowTheme.of(context).alternate,
-                                  ),
-                                ),
-                                borderRadius: BorderRadius.circular(16.0),
-                              ),
-                            ),
-                            FFButtonWidget(
-                              onPressed: () async {
-                                _model.onnewscategory = 'Podcast';
-                                safeSetState(() {});
-                              },
-                              text: ffTranslate(context, 'Podcast'),
-                              options: FFButtonOptions(
-                                height: 40.0,
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    16.0, 0.0, 16.0, 0.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: valueOrDefault<Color>(
-                                  _model.onnewscategory == 'Podcast'
-                                      ? FlutterFlowTheme.of(context).primary
-                                      : FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                  FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                ),
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      font: GoogleFonts.interTight(
-                                        fontWeight: FontWeight.w500,
-                                        fontStyle: FlutterFlowTheme.of(context)
-                                            .titleSmall
-                                            .fontStyle,
-                                      ),
-                                      color: valueOrDefault<Color>(
-                                        _model.onnewscategory == 'Podcast'
-                                            ? FlutterFlowTheme.of(context)
-                                                .secondaryBackground
-                                            : FlutterFlowTheme.of(context)
-                                                .secondaryText,
-                                        FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                      ),
-                                      fontSize: 14.0,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w500,
-                                      fontStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .fontStyle,
-                                    ),
-                                elevation: 0.0,
-                                borderSide: BorderSide(
-                                  color: valueOrDefault<Color>(
-                                    _model.onnewscategory == 'Podcast'
-                                        ? FlutterFlowTheme.of(context).primary
-                                        : FlutterFlowTheme.of(context)
-                                            .alternate,
-                                    FlutterFlowTheme.of(context).alternate,
-                                  ),
-                                ),
-                                borderRadius: BorderRadius.circular(16.0),
-                              ),
-                            ),
-                          ],
+                            );
+                          },
                         ),
                       ),
                       Padding(
@@ -687,7 +579,7 @@ class _MediaWidgetState extends State<MediaWidget> {
                             Text(
                               valueOrDefault<String>(
                                 _model.onnewscategory,
-                                'Course',
+                                ffTranslate(context, 'Courses'),
                               ),
                               style: FlutterFlowTheme.of(context)
                                   .bodyMedium
@@ -714,10 +606,17 @@ class _MediaWidgetState extends State<MediaWidget> {
                             12.0, 12.0, 12.0, 12.0),
                         child: StreamBuilder<List<CourseRecord>>(
                           stream: queryCourseRecord(
-                            queryBuilder: (courseRecord) => courseRecord.where(
-                              'Coursetype',
-                              isEqualTo: _model.onnewscategory,
-                            ),
+                            queryBuilder: (courseRecord) {
+                              final selectedCategory =
+                                  _model.onnewscategory.trim();
+                              if (selectedCategory.isEmpty) {
+                                return courseRecord;
+                              }
+                              return courseRecord.where(
+                                'Coursetype',
+                                isEqualTo: selectedCategory,
+                              );
+                            },
                           ),
                           builder: (context, snapshot) {
                             // Customize what your widget looks like when it's loading.

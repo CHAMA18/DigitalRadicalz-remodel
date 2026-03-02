@@ -213,12 +213,6 @@ class EditprofilesModel extends FlutterFlowModel<EditprofilesWidget> {
   FocusNode? usernameFocusNode;
   TextEditingController? usernameTextController;
   String? Function(BuildContext, String?)? usernameTextControllerValidator;
-  // State field(s) for passwordchange widget.
-  FocusNode? passwordchangeFocusNode;
-  TextEditingController? passwordchangeTextController;
-  late bool passwordchangeVisibility;
-  String? Function(BuildContext, String?)?
-      passwordchangeTextControllerValidator;
   // State field(s) for emailchange widget.
   FocusNode? emailchangeFocusNode;
   TextEditingController? emailchangeTextController;
@@ -250,7 +244,6 @@ class EditprofilesModel extends FlutterFlowModel<EditprofilesWidget> {
 
   @override
   void initState(BuildContext context) {
-    passwordchangeVisibility = false;
     selectedCountryCode = countryCodes.firstWhere(
       (c) => c.code == 'US',
       orElse: () => countryCodes.first,
@@ -261,9 +254,6 @@ class EditprofilesModel extends FlutterFlowModel<EditprofilesWidget> {
   void dispose() {
     usernameFocusNode?.dispose();
     usernameTextController?.dispose();
-
-    passwordchangeFocusNode?.dispose();
-    passwordchangeTextController?.dispose();
 
     emailchangeFocusNode?.dispose();
     emailchangeTextController?.dispose();

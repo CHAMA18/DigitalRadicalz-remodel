@@ -69,12 +69,14 @@ class _Settings3WidgetState extends State<Settings3Widget> {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: EdgeInsetsDirectional.fromSTEB(12.0, 24.0, 12.0, 0.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+      body: SafeArea(
+        top: false,
+        child: Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(12.0, 24.0, 12.0, 0.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
             Column(
               mainAxisSize: MainAxisSize.max,
               children: [
@@ -180,7 +182,8 @@ class _Settings3WidgetState extends State<Settings3Widget> {
                 ],
               ),
             ),
-          ],
+            ],
+          ),
         ),
       ),
     );

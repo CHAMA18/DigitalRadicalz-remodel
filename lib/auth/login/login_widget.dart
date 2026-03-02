@@ -456,7 +456,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text('Watchwoord',
+                                        Text(ffTranslate(context, 'Password'),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -1201,7 +1201,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text('Watchwoord',
+                                        Text(ffTranslate(context, 'Password'),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(
@@ -2250,7 +2250,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                             crossAxisAlignment:
                                                 CrossAxisAlignment.start,
                                             children: [
-                                              Text('Watchwoord',
+                                              Text(ffTranslate(context, 'Password'),
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .bodyMedium
@@ -2480,7 +2480,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text('Watchwoord',
+                                        Text(ffTranslate(context, 'Confirm Password'),
                                           style: FlutterFlowTheme.of(context)
                                               .bodyMedium
                                               .override(

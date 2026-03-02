@@ -56,13 +56,16 @@ class _Media2WidgetState extends State<Media2Widget> {
         if (!snapshot.hasData) {
           return Scaffold(
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            body: Center(
-              child: SizedBox(
-                width: 50.0,
-                height: 50.0,
-                child: FFShimmerLoadingIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    FlutterFlowTheme.of(context).primary,
+            body: SafeArea(
+              top: false,
+              child: Center(
+                child: SizedBox(
+                  width: 50.0,
+                  height: 50.0,
+                  child: FFShimmerLoadingIndicator(
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      FlutterFlowTheme.of(context).primary,
+                    ),
                   ),
                 ),
               ),
@@ -80,8 +83,10 @@ class _Media2WidgetState extends State<Media2Widget> {
           child: Scaffold(
             key: scaffoldKey,
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
-            body: Stack(
-              children: [
+            body: SafeArea(
+              top: false,
+              child: Stack(
+                children: [
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 1.0),
                   child: SingleChildScrollView(
@@ -505,7 +510,8 @@ class _Media2WidgetState extends State<Media2Widget> {
                     ),
                   ),
                 ),
-              ],
+                ],
+              ),
             ),
           ),
         );

@@ -89,13 +89,15 @@ class _SharedMediaWidgetState extends State<SharedMediaWidget>
           ],
         ),
       ),
-      body: StreamBuilder<List<ChatmessagesRecord>>(
-        stream: queryChatmessagesRecord(
-          parent: widget.chatRef,
-          queryBuilder: (chatmessagesRecord) =>
-              chatmessagesRecord.orderBy('timestamp', descending: true),
-        ),
-        builder: (context, snapshot) {
+      body: SafeArea(
+        top: false,
+        child: StreamBuilder<List<ChatmessagesRecord>>(
+          stream: queryChatmessagesRecord(
+            parent: widget.chatRef,
+            queryBuilder: (chatmessagesRecord) =>
+                chatmessagesRecord.orderBy('timestamp', descending: true),
+          ),
+          builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Center(
               child: Text(
@@ -131,16 +133,17 @@ class _SharedMediaWidgetState extends State<SharedMediaWidget>
           final messagesWithVoice =
               messages.where((m) => m.voice.isNotEmpty).toList();
 
-          return TabBarView(
-            controller: _tabController,
-            children: [
-              // Images Tab
-              _buildImagesGrid(context, allImages),
-              // Audio Tab
-              _buildAudioList(context, messagesWithVoice),
-            ],
-          );
-        },
+            return TabBarView(
+              controller: _tabController,
+              children: [
+                // Images Tab
+                _buildImagesGrid(context, allImages),
+                // Audio Tab
+                _buildAudioList(context, messagesWithVoice),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -383,31 +386,34 @@ class _FullScreenImageView extends StatelessWidget {
           ],
         ),
       ),
-      body: Center(
-        child: InteractiveViewer(
-          panEnabled: true,
-          minScale: 0.5,
-          maxScale: 4.0,
-          child: Image.network(
-            imageUrl,
-            fit: BoxFit.contain,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return Center(
-                child: CircularProgressIndicator(
-                  value: loadingProgress.expectedTotalBytes != null
-                      ? loadingProgress.cumulativeBytesLoaded /
-                          loadingProgress.expectedTotalBytes!
-                      : null,
-                  color: Colors.white,
+      body: SafeArea(
+        top: false,
+        child: Center(
+          child: InteractiveViewer(
+            panEnabled: true,
+            minScale: 0.5,
+            maxScale: 4.0,
+            child: Image.network(
+              imageUrl,
+              fit: BoxFit.contain,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                    color: Colors.white,
+                  ),
+                );
+              },
+              errorBuilder: (context, error, stackTrace) => const Center(
+                child: Icon(
+                  Icons.broken_image_outlined,
+                  color: Colors.white54,
+                  size: 64,
                 ),
-              );
-            },
-            errorBuilder: (context, error, stackTrace) => const Center(
-              child: Icon(
-                Icons.broken_image_outlined,
-                color: Colors.white54,
-                size: 64,
               ),
             ),
           ),
