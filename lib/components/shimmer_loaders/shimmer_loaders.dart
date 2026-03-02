@@ -927,6 +927,206 @@ class CommunityPageShimmer extends StatelessWidget {
   }
 }
 
+/// Shimmer for small horizontal community cards
+class CommunityCardSmallShimmer extends StatelessWidget {
+  const CommunityCardSmallShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 12.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 101.8,
+            height: 87.1,
+            decoration: BoxDecoration(
+              color: FlutterFlowTheme.of(context).alternate,
+              borderRadius: BorderRadius.circular(9.0),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Container(
+            width: 80,
+            height: 14,
+            decoration: BoxDecoration(
+              color: FlutterFlowTheme.of(context).alternate,
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+        ],
+      ),
+    ).withShimmerAnimation();
+  }
+}
+
+/// Shimmer for large community cards in "My Communities" section
+class CommunityCardLargeShimmer extends StatelessWidget {
+  const CommunityCardLargeShimmer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 12.0),
+      decoration: BoxDecoration(
+        color: FlutterFlowTheme.of(context).secondaryBackground,
+        boxShadow: const [
+          BoxShadow(
+            blurRadius: 4.0,
+            color: Color(0x33000000),
+            offset: Offset(0.0, 2.0),
+          )
+        ],
+        borderRadius: BorderRadius.circular(12.0),
+      ),
+      child: Stack(
+        alignment: AlignmentDirectional(0.0, 0.4),
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Image area
+              Container(
+                width: double.infinity,
+                height: 105.0,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).alternate,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(12.0),
+                    topRight: Radius.circular(12.0),
+                  ),
+                ),
+              ),
+              // Bottom info area
+              Container(
+                width: double.infinity,
+                height: 43.4,
+                decoration: BoxDecoration(
+                  color: FlutterFlowTheme.of(context).secondaryBackground,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(12.0),
+                    bottomRight: Radius.circular(12.0),
+                  ),
+                  border: Border.all(
+                    color: FlutterFlowTheme.of(context).alternate,
+                  ),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 120,
+                        height: 12,
+                        decoration: BoxDecoration(
+                          color: FlutterFlowTheme.of(context).alternate,
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          // Category badge and avatars
+          Align(
+            alignment: const AlignmentDirectional(0.0, 0.37),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0),
+              child: Row(
+                children: [
+                  // Category badge
+                  Container(
+                    width: 100,
+                    height: 27.4,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).alternate,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // Avatar stack
+                  Stack(
+                    children: [
+                      Container(
+                        width: 32,
+                        height: 32,
+                        decoration: BoxDecoration(
+                          color: FlutterFlowTheme.of(context).alternate,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 18),
+                        child: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context).alternate.withValues(alpha: 0.8),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 36),
+                        child: Container(
+                          width: 32,
+                          height: 32,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context).alternate.withValues(alpha: 0.6),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    ).withShimmerAnimation();
+  }
+}
+
+/// Horizontal shimmer row for recommended communities
+class CommunityRowShimmer extends StatelessWidget {
+  final int count;
+  const CommunityRowShimmer({super.key, this.count = 4});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: List.generate(
+          count,
+          (index) => const CommunityCardSmallShimmer(),
+        ),
+      ),
+    );
+  }
+}
+
+/// List shimmer for "My Communities" section
+class MyCommunityListShimmer extends StatelessWidget {
+  final int count;
+  const MyCommunityListShimmer({super.key, this.count = 3});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: List.generate(
+        count,
+        (index) => const CommunityCardLargeShimmer(),
+      ),
+    );
+  }
+}
+
 /// Generic list shimmer with customizable item builder
 class GenericListShimmer extends StatelessWidget {
   final int itemCount;

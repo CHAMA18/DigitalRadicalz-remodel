@@ -178,6 +178,9 @@ class _AgendaWidgetState extends State<AgendaWidget>
                         child: StreamBuilder<List<EventsRecord>>(
                           stream: queryEventsRecord(),
                           builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(child: Text('Error loading events'));
+                            }
                             if (!snapshot.hasData) {
                               return Center(
                                 child: SizedBox(
@@ -217,6 +220,9 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                         singleRecord: true,
                                       ),
                                       builder: (context, snapshot) {
+                                        if (snapshot.hasError) {
+                                          return SizedBox.shrink();
+                                        }
                                         if (!snapshot.hasData) {
                                           return Center(
                                             child: SizedBox(
@@ -526,6 +532,9 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                 .orderBy('coordinates', descending: true),
                           ),
                           builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(child: Text('Error loading events'));
+                            }
                             if (!snapshot.hasData) {
                               return Center(
                                 child: SizedBox(
@@ -565,6 +574,9 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                         singleRecord: true,
                                       ),
                                       builder: (context, snapshot) {
+                                        if (snapshot.hasError) {
+                                          return SizedBox.shrink();
+                                        }
                                         if (!snapshot.hasData) {
                                           return Center(
                                             child: SizedBox(
@@ -925,6 +937,9 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                 .orderBy('salesEndTime', descending: true),
                           ),
                           builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(child: Text('Error loading events'));
+                            }
                             if (!snapshot.hasData) {
                               return Center(
                                 child: SizedBox(
@@ -962,6 +977,9 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                         singleRecord: true,
                                       ),
                                       builder: (context, snapshot) {
+                                        if (snapshot.hasError) {
+                                          return SizedBox.shrink();
+                                        }
                                         if (!snapshot.hasData) {
                                           return Center(
                                             child: SizedBox(
@@ -1316,6 +1334,9 @@ class _AgendaWidgetState extends State<AgendaWidget>
                         child: StreamBuilder<List<EventsRecord>>(
                           stream: queryEventsRecord(),
                           builder: (context, snapshot) {
+                            if (snapshot.hasError) {
+                              return Center(child: Text('Error loading events'));
+                            }
                             if (!snapshot.hasData) {
                               return Center(
                                 child: SizedBox(
@@ -1348,6 +1369,9 @@ class _AgendaWidgetState extends State<AgendaWidget>
                                         singleRecord: true,
                                       ),
                                       builder: (context, tixSnap) {
+                                        if (tixSnap.hasError) {
+                                          return SizedBox.shrink();
+                                        }
                                         if (!tixSnap.hasData) {
                                           return Center(
                                             child: SizedBox(

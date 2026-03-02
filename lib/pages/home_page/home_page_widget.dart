@@ -248,8 +248,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
         singleRecord: true,
       ),
       builder: (context, snapshot) {
-        // Customize what your widget looks like when it's loading.
-        if (!snapshot.hasData) {
+        // Handle loading state - only show shimmer if loading and no error
+        if (!snapshot.hasData && !snapshot.hasError) {
           return Scaffold(
             backgroundColor: FlutterFlowTheme.of(context).secondaryBackground,
             appBar: const MainTabAppBar(showShopActions: true),
@@ -268,7 +268,13 @@ class _HomePageWidgetState extends State<HomePageWidget>
             ),
           );
         }
-        List<CommunitiesRecord> homePageCommunitiesRecordList = snapshot.data!;
+        
+        // Handle error state - continue to show content with empty/default data
+        if (snapshot.hasError) {
+          debugPrint('Error loading communities: ${snapshot.error}');
+        }
+        
+        List<CommunitiesRecord> homePageCommunitiesRecordList = snapshot.data ?? [];
         final homePageCommunitiesRecord =
             homePageCommunitiesRecordList.isNotEmpty
                 ? homePageCommunitiesRecordList.first
@@ -302,7 +308,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                               singleRecord: true,
                             ),
                             builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
+                              if (!snapshot.hasData && !snapshot.hasError) {
                                 return Center(
                                   child: SizedBox(
                                     width: 24.0,
@@ -316,8 +322,11 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                   ),
                                 );
                               }
+                              if (snapshot.hasError) {
+                                debugPrint('Error loading app preferences: ${snapshot.error}');
+                              }
                               List<AppPreferenceRecord>
-                                  rowAppPreferenceRecordList = snapshot.data!;
+                                  rowAppPreferenceRecordList = snapshot.data ?? [];
                               final rowAppPreferenceRecord =
                                   rowAppPreferenceRecordList.isNotEmpty
                                       ? rowAppPreferenceRecordList.first
@@ -408,7 +417,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                   .orderBy('publishedAt', descending: true),
                             ),
                             builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
+                              if (!snapshot.hasData && !snapshot.hasError) {
                                 return SingleChildScrollView(
                                   scrollDirection: Axis.horizontal,
                                   child: Row(
@@ -422,8 +431,11 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                   ),
                                 );
                               }
+                              if (snapshot.hasError) {
+                                debugPrint('Error loading news: ${snapshot.error}');
+                              }
                               List<NewsRecord> rowNewsRecordList =
-                                  snapshot.data!;
+                                  snapshot.data ?? [];
                               if (rowNewsRecordList.isEmpty) {
                                 return Center(
                                   child: Image.asset(
@@ -612,7 +624,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                 ),
                                 builder: (context, snapshot) {
                                   // Customize what your widget looks like when it's loading.
-                                  if (!snapshot.hasData) {
+                                  if (!snapshot.hasData && !snapshot.hasError) {
                                     return Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
@@ -622,8 +634,11 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                       ],
                                     );
                                   }
+                                  if (snapshot.hasError) {
+                                    debugPrint('Error loading community posts: ${snapshot.error}');
+                                  }
                                   List<PostRecord> columnPostRecordList =
-                                      snapshot.data!;
+                                      snapshot.data ?? [];
 
                                   return Column(
                                     mainAxisSize: MainAxisSize.max,
@@ -643,13 +658,13 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                     12.0, 24.0, 12.0, 16.0),
                                             child: StreamBuilder<
                                                 CommunitiesRecord>(
-                                              stream:
-                                                  CommunitiesRecord.getDocument(
-                                                      columnPostRecord
-                                                          .communityid!),
+                                              stream: columnPostRecord.communityid != null
+                                                  ? CommunitiesRecord.getDocument(
+                                                      columnPostRecord.communityid!)
+                                                  : null,
                                               builder: (context, snapshot) {
                                                 // Customize what your widget looks like when it's loading.
-                                                if (!snapshot.hasData) {
+                                                if (!snapshot.hasData && !snapshot.hasError) {
                                                   return Row(
                                                     mainAxisSize:
                                                         MainAxisSize.max,
@@ -676,6 +691,37 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                       _shimmerBar(
                                                           width: 140,
                                                           height: 16),
+                                                    ],
+                                                  );
+                                                }
+                                                
+                                                // Handle error or no data - show default community name
+                                                if (snapshot.hasError || !snapshot.hasData) {
+                                                  return Row(
+                                                    mainAxisSize: MainAxisSize.max,
+                                                    mainAxisAlignment: MainAxisAlignment.start,
+                                                    children: [
+                                                      Container(
+                                                        width: 25.0,
+                                                        height: 25.0,
+                                                        decoration: BoxDecoration(
+                                                          color: FlutterFlowTheme.of(context).alternate,
+                                                          shape: BoxShape.circle,
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
+                                                        child: Text(
+                                                          'Community',
+                                                          style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                            font: GoogleFonts.inter(
+                                                              fontWeight: FontWeight.w500,
+                                                            ),
+                                                            fontSize: 14.0,
+                                                            letterSpacing: 0.0,
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ],
                                                   );
                                                 }
@@ -1251,7 +1297,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
                               stream: queryPostRecord(),
                               builder: (context, snapshot) {
                                 // Customize what your widget looks like when it's loading.
-                                if (!snapshot.hasData) {
+                                if (!snapshot.hasData && !snapshot.hasError) {
                                   return Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -1261,8 +1307,11 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                     ],
                                   );
                                 }
+                                if (snapshot.hasError) {
+                                  debugPrint('Error loading posts: ${snapshot.error}');
+                                }
                                 List<PostRecord> columnPostRecordList =
-                                    snapshot.data!;
+                                    snapshot.data ?? [];
                                 // Exclude posts from the current user's community to avoid duplicates across sections
                                 columnPostRecordList = columnPostRecordList
                                     .where((p) =>
@@ -1288,13 +1337,13 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                   12.0, 24.0, 12.0, 16.0),
                                           child:
                                               StreamBuilder<CommunitiesRecord>(
-                                            stream:
-                                                CommunitiesRecord.getDocument(
-                                                    columnPostRecord
-                                                        .communityid!),
+                                            stream: columnPostRecord.communityid != null
+                                                ? CommunitiesRecord.getDocument(
+                                                    columnPostRecord.communityid!)
+                                                : null,
                                             builder: (context, snapshot) {
                                               // Customize what your widget looks like when it's loading.
-                                              if (!snapshot.hasData) {
+                                              if (!snapshot.hasData && !snapshot.hasError) {
                                                 return Row(
                                                   mainAxisSize:
                                                       MainAxisSize.max,
@@ -1318,6 +1367,37 @@ class _HomePageWidgetState extends State<HomePageWidget>
                                                     SizedBox(width: 12.0),
                                                     _shimmerBar(
                                                         width: 140, height: 16),
+                                                  ],
+                                                );
+                                              }
+                                              
+                                              // Handle error or no data - show default community name
+                                              if (snapshot.hasError || !snapshot.hasData) {
+                                                return Row(
+                                                  mainAxisSize: MainAxisSize.max,
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    Container(
+                                                      width: 25.0,
+                                                      height: 25.0,
+                                                      decoration: BoxDecoration(
+                                                        color: FlutterFlowTheme.of(context).alternate,
+                                                        shape: BoxShape.circle,
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
+                                                      child: Text(
+                                                        'Community',
+                                                        style: FlutterFlowTheme.of(context).bodyMedium.override(
+                                                          font: GoogleFonts.inter(
+                                                            fontWeight: FontWeight.w500,
+                                                          ),
+                                                          fontSize: 14.0,
+                                                          letterSpacing: 0.0,
+                                                        ),
+                                                      ),
+                                                    ),
                                                   ],
                                                 );
                                               }
